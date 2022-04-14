@@ -20,3 +20,4 @@ set searchincr
 
 " ABBREVIATIONS
 abbr _lia <li><a href=""></a></li>
+abbr _mdl []()
