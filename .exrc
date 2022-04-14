@@ -17,3 +17,6 @@ set searchincr
 
 " ruler=ru  shiftwidth=sw  expandtab=et  autoindent=ai  ignorecase=ic
 " showmatch=sm showmode=smd tabstop=ts
+
+" ABBREVIATIONS
+abbr _lia <li><a href=""></a></li>
