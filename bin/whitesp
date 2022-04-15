@@ -1,0 +1,4 @@
+#!/bin/sh
+grey="$(printf '\033[90m')"
+reset="$(printf '\033[0m')"
+sed -e "s/ /$grey.$reset/g" | sed -e 's/\t/'$grey▸$reset'\t/g' | sed -e "s/\$/$grey¬$reset/"
