@@ -1,0 +1,13 @@
+! $OpenBSD: dot.Xdefaults,v 1.3 2014/07/10 10:22:59 jasper Exp $
+XTerm*loginShell:true
+
+
+XTerm*foreground:                     white
+XTerm*background:                     black
+XTerm*metaSendsEscape:                true
+!XTerm*faceName:                       spleen:pixelsize=18:antialias=false
+XTerm*faceName:                       spleen:pixelsize=14:antialias=false
+
+! == XCLOCK
+XClock*analog:                        false
+XClock*geometry:                      -2-2
