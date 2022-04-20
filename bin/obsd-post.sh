@@ -36,13 +36,13 @@ sed -i 's/xconsole/#xconsole/' /etc/X11/xenodm/Xsetup_0
 
 # ----- package install
 BASE_PKGS="git curl wget yadm exa nnn htop detox ncdu rsync ripgrep bat " \
-          "delta"
+BASE_PKGS="$BASH_PKGS delta"
 echo "add base packages: $BASE_PKGS"
 pkg_add $BASE_PKGS
 
-DESKTOP_PKGS="syncthing qutebrowser firefox meld mpv irssi pandoc mutt " \ 
-             "isync notmuch msmtp neofetch aria2 sxiv libqrencode zathura " \
-             "abook audacious cmus lynx nmap "
+DESKTOP_PKGS="syncthing qutebrowser firefox meld mpv irssi pandoc mutt " 
+DESKTOP_PKGS="$DESKTOP_PKGS isync notmuch msmtp neofetch aria2 sxiv "
+DESKTOP_PKGS="$DESKTOP_PKGS libqrencode zathura abook audacious cmus lynx nmap "
 echo "add desktop packages: $DESKTOP_PKGS"
 pkg_add $DESKTOP_PKGS
         
