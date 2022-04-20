@@ -36,7 +36,7 @@ sed -i 's/xconsole/#xconsole/' /etc/X11/xenodm/Xsetup_0
 
 # ----- package install
 BASE_PKGS="git curl wget yadm exa nnn htop detox ncdu rsync ripgrep bat " \
-BASE_PKGS="$BASH_PKGS delta"
+BASE_PKGS="$BASE_PKGS delta"
 echo "add base packages: $BASE_PKGS"
 pkg_add $BASE_PKGS
 
