@@ -13,3 +13,9 @@ PATH=$HOME/bin:$HOME/.local/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/us
 export PATH HOME TERM PS1
 
 set -o emacs
+
+function sptouc
+{
+    for f in *\ *; do mv "$f" "${f// /_}"; done
+}
+
