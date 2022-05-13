@@ -5,13 +5,14 @@
 
 XTerm*loginShell:               true
 
-
 !XTerm*foreground:               white
 !XTerm*background:               black
 XTerm*metaSendsEscape:          true
 !XTerm*faceName:                 spleen:pixelsize=18:antialias=false
 !XTerm*faceName:                 spleen:pixelsize=14:antialias=false
 XTerm*geometry:                 90x29
+
+URxvt.font:xft:agave Nerd Font:pixelsize=14, xft:DejaVu Sans Mono Nerd Font:pixelsize=14
 
 ! == XCLOCK
 XClock*analog:                  false
@@ -24,7 +25,7 @@ XClock*geometry:                -2-2
 
 ! black
 *.color0:			FG
-*.color8:			#333333
+*.color8:			#999
 
 ! red
 *.color1:			#825b69
@@ -39,7 +40,8 @@ XClock*geometry:                -2-2
 *.color11:			#bdb3a0
 
 ! blue
-*.color4:			#5b6982
+!*.color4:			#5b6982
+*.color4:                       #6090d0
 *.color12:			#a0aabd
 
 ! magenta
