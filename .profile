@@ -19,3 +19,4 @@ function sptouc
     for f in *\ *; do mv "$f" "${f// /_}"; done
 }
 
+. "$HOME/.cargo/env"
