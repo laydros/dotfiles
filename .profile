@@ -1,6 +1,12 @@
-# $OpenBSD: dot.profile,v 1.7 2020/01/24 02:09:51 okan Exp $
-#
-# sh/ksh initialization
+# ~/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
 
 HISTFILE=~/.ksh_history
 
@@ -20,7 +26,6 @@ function sptouc
 }
 
 . "$HOME/.cargo/env"
-
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
