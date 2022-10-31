@@ -40,14 +40,14 @@ mkdir -p /var/syncthing
 BASE_PKGS="git curl wget yadm exa nnn htop detox ncdu rsync ripgrep bat " \
 BASE_PKGS="$BASE_PKGS delta"
 echo "add base packages: $BASE_PKGS"
-pkg_add $BASE_PKGS
+pkg_add "$BASE_PKGS"
 
 DESKTOP_PKGS="syncthing firefox meld mpv irssi pandoc cyrus-sasl--"
 DESKTOP_PKGS="$DESKTOP_PKGS isync notmuch msmtp neofetch aria2 sxiv "
 DESKTOP_PKGS="$DESKTOP_PKGS libqrencode zathura abook audacious cmus lynx nmap"
 DESKTOP_PKGS="$DESKTOP_PKGS password-store mutt--gpgme-sasl"
 echo "add desktop packages: $DESKTOP_PKGS"
-pkg_add $DESKTOP_PKGS
+pkg_add "$DESKTOP_PKGS"
         
 
 echo "add syncthing init for laydros"
