@@ -51,6 +51,12 @@ setopt EXTENDED_HISTORY  # add timestamps to history
 autoload -U colors zcalc
 colors
 
+# possible fix for very slow autocomplete in git repo
+
+__git_files () { 
+    _wanted files expl 'local files' _files     
+}
+
 # =============
 #   EXPORT
 # =============
