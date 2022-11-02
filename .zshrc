@@ -52,6 +52,7 @@ autoload -U colors zcalc
 colors
 
 # possible fix for very slow autocomplete in git repo
+# https://stackoverflow.com/questions/9810327/zsh-auto-completion-for-git-takes-significant-amount-of-time-can-i-turn-it-off/9810485#9810485
 
 __git_files () { 
     _wanted files expl 'local files' _files     
