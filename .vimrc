@@ -118,6 +118,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'wellle/context.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'jeffkreeftmeijer/vim-dim'
+Plug 'jkramer/vim-checkbox'
 call plug#end()
 
 " colorscheme nord
@@ -139,10 +140,12 @@ set t_Co=256
 " KEYS
 set pastetoggle=<C-p>			" for vim, nvim handles automatically
 inoremap jk <Esc>				" use kj for esc in while in insert mode
+let mapleader = ","             " map leader to comma
 
 nnoremap <F5> "=strftime("%Y-%m-%d_%X")<CR>P
 inoremap <F5> <C-R>=strftime("%Y-%m-%d_%X")<CR>
 iab <expr> sdate strftime("%Y-%m-%d_%X")
+
 
 " ABBREVIATIONS
 abbr _lia <li><a href=""></a></li>
