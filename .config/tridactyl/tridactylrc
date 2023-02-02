@@ -1,0 +1,12 @@
+" vim: filetype=vim
+" could also be set to tridactyl instead of vim with
+" https://github.com/tridactyl/vim-tridactyl
+
+unbind j
+unbind k
+
+bind j scrollline 5
+bind k scrollline -5
+
+bind J tabnext
+bind K tabprev
