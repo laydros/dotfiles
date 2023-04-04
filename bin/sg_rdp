@@ -1,2 +1,2 @@
 #! /bin/bash
-xfreerdp /network:broadband /bpp:16 /compression /u:"Jason Hamilton" -grab-keyboard /size:2400x1300 /title:"SG" /clipboard /v:10.1.0.71:3389
+xfreerdp /network:broadband /bpp:16 /compression /u:"jasonh" -grab-keyboard /size:2400x1300 /title:"SG" /clipboard /v:10.1.0.72:3389
