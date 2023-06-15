@@ -15,7 +15,7 @@ EDITOR=vi
 LC_CTYPE="en_US.UTF-8"
 PS1='\u@\h:\w \$ '
 
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:$PATH
+PATH=$HOME/bin:/usr/bin:/sbin:/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:$PATH
 export PATH HOME TERM PS1
 
 set -o emacs
@@ -25,7 +25,7 @@ function sptouc
     for f in *\ *; do mv "$f" "${f// /_}"; done
 }
 
-. "$HOME/.cargo/env"
+#. "$HOME/.cargo/env"
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
