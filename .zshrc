@@ -167,6 +167,9 @@ fi
     alias ll='ls -alF'
     alias la='ls -A'
     alias l='ls -CF'
+    
+# if using exa
+#alias ls="exa --color=auto -a -g"
 
 
 #alias df='df -h -x"squashfs"'
@@ -174,8 +177,11 @@ alias sort='LC_ALL=C sort'
 # alias em='emacsclient -n'
 alias dotf='ls .[a-zA-Z0-9_]*'
 alias qr='qrencode -t UTF8'
-alias cp="cp -i"                    # confirm before overwriting
+alias cp="cp -iv"                    # confirm before overwriting, verbose
 alias cat="bat -p"
+alias clear="clear -x"
+alias ip="ip -c"
+alias feh="echo imv"
 
 # alias ls='LC_COLLATE=C ls -FG'
 
@@ -263,3 +269,5 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 export PATH="/usr/local/sbin:$PATH"
 # source zsh functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
+
+source /home/laydros/.config/broot/launcher/bash/br
