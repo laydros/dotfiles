@@ -58,8 +58,11 @@ export LC_TIME=C
 # less: use UTF-8
 export LESSCHARSET=UTF-8
 
-. "$HOME/.cargo/env"
+#. "$HOME/.cargo/env"
 
 # == SITE LOCAL CONFIG
 
 # [[ -e ~/.zshenv.local ]] && . ~/.zshenv.local || :
+#. "/home/laydros/.local/share/cargo/env"
+
+#if [ -e /home/laydros/.nix-profile/etc/profile.d/nix.sh ]; then . /home/laydros/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
