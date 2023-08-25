@@ -68,6 +68,8 @@ PATH=$HOME/bin:$HOME/.local/bin:$PATH
 PATH=$HOME/.local/share/cargo/bin:$PATH
 # for brew
 PATH=/opt/homebrew/sbin:/opt/homebrew/bin:/opt/homebrew/opt/python@3.9/libexec/bin:$PATH
+# for go
+PATH=$HOME/.local/share/go/bin:$PATH
 
 export PATH
 
@@ -269,5 +271,10 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 export PATH="/usr/local/sbin:$PATH"
 # source zsh functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
+
+# from walk github page  https://github.com/antonmedv/walk
+function lk {
+  cd "$(walk "$@")"
+}
 
 source /home/laydros/.config/broot/launcher/bash/br
