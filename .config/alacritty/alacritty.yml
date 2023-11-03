@@ -151,7 +151,7 @@ font:
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
     #family: monospace
-    #family: Iosevka
+    #family: Iosevka Fixed
     family: Hack
       #family: FuraMono
       #family: inconsolata
