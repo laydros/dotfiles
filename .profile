@@ -27,6 +27,15 @@ function sptouc
 
 #. "$HOME/.cargo/env"
 
+
+# run ssh-agent - from https://jamsek.dev/posts/2019/Jul/27/starting-ssh-agent-on-openbsd/
+if [ ! -S ~/.ssh/ssh_auth_sock ]; then
+  eval `ssh-agent`
+  ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+fi
+export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+ssh-add -l > /dev/null || ssh-add
+
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
