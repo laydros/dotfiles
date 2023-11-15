@@ -1,0 +1,48 @@
+#!/bin/sh
+
+#browser=lynx
+browser=ssurf
+
+cmd=$1
+
+if [ -z "$cmd"]; then
+  url="https://ma.sdf.org"
+  exec $browser "$url"
+
+else
+
+  shift
+  case $cmd in
+    w)
+        url="https://whoogle.sdf.org/search?q=$*"
+        ;;
+    s)
+        url="https://anon.sx/search?q=$*"
+        ;;
+    d)
+        url="https://html.duckduckgo.com/html?q=$*"
+        ;;
+    g)
+        url="https://www.google.com/search?q=$*"
+        ;;
+    tr)
+        url="https://context.reverso.net/translation/italian-english/$*"
+        ;;
+    wp)
+        url="https://en.wikipedia.org/wiki/Special:Search?search=$*"
+        ;;
+    pkg)
+        url="http://pkgsrc.se/search.php?so=$*#main"
+        ;;
+    c)
+        url=$(xclip -o)
+        ;;
+    *)
+        url="$cmd"
+        ;;
+  esac
+fi
+
+url=$(printf "$url" | sed 's/ /%20/g')
+exec $browser "$url"
+
