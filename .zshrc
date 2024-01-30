@@ -58,10 +58,18 @@ __git_files () {
     _wanted files expl 'local files' _files     
 }
 
+# == SSH Agent
+
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+   ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
+fi
+if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+   source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
+fi
+
 # =============
 #   EXPORT
 # =============
-
 
 PATH=$HOME/bin:$HOME/.local/bin:$PATH
 # for rust
@@ -72,7 +80,6 @@ PATH=/opt/homebrew/sbin:/opt/homebrew/bin:/opt/homebrew/opt/python@3.9/libexec/b
 PATH=$HOME/.local/share/go/bin:$PATH
 
 export PATH
-
 
 # Color man pages
 export LESS_TERMCAP_mb=$'\E[01;32m'
@@ -155,7 +162,6 @@ fi
 #   ALIASES
 # ===========
 
-
 # enable color support of ls and also add handy aliases
   if [ -x /usr/bin/dircolors ]; then
       test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -172,7 +178,6 @@ fi
     
 # if using exa
 #alias ls="exa --color=auto -a -g"
-
 
 #alias df='df -h -x"squashfs"'
 alias sort='LC_ALL=C sort'
