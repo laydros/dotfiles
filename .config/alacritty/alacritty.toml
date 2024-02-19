@@ -29,7 +29,7 @@ history = 90000
 
 [shell]
 args = ["-l", "-c", "tmux"]
-program = "/usr/bin/zsh"
+program = "zsh"
 
 [window]
 dynamic_title = true
