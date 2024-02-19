@@ -1,5 +1,7 @@
 ## -*- mode: conf-unix-*-
 ## -*- coding: utf-8 -*-
+## vim: ts=2:sw=2:et:ft=zsh
+#
 # zshenv for $XDG_CONFIG_HOME
 # for zsh-specific settings for non-interactive and interactive sessions
 
@@ -63,6 +65,13 @@ export LESSCHARSET=UTF-8
 # == SITE LOCAL CONFIG
 
 # [[ -e ~/.zshenv.local ]] && . ~/.zshenv.local || :
-. "/home/laydros/.local/share/cargo/env"
+
+# platform specific stuff
+if [[ $OSTYPE = darwin* ]]; then
+    export STORE_LASTDIR=1
+
+elif [[ $OSTYPE = linux* ]]; then
+    . "/home/laydros/.local/share/cargo/env"
+fi
 
 #if [ -e /home/laydros/.nix-profile/etc/profile.d/nix.sh ]; then . /home/laydros/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

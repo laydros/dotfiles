@@ -155,6 +155,8 @@ fi
 #   ALIASES
 # ===========
 
+# if [-x /usr/bin/dircolors ]; then
+#     alias ls='ls --color=auto'
 
 # enable color support of ls and also add handy aliases
   if [ -x /usr/bin/dircolors ]; then
@@ -186,6 +188,7 @@ alias ip="ip -c"
 alias feh="echo imv"
 
 # alias ls='LC_COLLATE=C ls -FG'
+alias ls='ls -F'
 
 # == Aliases for XDG
 alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"

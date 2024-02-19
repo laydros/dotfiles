@@ -3,7 +3,7 @@
     email = git@laydros.net
 [core]
     excludesfile = $HOME/.config/git/gitignore
-    editor = /usr/bin/nvim
+    editor = vim
     pager = delta
 [status]
     relativePaths = false
