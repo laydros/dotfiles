@@ -66,12 +66,5 @@ export LESSCHARSET=UTF-8
 
 # [[ -e ~/.zshenv.local ]] && . ~/.zshenv.local || :
 
-# platform specific stuff
-if [[ $OSTYPE = darwin* ]]; then
-    export STORE_LASTDIR=1
-
-elif [[ $OSTYPE = linux* ]]; then
-    . "/home/laydros/.local/share/cargo/env"
-fi
 
 #if [ -e /home/laydros/.nix-profile/etc/profile.d/nix.sh ]; then . /home/laydros/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

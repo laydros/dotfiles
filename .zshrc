@@ -60,11 +60,13 @@ __git_files () {
 
 # == SSH Agent
 
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-   ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
-fi
-if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
-   source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
+if [[ $OSTYPE != darwin* ]]; then
+   if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+      ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
+   fi
+   if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+      source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
+   fi
 fi
 
 # =============
@@ -286,4 +288,12 @@ function lk {
   cd "$(walk "$@")"
 }
 
-source /home/laydros/.config/broot/launcher/bash/br
+# platform specific stuff
+if [[ $OSTYPE = darwin* ]]; then
+   export STORE_LASTDIR=1
+
+elif [[ $OSTYPE = linux* ]]; then
+   . "/home/laydros/.local/share/cargo/env"
+   . "/home/laydros/.config/broot/launcher/bash/br"
+fi
+
