@@ -2,26 +2,23 @@
 #
 # Read `man 5 sway` for a complete reference.
 
-include local.config
+#====================================#
+# Configuration variables            #
+#====================================#
 
-gaps inner 10
-
-### Variables
-#
-# Logo key. Use Mod1 for Alt.
+# Set the modifier key to super:
 set $mod Mod4
 
-# Workspace names
-#set $ws1 "1: main"
-#set $ws2 "2: mail"
-#set $ws3 "3: web"
-#set $ws4 "4: comm"
-#set $ws5 "5: media"
-#set $ws6 "6: rdc"
-#set $ws7 "7: vm"
-#set $ws8 "8"
-#set $ws9 "9"
-#set $ws10 "10"
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
+
+# Your preferred terminal emulator
+set $term2 foot
+set $term alacritty
+
 
 set $ws1 "1:"
 set $ws2 "2:"
@@ -34,15 +31,49 @@ set $ws8 "8:"
 set $ws9 "9:"
 set $ws10 "10:"
 
-# Home row direction keys, like vim
-set $left h
-set $down j
-set $up k
-set $right l
+#====================================#
+# Appearance and Theming             #
+#====================================#
 
-# Your preferred terminal emulator
-set $term2 foot
-set $term alacritty
+# Declare Colors:
+set $background #332b2b
+set $color_urgent #fb4934
+set $text_color #ffffff
+set $title_bg_unfocused #666666
+set $title_outline_active #0e844e
+set $title_outline_unfocused #332b2b
+
+# Set Colors:           Border                   Background          Text          Indicator             Child Border
+client.background       $background
+client.focused          $title_outline_active    $background         $text_color   $title_outline_active $title_outline_active
+client.focused_inactive $title_outline_unfocused $background         $text_color   $text_color           $title_outline_unfocused
+client.unfocused        $title_outline_unfocused $title_bg_unfocused $text_color   $title_outline_active
+client.urgent           $color_urgent            $color_urgent       $color_urgent $color_urgent         $color_urgent
+
+# Add gaps in between all application windows:
+gaps inner 8
+gaps outer 3
+
+# Configure the default border:
+default_border pixel 2
+
+# Set the Wallpaper:
+output * bg $HOME/.config/sway/wallpaper.jpg fill
+
+
+#====================================#
+# Activate the panel                 #
+#====================================#
+
+# Read `man 5 sway-bar` for more information about this section.
+# Set the waybar command for the application launcher:
+bar {
+    swaybar_command waybar
+}
+
+#====================================#
+# Keyboard Shortcuts (Sway-specific) #
+#====================================#
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
@@ -50,10 +81,10 @@ set $term alacritty
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu wofi --show=drun --lines=5 --prompt=""
 
-### Output configuration
-#
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-#output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+#====================================#
+# Output Configuration               #
+#====================================#
+
 output * bg /home/laydros/sync/img/wallpaper/purple-moon-stars-buildings-city-minimal-4k-gp.jpg fill
 #
 # Example configuration:
@@ -123,10 +154,10 @@ input * {
     xkb_options "ctrl:nocaps"
 }
 
-### Key bindings
-#
-# Basics:
-#
+#====================================#
+# Keyboard Shortcuts (Sway-specific) #
+#====================================#
+
     # Start a terminal
     bindsym $mod+Return exec $term
     bindsym $mod+t exec $term2
@@ -144,7 +175,6 @@ input * {
 
     # lock screen
     bindsym $mod+Alt+l exec swaylock -f -c 000000
-
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -164,18 +194,10 @@ input * {
     # Hibernate
     bindsym $mod+Shift+z exec swaynag -t warning -m 'Sleepy time?!?!' -b 'ZzZz...' 'systemctl hibernate'
 
-    # ulauncher
-    bindsym Mod1+Space exec ulauncher-toggle
+#========================================#
+# Keyboard Shortcuts (Media Keys) #
+#========================================#
 
-    # window picker
-    bindsym $mod+g exec swaymsg \[con_id=$(swaymsg -t get_tree | jq -r '.nodes | .[] | .nodes | . [] | select(.nodes != null) | .nodes | .[] | select(.name != null) | "\(.id?) \(.name?)"' | rofi -dmenu -i | awk '{print $1}')] focus
-
-    # mako
-    bindsym $mod+n exec makoctl dismiss
-    bindsym $mod+Shift+n exec makoctl dismiss -a
-#
-# Media Keys
-#
     set $refresh_i3status killall -SIGUSR1 i3status
     bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
     bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
@@ -213,9 +235,10 @@ input * {
         bindsym XF86AudioMedia exec firefox https://community.frame.work/
     #bindsym Shift+XF86AudioMedia exec firefox https://en.wikipedia.org/wiki/Framework_Computer
 
-#
-# Moving around:
-#
+#========================================#
+# Keyboard Shortcuts (Window Management) #
+#========================================#
+
     # Move your focus around
     bindsym $mod+$left focus left
     bindsym $mod+$down focus down
@@ -243,9 +266,34 @@ input * {
     bindsym $mod+Ctrl+Right workspace next
     # TODO : look into libinput-gestures to use with trackpad
 
-#
-# Workspaces:
-#
+# Resizing containers:
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # Ditto, with arrow keys
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "resize"
+
+#=================================#
+# Keyboard Shortcuts (Workspaces) #
+#=================================#
+
     # Switch to workspace
     bindsym $mod+1 workspace number $ws1
     bindsym $mod+2 workspace number $ws2
@@ -269,17 +317,16 @@ input * {
     bindsym $mod+Shift+8 move container to workspace number $ws8
     bindsym $mod+Shift+9 move container to workspace number $ws9
     bindsym $mod+Shift+0 move container to workspace number $ws10
-
-    # Note: workspaces can have any name you want, not just numbers.
-    # We just use 1-10 as the default.
     
     # move workspaces to other montiors
     bindsym $mod+Shift+Alt+l move workspace to output right
     bindsym $mod+Shift+Alt+h move workspace to output left
 
-#
-# Layout stuff:
-#
+
+#====================================#
+# Keyboard Shortcuts (Layout)        #
+#====================================#
+
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
@@ -306,9 +353,41 @@ input * {
     # focus the child container
     #bindsym $mod+d focus child
 
-#
-# Window:
-#
+
+#====================================#
+# Keyboard Shortcuts (Scratchpad)    #
+#====================================#
+
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
+
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+    # use $mod+shift+space with a scratchpad window active to toggle floating mode,
+    # which basically allows you to pull it back from the scratchpad
+
+
+#=============================================#
+# Keyboard Shortcuts (launching applications) #
+#=============================================#
+    # ulauncher
+    bindsym Mod1+Space exec ulauncher-toggle
+
+    # window picker
+    bindsym $mod+g exec swaymsg \[con_id=$(swaymsg -t get_tree | jq -r '.nodes | .[] | .nodes | . [] | select(.nodes != null) | .nodes | .[] | select(.name != null) | "\(.id?) \(.name?)"' | rofi -dmenu -i | awk '{print $1}')] focus
+
+    # mako
+    bindsym $mod+n exec makoctl dismiss
+    bindsym $mod+Shift+n exec makoctl dismiss -a
+
+
+#====================================#
+# Window Settings                    #
+#====================================#
     # Floating Windows
     for_window [class="Xfce4-notifyd"] floating enable;border none; focus mode_toggle
     for_window [window_role = "pop-up"] floating enable
@@ -362,49 +441,6 @@ input * {
     for_window [class=Brave] focus
     for_window [class=Steam] focus
 
-#
-# Scratchpad:
-#
-    # Sway has a "scratchpad", which is a bag of holding for windows.
-    # You can send windows there and get them back later.
-
-    # Move the currently focused window to the scratchpad
-    bindsym $mod+Shift+minus move scratchpad
-
-    # Show the next scratchpad window or hide the focused scratchpad window.
-    # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym $mod+minus scratchpad show
-    # use $mod+shift+space with a scratchpad window active to toggle floating mode,
-    # which basically allows you to pull it back from the scratchpad
-
-
-#
-# Resizing containers:
-#
-mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
-
-    # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
-
-    # Return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-    bindsym $mod+r mode "default"
-}
-bindsym $mod+r mode "resize"
-
-
 # set $gnome-schema org.gnome.desktop.interface
 # exec_always {
 #    gsettings set $gnome-schema gtk-theme 'Yaru Dark'
@@ -414,33 +450,11 @@ bindsym $mod+r mode "resize"
 #    gsettings set $gnome-schema cursor-size 50
 #}
 
-#
-# Status Bar:
-#
-# Read `man 5 sway-bar` for more information about this section.
-bar {
-    swaybar_command waybar
-}
+#====================================#
+# Startup                            #
+#====================================#
 
-#bar {
-#    position top
-#
-#    # When the status_command prints a new line to stdout, swaybar updates.
-#    # The default just shows the current date and time.
-#    status_command while date +'%Y-%m-%d %I:%M:%S %p'; do sleep 1; done
-#
-#    colors {
-#        statusline #ffffff
-#        background #323232
-#        inactive_workspace #32323200 #32323200 #5c5c5c
-#    }
-#}
-
-#
-# Startup
-#
 exec nm-applet --indicator
-#exec protonmail-bridge
 #exec flatpak run ch.protonmail.protonmail-bridge
 exec protonmail-bridge --no-window
 exec mako
@@ -449,5 +463,11 @@ exec ulauncher
 # setup clipboard
 exec wl-paste -t text --watch clipman store --no-persist
 
+#====================================#
+# Misc                               #
+#====================================#
+
+include /etc/sway/config-vars.d/*
+include local.config
 include /etc/sway/config.d/*
 # include ~/.config/sway/`hostname`/*
