@@ -322,6 +322,7 @@ input * {
     for_window [app_id = "floating"] floating enable
     for_window [app_id = "floating_update"] floating enable, resize set width 1000px height 600px
     for_window [app_id = "firefox" title = "^Extension: \(Bitwarden*"] floating enable
+    for_window [app_id = "firefox" title = "^Pinboard - Save a Bookmark*"] floating enable
 # for_window [app_id = "org.remmina.Remmina" title = "sg3"] 
 
     for_window [title = "Picture-in-Picture"] floating enable
@@ -444,6 +445,9 @@ exec nm-applet --indicator
 exec protonmail-bridge --no-window
 exec mako
 exec ulauncher
+
+# setup clipboard
+exec wl-paste -t text --watch clipman store --no-persist
 
 include /etc/sway/config.d/*
 # include ~/.config/sway/`hostname`/*
