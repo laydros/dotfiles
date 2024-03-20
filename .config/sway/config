@@ -473,4 +473,4 @@ exec wl-paste -t text --watch clipman store --no-persist
 
 include /etc/sway/config-vars.d/*
 include /etc/sway/config.d/*
-include "$(cat /etc/hostname)"
+include "$(cat /etc/hostname).conf"
