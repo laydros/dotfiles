@@ -58,7 +58,7 @@ gaps outer 3
 default_border pixel 2
 
 # Set the Wallpaper:
-output * bg $HOME/.config/sway/wallpaper.jpg fill
+#output * bg $HOME/.config/sway/wallpaper.jpg fill
 
 
 #====================================#
@@ -412,6 +412,10 @@ bindsym $mod+r mode "resize"
     for_window [title = "Audacious Settings"] floating enable
     for_window [title = "ALSA Output Settings"] floating enable
 
+    # Don't sleep when a window is fullscreen
+    for_window [class=".*"] inhibit_idle fullscreen
+    for_window [app_id=".*"] inhibit_idle fullscreen
+
     # Tag xwayland windows with [X]
     for_window [shell="xwayland"] title_format "[X] %title"
 
@@ -468,6 +472,5 @@ exec wl-paste -t text --watch clipman store --no-persist
 #====================================#
 
 include /etc/sway/config-vars.d/*
-include local.config
 include /etc/sway/config.d/*
-# include ~/.config/sway/`hostname`/*
+include "$(cat /etc/hostname)"

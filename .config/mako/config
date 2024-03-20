@@ -1,0 +1,13 @@
+width=500
+height=200
+
+background-color=#2e3440
+border-size=2
+
+font=inter 12
+
+[app-name="NetworkManager Applet"]
+default-timeout=5000
+
+
+
