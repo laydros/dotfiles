@@ -15,7 +15,7 @@ export XDG_CACHE_HOME=$HOME/.cache
 export XDG_DATA_HOME=$HOME/.local/share
 
 # for flatpak
-export XDG_DATA_DIRS=${XDG_DATA_DIRS}:var/lib/flatpak/exports/share:${XDG_DATA_HOME}/flatpak/exports/share
+#export XDG_DATA_DIRS=${XDG_DATA_DIRS}:var/lib/flatpak/exports/share:${XDG_DATA_HOME}/flatpak/exports/share
 # set some programs to use XDG
 
 #  less
