@@ -31,6 +31,18 @@ set $ws8 "8:"
 set $ws9 "9:"
 set $ws10 "10:"
 
+# set workspace output priority
+workspace number $ws1 output DP-3 eDP-2 
+workspace number $ws2 output DP-3 eDP-2 
+workspace number $ws3 output DP-3 eDP-2 
+workspace number $ws4 output DP-3 eDP-2 
+workspace number $ws6 output DP-3 eDP-2 
+workspace number $ws7 output DP-3 eDP-2 
+workspace number $ws8 output DP-3 eDP-2 
+workspace number $ws9 output DP-3 eDP-2 
+workspace number $ws10 output DP-3 eDP-2 
+
+
 #====================================#
 # Appearance and Theming             #
 #====================================#
