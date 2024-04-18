@@ -66,7 +66,13 @@ endif
 "
 " start my options
 set hidden                      " abandon hidden buffers
-set undolevels=800
+
+" save unto-trees in files
+set undofile
+set undodir=$HOME/.config/nvim/undo
+set undolevels=10000
+set undoreload=10000
+
 " seems to cause issue with abbrv starting with _
 "set iskeyword-=_                " treat '_' as word separator
 
