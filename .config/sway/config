@@ -475,6 +475,7 @@ exec nm-applet --indicator
 exec protonmail-bridge --no-window
 exec mako
 exec ulauncher
+exec kanshi
 
 # setup clipboard
 exec wl-paste -t text --watch clipman store --no-persist
