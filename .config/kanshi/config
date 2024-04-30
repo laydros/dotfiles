@@ -1,6 +1,7 @@
 profile desk {
     output DP-3 enable
     output eDP-2 enable scale 1.4
+    output eDP-2 position 2560,296
     exec swaymsg workspace "1:", move workspace to DP-3
     exec swaymsg workspace "2:", move workspace to DP-3
     exec swaymsg workspace "3:", move workspace to DP-3
