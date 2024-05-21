@@ -1,5 +1,6 @@
-" init.vim - 2022-04-14 - jwh
-
+" init.vim - 2024-05-06 - jwh
+" (neo)vim config - the result of realizing I spent too much time working on
+" my emacs init.el
 
 " plug.vim install and run from https://github.com/jeffkreeftmeijer/.vim/
 " Download plug.vim if it doesn't exist yet
