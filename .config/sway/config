@@ -19,6 +19,7 @@ set $right l
 set $term2 foot
 set $term alacritty
 
+set $swaylockwall sh ~/.config/sway/scripts/lock.sh
 
 set $ws1 "1:"
 set $ws2 "2:"
@@ -342,8 +343,14 @@ bindsym $mod+r mode "resize"
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    # bindsym $mod+b splith
+    # bindsym $mod+v splitv
+
+    # split in horizontal orientation
+    bindsym $mod+CTRL+h split h
+
+    # split in vertical orientation
+    bindsym $mod+CTRL+v split v
 
     # Switch the current container between different layout styles
     bindsym $mod+s layout stacking
@@ -365,6 +372,7 @@ bindsym $mod+r mode "resize"
     # focus the child container
     #bindsym $mod+d focus child
 
+for_window [class="URxvt*"] border pixel 1
 
 #====================================#
 # Keyboard Shortcuts (Scratchpad)    #
@@ -382,6 +390,20 @@ bindsym $mod+r mode "resize"
     # use $mod+shift+space with a scratchpad window active to toggle floating mode,
     # which basically allows you to pull it back from the scratchpad
 
+# Terminal scratchpad
+for_window [instance="foot_scratchpad"] move to scratchpad, border none
+bindsym $mod+Shift+t [instance="foot_scratchpad"] scratchpad show
+exec foot -T foot_scratchpad
+
+# htop scratchpad
+for_window [instance="htop_scratchpad"] move to scratchpad, border none
+bindsym $mod+Shift+v [instance="htop_scratchpad"] scratchpad show
+exec foot -T htop_scratchpad htop
+
+# btop scratchpad
+for_window [instance="btop_scratchpad"] move to scratchpad, border none
+bindsym $mod+Shift+b [instance="btop_scratchpad"] scratchpad show
+exec foot -T btop_scratchpad btop
 
 #=============================================#
 # Keyboard Shortcuts (launching applications) #
