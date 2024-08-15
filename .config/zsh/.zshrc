@@ -6,6 +6,10 @@
 
 # Lots borrowed from https://leahneukirchen.org/dotfiles/.zshrc
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+#PATH=/opt/homebrew/sbin:/opt/homebrew/bin:/opt/homebrew/opt/python@3.9/libexec/bin:$PATH
+
 ## completion for homebrew: https://docs.brew.sh/Shell-Completion
 if type brew &>/dev/null; then
 	FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
@@ -186,6 +190,11 @@ fi
     
 # if using exa
 #alias ls="exa --color=auto -a -g"
+
+# for wireguard
+alias vpnup='sudo wg-quick up f500'
+alias vpndown='sudo wg-quick down f500'
+alias dnsfix='sudo /usr/sbin/networksetup -setdnsservers Wi-Fi "Empty"'
 
 #alias df='df -h -x"squashfs"'
 alias sort='LC_ALL=C sort'
