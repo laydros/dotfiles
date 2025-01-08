@@ -1,4 +1,4 @@
-import = ["/home/laydros/.config/alacritty/themes/dracula.toml"]
+import = ["$HOME/.config/alacritty/themes/dracula.toml"]
 
 [bell]
 animation = "EaseOutExpo"
