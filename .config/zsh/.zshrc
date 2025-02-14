@@ -117,6 +117,12 @@ setopt prompt_subst
 #PROMPT="%B%{$fg[cyan]%}%(4~|%-1~/.../%2~|%~)%u%b >%{$fg[cyan]%}>%B%(?.%{$fg[cyan]%}.%{$fg[red]%})>%{$reset_color%}%b "
 #RPROMPT="%{$fg[red]%} %(?..[%?])"
 
+
+# set docker to use colima on Mac only
+if [[ "$(uname)" == "Darwin" ]]; then
+  export DOCKER_HOST=unix://$HOME/.colima/docker.sock
+fi
+
 # Print a greeting message when shell is started
 if [[ "$OSTYPE" = darwin* ]]; then
    echo $USER@$HOST  $(uname -srm)
