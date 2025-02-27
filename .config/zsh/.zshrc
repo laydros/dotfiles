@@ -177,22 +177,36 @@ fi
 #   ALIASES
 # ===========
 
-# if [-x /usr/bin/dircolors ]; then
-#     alias ls='ls --color=auto'
-
 # enable color support of ls and also add handy aliases
-  if [ -x /usr/bin/dircolors ]; then
-      test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-      alias ls='ls -F --color=auto'
-      alias grep='grep --color=auto'
-      alias fgrep='fgrep --color=auto'
-      alias egrep='egrep --color=auto'
-  fi
+# Detect OS type (macOS, Linux, or BSD)
+case "$(uname)" in
+    Darwin)  # macOS
+        export CLICOLOR=1
+        export LSCOLORS=GxFxCxDxBxegedabagaced
+        alias ls='ls -GF'
+        ;;
+    Linux)  # Linux
+        if command -v dircolors >/dev/null 2>&1; then
+            test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+        fi
+        alias ls='ls --color=auto -F'
+        ;;
+    *BSD)  # BSD variants (including FreeBSD, OpenBSD, NetBSD)
+        export CLICOLOR=1
+        export LSCOLORS=GxFxCxDxBxegedabagaced
+        alias ls='ls -GF'
+        ;;
+esac
 
-# some more ls aliases
-    alias ll='ls -alF'
-    alias la='ls -A'
-    alias l='ls -CF'
+# Some more ls aliases (compatible across systems)
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Enable color for grep (works on Linux and BSD/macOS)
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
     
 # if using exa
 #alias ls="exa --color=auto -a -g"
@@ -214,7 +228,6 @@ alias ip="ip -c"
 alias feh="echo imv"
 
 # alias ls='LC_COLLATE=C ls -FG'
-alias ls='ls -F'
 
 # == Aliases for XDG
 alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
