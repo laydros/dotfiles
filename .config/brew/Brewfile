@@ -1,4 +1,21 @@
-
+# Brewfile - Declarative Homebrew package management
+#
+# Usage:
+# 1. Install all listed packages: `brew bundle install --file=~/.config/brew/Brewfile`
+# 2. Remove unlisted packages (except VS Code extensions): 
+#    `brew bundle cleanup --file=~/.config/brew/Brewfile --force && ~/bin/sync-vscode-extensions.sh`
+# 3. Update this file with current packages: `brew bundle dump --file=~/.config/brew/Brewfile --force`
+# 4. Sync VS Code extensions separately: `~/bin/sync-vscode-extensions.sh`
+# 5. **Do it all at once (install, cleanup, sync VS Code extensions)**:
+#    `brew bundle install --cleanup --file=~/.config/brew/Brewfile && ~/bin/sync-vscode-extensions.sh`
+#
+# Notes:
+# - `brew` entries are command-line utilities.
+# - `cask` entries are macOS GUI applications.
+# - `mas` entries are Mac App Store applications.
+# - `vscode` entries install VS Code extensions.
+#
+# Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
 
 tap "ferdium/ferdium"
 tap "homebrew/bundle"
