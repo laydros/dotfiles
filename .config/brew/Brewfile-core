@@ -1,0 +1,96 @@
+# Brewfile - Declarative Homebrew package management
+# Brewfile-core - items that should work across Mac and Linux
+#
+# Usage:
+# 1. Install all listed packages: `brew bundle install --file=~/.config/brew/Brewfile`
+# 2. Remove unlisted packages (except VS Code extensions): 
+#    `brew bundle cleanup --file=~/.config/brew/Brewfile --force && ~/bin/sync-vscode-extensions.sh`
+# 3. Update this file with current packages: `brew bundle dump --file=~/.config/brew/Brewfile --force`
+# 4. Sync VS Code extensions separately: `~/bin/sync-vscode-extensions.sh`
+# 5. **Do it all at once (install, cleanup, sync VS Code extensions)**:
+#    `brew bundle install --cleanup --file=~/.config/brew/Brewfile && ~/bin/sync-vscode-extensions.sh`
+#
+# Notes:
+# - `brew` entries are command-line utilities.
+# - `cask` entries are macOS GUI applications.
+# - `mas` entries are Mac App Store applications.
+# - `vscode` entries install VS Code extensions.
+#
+# Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
+
+tap "ferdium/ferdium"
+tap "homebrew/services"
+
+brew "ansible"
+brew "ansible-lint"
+brew "aria2"
+brew "autoconf"
+brew "bat"
+brew "btop"
+brew "glib"
+brew "coreutils"
+brew "gnutls"
+brew "ffmpeg"
+
+brew "curl"
+brew "detox"
+# brew "docutils"
+# brew "duf"
+# brew "dust"
+brew "eza"
+# brew "fastfetch"
+brew "fd"
+brew "git"
+# brew "git-delta"
+brew "gnupg"
+brew "go"
+# brew "pkg-config"
+brew "htop"
+brew "imagemagick"
+# brew "irssi"
+brew "jq"
+brew "kanata"
+brew "lima"
+brew "llm"
+brew "moreutils"
+# brew "ncdu"
+brew "neovim"
+brew "nmap"
+brew "ollama"
+# brew "openttd"
+brew "pandoc"
+brew "ripgrep"
+brew "rustup"
+brew "shellcheck"
+# brew "slashem"
+# brew "smartmontools"
+brew "syncthing", restart_service: true
+# brew "telnet"
+brew "tldr"
+# brew "tmux"
+# brew "tmuxp"
+brew "tokei"
+brew "tree"
+brew "virtualenv"
+brew "wireguard-tools"
+brew "xdg-ninja"
+brew "yadm"
+brew "yt-dlp"
+brew "zlib"
+brew "zoxide"
+brew "zsh-completions"
+
+vscode "mechatroner.rainbow-csv"
+vscode "ms-python.black-formatter"
+vscode "ms-python.debugpy"
+vscode "ms-python.isort"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode-remote.remote-ssh"
+vscode "ms-vscode-remote.remote-ssh-edit"
+vscode "ms-vscode-remote.remote-wsl"
+vscode "ms-vscode-remote.vscode-remote-extensionpack"
+vscode "ms-vscode.remote-explorer"
+vscode "ms-vscode.remote-server"
+vscode "openai.openai-chatgpt-adhoc"
