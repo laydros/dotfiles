@@ -21,15 +21,12 @@
 tap "ferdium/ferdium"
 tap "homebrew/services"
 
-
 # brew "colima", restart_service: true
 
 brew "signify-osx"
 
-
-
-
 cask "arc"
+cask "bartender"
 cask "bbedit"
 cask "bettertouchtool"
 # cask "calibre"
@@ -83,6 +80,7 @@ cask "stolendata-mpv"
 
 # Eclipse JDK
 cask "temurin"
+cask "tigervnc-viewer"
 cask "tor-browser"
 cask "transmission"
 cask "transmit"
@@ -114,6 +112,7 @@ mas "Capture", id: 6458535284
 # mas "DeArrow", id: 6451469297
 # mas "Deliveries", id: 290986013
 mas "Disk Speed Test", id: 425264550
+mas "Equinox", id: 1591510203
 mas "Fantastical", id: 975937182
 mas "GarageBand", id: 682658836
 mas "HomePass", id: 1330266650
