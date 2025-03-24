@@ -1,0 +1,144 @@
+# Brewfile - Declarative Homebrew package management
+# Brewfile-mac - Mac specific
+#
+# Usage:
+# 1. Install all listed packages: `brew bundle install --file=~/.config/brew/Brewfile`
+# 2. Remove unlisted packages (except VS Code extensions): 
+#    `brew bundle cleanup --file=~/.config/brew/Brewfile --force && ~/bin/sync-vscode-extensions.sh`
+# 3. Update this file with current packages: `brew bundle dump --file=~/.config/brew/Brewfile --force`
+# 4. Sync VS Code extensions separately: `~/bin/sync-vscode-extensions.sh`
+# 5. **Do it all at once (install, cleanup, sync VS Code extensions)**:
+#    `brew bundle install --cleanup --file=~/.config/brew/Brewfile && ~/bin/sync-vscode-extensions.sh`
+#
+# Notes:
+# - `brew` entries are command-line utilities.
+# - `cask` entries are macOS GUI applications.
+# - `mas` entries are Mac App Store applications.
+# - `vscode` entries install VS Code extensions.
+#
+# Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
+
+tap "ferdium/ferdium"
+tap "homebrew/services"
+
+# brew "colima", restart_service: true
+
+brew "signify-osx"
+
+cask "arc"
+cask "bartender"
+cask "bbedit"
+cask "bettertouchtool"
+# cask "calibre"
+cask "chatgpt"
+# cask "coteditor"
+cask "daisydisk"
+# cask "discord"
+cask "easy-move+resize"
+cask "ferdium"
+cask "firefox"
+cask "font-hack-nerd-font"
+cask "font-inconsolata"
+cask "font-iosevka"
+cask "font-iosevka-nerd-font"
+cask "font-source-code-pro"
+# cask "font-terminus"
+# cask "freac"
+cask "google-chrome"
+cask "hammerspoon"
+cask "handbrake"
+cask "iina"
+# cask "karabiner-elements"
+# cask "keymapp"
+cask "libreoffice"
+# cask "librewolf"
+cask "maccy"
+cask "macfuse"
+cask "makemkv"
+cask "musicbrainz-picard"
+cask "obsidian"
+# cask "onyx"
+cask "orion"
+cask "permute"
+cask "plexamp"
+cask "proton-mail-bridge"
+cask "protonvpn"
+cask "qlimagesize"
+cask "qlmarkdown"
+cask "qlstephen"
+cask "qlvideo"
+cask "qmk-toolbox"
+cask "quicklook-json"
+cask "qutebrowser"
+cask "rio"
+cask "rustdesk"
+cask "signal"
+cask "spotify"
+cask "standard-notes"
+cask "steam"
+cask "stolendata-mpv"
+
+# Eclipse JDK
+cask "temurin"
+cask "tigervnc-viewer"
+cask "tor-browser"
+cask "transmission"
+cask "transmit"
+cask "veracrypt"
+cask "viscosity"
+cask "visual-studio-code"
+cask "vmware-fusion"
+# cask "vscodium"
+# cask "wezterm"
+cask "whichspace"
+cask "whisky"
+cask "xbar"
+cask "xquartz"
+cask "zoom"
+
+brew "mas"
+
+mas "1Blocker", id: 1365531024
+mas "Acorn", id: 6737921844
+mas "Amphetamine", id: 937984704
+# mas "AutoMounter", id: 1160435653
+mas "Barbee", id: 1548711022
+mas "Be Focused Pro", id: 961632517
+mas "Bitwarden", id: 1352778147
+# mas "Capo", id: 696977615
+mas "Capture", id: 6458535284
+# mas "CotEditor", id: 1024640650
+# mas "CoverSutra", id: 404128139
+# mas "DeArrow", id: 6451469297
+# mas "Deliveries", id: 290986013
+mas "Disk Speed Test", id: 425264550
+mas "Equinox", id: 1591510203
+mas "Fantastical", id: 975937182
+mas "GarageBand", id: 682658836
+mas "HomePass", id: 1330266650
+# mas "Hyperspace", id: 6739505345
+mas "iMovie", id: 408981434
+# mas "Ivory", id: 6444602274
+mas "Keynote", id: 409183694
+mas "Navicat Premium Essentials", id: 466416967
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Parcel", id: 639968404
+mas "Pastebot", id: 1179623856
+mas "Perplexity", id: 6714467650
+mas "Reaper", id: 698147017
+mas "Resident Evil 2", id: 1640632432
+mas "SponsorBlock", id: 1573461917
+mas "Tailscale", id: 1475387142
+mas "Telephone", id: 406825478
+mas "TestFlight", id: 899247664
+mas "Todoist", id: 585829637
+mas "Tuneful", id: 6739804295
+mas "UTM", id: 1538878817
+# mas "Valheim", id: 1554294918
+mas "Windows App", id: 1295203466
+# mas "WireGuard", id: 1451685025
+
+
+vscode "kaleidoscope-app.vscode-ksdiff"
+
