@@ -6,7 +6,6 @@
 
 # Lots borrowed from https://leahneukirchen.org/dotfiles/.zshrc
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
 #PATH=/opt/homebrew/sbin:/opt/homebrew/bin:/opt/homebrew/opt/python@3.9/libexec/bin:$PATH
 
@@ -74,6 +73,13 @@ if [[ $OSTYPE != darwin* ]]; then
    if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
       source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
    fi
+fi
+
+# set homebrew stuff for mac and linux
+if [[ "$OSTYPE" = darwin* ]]; then
+   eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 # =============
@@ -327,4 +333,5 @@ elif [[ $OSTYPE = linux* ]]; then
    . "/home/laydros/.local/share/cargo/env"
    . "/home/laydros/.config/broot/launcher/bash/br"
 fi
+
 

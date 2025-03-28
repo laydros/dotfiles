@@ -1,4 +1,4 @@
-import = ["$HOME/.config/alacritty/themes/dracula.toml"]
+general.import = ["$HOME/.config/alacritty/themes/dracula.toml"]
 
 [bell]
 animation = "EaseOutExpo"
@@ -27,7 +27,7 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 [scrolling]
 history = 90000
 
-[shell]
+[terminal.shell]
 args = ["-l", "-c", "tmux"]
 program = "zsh"
 
@@ -41,3 +41,5 @@ lines = 38
 [window.padding]
 x = 4
 y = 2
+
+[terminal]
