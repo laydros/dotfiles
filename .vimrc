@@ -144,7 +144,7 @@ set smartcase                   " but look for case if I search with it
 set t_Co=256
 
 " KEYS
-set pastetoggle=<C-p>			" for vim, nvim handles automatically
+" set pastetoggle=<C-p>			" for vim, nvim handles automatically
 inoremap jk <Esc>				" use kj for esc in while in insert mode
 let mapleader = ","             " map leader to comma
 
