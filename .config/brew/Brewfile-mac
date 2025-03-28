@@ -48,6 +48,7 @@ cask "google-chrome"
 cask "hammerspoon"
 cask "handbrake"
 cask "iina"
+cask "kaleidoscope"
 # cask "karabiner-elements"
 # cask "keymapp"
 cask "libreoffice"
@@ -111,6 +112,7 @@ mas "Capture", id: 6458535284
 # mas "CoverSutra", id: 404128139
 # mas "DeArrow", id: 6451469297
 # mas "Deliveries", id: 290986013
+mas "Drafts", id: 1435957248
 mas "Disk Speed Test", id: 425264550
 mas "Equinox", id: 1591510203
 mas "Fantastical", id: 975937182
