@@ -55,3 +55,6 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 #eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 #. "/home/laydros/.local/share/cargo/env"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/laydros/.lmstudio/bin"
