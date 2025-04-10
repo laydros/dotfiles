@@ -26,6 +26,7 @@ tap "homebrew/services"
 brew "signify-osx"
 
 cask "arc"
+cask "bambu-studio"
 cask "bartender"
 cask "bbedit"
 cask "bettertouchtool"
