@@ -93,6 +93,10 @@ PATH=$HOME/.local/share/cargo/bin:$PATH
 PATH=/opt/homebrew/sbin:/opt/homebrew/bin:/opt/homebrew/opt/python@3.9/libexec/bin:$PATH
 # for go
 PATH=$HOME/.local/share/go/bin:$PATH
+# for m3-info
+if [[ "$OSTYPE" != "darwin" && "$OSTYPE" != "cygwin" && "$OSTYPE" != "msys" && "$OSTYPE" != "win32" ]]; then
+    PATH=/home/m3db/data/linux/bin:$PATH
+fi
 
 export PATH
 
