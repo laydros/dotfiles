@@ -42,10 +42,10 @@ elif [[ "$(uname)" == "Linux" ]]; then
 fi
 
 # Install and clean up using the combined Brewfile
-brew bundle install --cleanup --file="$BREWFILE_TEMP"
+brew bundle install --no-upgrade --cleanup --file="$BREWFILE_TEMP"
 
 # Sync VS Code extensions separately
-~/bin/sync-vscode-extensions.sh
+~/bin/vscode-sync-extensions.sh
 
 # Remove temporary file
 rm "$BREWFILE_TEMP"
