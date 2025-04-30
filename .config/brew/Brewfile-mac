@@ -21,7 +21,7 @@
 tap "ferdium/ferdium"
 tap "homebrew/services"
 
-# brew "colima", restart_service: true
+brew "colima", restart_service: true
 
 brew "signify-osx"
 
