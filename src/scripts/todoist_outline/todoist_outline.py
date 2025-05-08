@@ -1,33 +1,22 @@
 import pandas as pd
-from collections import defaultdict
 
-# Replace this with your actual file path
-CSV_FILE = 'todoist_export.csv'
+# Replace with the path to your actual CSV file
+CSV_FILE = "todoist_export.csv"
 
 # Load the CSV
 df = pd.read_csv(CSV_FILE)
 
-# Ensure ID and Parent columns are strings for consistent mapping
-df['ID'] = df['ID'].astype(str)
-df['Parent'] = df['Parent'].apply(lambda x: str(int(x)) if pd.notna(x) else None)
+# Ensure INDENT is numeric
+df["INDENT"] = pd.to_numeric(df["INDENT"], errors="coerce").fillna(1).astype(int)
 
-# Build dictionaries for tasks and child mapping
-tasks = df.set_index("ID").to_dict(orient="index")
-children_map = defaultdict(list)
-
-for task_id, task in tasks.items():
-    parent_id = task.get('Parent')
-    if parent_id:
-        children_map[parent_id].append(task_id)
-
-# Recursive function to build an indented outline
-def build_outline(task_id, level=0):
-    content = tasks[task_id].get("Content", "(no content)")
-    output = "  " * level + "- " + content + "\n"
-    for child_id in children_map.get(task_id, []):
-        output += build_outline(child_id, level + 1)
-    return output
-
-# Start from root-level tasks
+# Reconstruct the indented outline
 outline = ""
-for task_id, task in tasks.items():
+for _, row in df.iterrows():
+    if row["TYPE"] != "task":
+        continue  # skip sections, headers, etc.
+    indent_level = row["INDENT"] - 1  # INDENT starts at 1, so subtract 1 for 0-based
+    content = row["CONTENT"]
+    outline += "  " * indent_level + "- " + content + "\n"
+
+# Print the result
+print(outline)
