@@ -55,6 +55,10 @@ export NVM_DIR="$XDG_DATA_HOME"/nvm
 export SQLITE_HISTORY=$XDG_DATA_HOME/sqlite_history
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export TLDR_CACHE_DIR="$XDG_CACHE_HOME"/tldr
+export TERMINFO="$XDG_DATA_HOME"/terminfo                                     
+export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
+export COLIMA_HOME="$XDG_DATA_HOME/colima"
+export OLLAMA_HOME="$XDG_DATA_HOME/ollama"
 
 # since I don't have any options set, this breaks
 # export WGETRC="$XDG_CONFIG_HOME/wgetrc"
