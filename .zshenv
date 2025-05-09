@@ -14,6 +14,8 @@ export LFS=/mnt/lfs
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME=$HOME/.cache
 export XDG_DATA_HOME=$HOME/.local/share
+export XDG_STATE_HOME=$HOME/.local/state
+export XDG_RUNTIME_DIR=/run/user/$UID
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
@@ -33,6 +35,7 @@ export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 # L    Ignore LESSOPEN – some Linux distros set this to broken defaults (*cough* Fedora *cough*).
 export LESS="RiMQXL"
 
+# stuff to keep $HOME clean
 export GNUPGHOME=${XDG_CONFIG_HOME}/gnupg
 export MPLAYER_HOME=$XDG_CONFIG_HOME/mplayer
 export ELINKS_CONFDIR="$XDG_CONFIG_HOME"/elinks
@@ -50,6 +53,8 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export NVM_DIR="$XDG_DATA_HOME"/nvm
 export SQLITE_HISTORY=$XDG_DATA_HOME/sqlite_history
+export GNUPGHOME="$XDG_DATA_HOME"/gnupg
+export TLDR_CACHE_DIR="$XDG_CACHE_HOME"/tldr
 
 # since I don't have any options set, this breaks
 # export WGETRC="$XDG_CONFIG_HOME/wgetrc"
