@@ -19,7 +19,6 @@
 # Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
 
 tap "ferdium/ferdium"
-tap "homebrew/services"
 
 brew "ansible"
 brew "ansible-lint"
