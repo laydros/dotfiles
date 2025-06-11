@@ -18,8 +18,6 @@
 #
 # Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
 
-tap "ferdium/ferdium"
-
 brew "ansible"
 brew "ansible-lint"
 brew "aria2"
@@ -69,7 +67,7 @@ brew "shellcheck"
 # brew "smartmontools"
 brew "syncthing", restart_service: true
 # brew "telnet"
-brew "tldr"
+brew "tealdeer"
 # brew "tmux"
 # brew "tmuxp"
 brew "tokei"

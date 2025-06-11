@@ -18,11 +18,7 @@
 #
 # Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
 
-tap "ferdium/ferdium"
-tap "homebrew/services"
-
 brew "colima", restart_service: true
-
 brew "signify-osx"
 
 cask "arc"
@@ -70,7 +66,7 @@ cask "permute"
 cask "plexamp"
 cask "proton-mail-bridge"
 cask "protonvpn"
-cask "qlimagesize"
+# cask "qlimagesize"
 cask "qlmarkdown"
 cask "qlstephen"
 cask "qlvideo"
