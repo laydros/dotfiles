@@ -19,6 +19,7 @@
 # Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
 
 brew "colima", restart_service: true
+brew "OpenSSH"   # to get sftp with tab complete
 brew "signify-osx"
 
 cask "arc"
