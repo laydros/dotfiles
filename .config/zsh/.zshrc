@@ -20,7 +20,6 @@ bindkey -e
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/laydros/.config/zsh/.zshrc'
 
-eval "$(zoxide init zsh)"
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
