@@ -66,15 +66,34 @@ __git_files () {
 
 # == SSH Agent
 
-if [[ $OSTYPE != darwin* ]]; then
-   if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-      ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
-   fi
-   if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
-      source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
-   fi
+# Hosts that should use ssh-agent with 24-hour timeout
+ssh_agent_hosts=("ibanez" "indy")
+
+if [[ " ${ssh_agent_hosts[@]} " =~ " $(hostname) " ]]; then
+    # Check if we can connect to existing agent
+    if [[ -z "$SSH_AUTH_SOCK" ]] || ! ssh-add -l >/dev/null 2>&1; then
+        # Try to use the system openssh agent first
+        if [[ -S "/run/user/$(id -u)/openssh_agent" ]]; then
+            export SSH_AUTH_SOCK="/run/user/$(id -u)/openssh_agent"
+        else
+            # Start our own agent
+            eval "$(ssh-agent -t 24h)"
+        fi
+    fi
+    
+    # Don't auto-add keys - let SSH do it on first use
+    # (Remove the auto-add section that was prompting immediately)
 fi
 
+# if [[ $OSTYPE != darwin* ]]; then
+#    if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+#       ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
+#    fi
+#    if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+#       source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
+#    fi
+# fi
+# 
 # set homebrew stuff for mac and linux
 if [[ "$OSTYPE" = darwin* ]]; then
    eval "$(/opt/homebrew/bin/brew shellenv)"
