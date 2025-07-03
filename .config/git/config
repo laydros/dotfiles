@@ -3,7 +3,7 @@
     email = git@laydros.net
 
 [includeIf "gitdir:~/src/f500/"]
-    path = ~/.config/git/config-work
+    path = ~/.config/git/config-f500
 
 [core]
     excludesfile = $HOME/.config/git/gitignore
