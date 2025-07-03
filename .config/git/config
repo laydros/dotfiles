@@ -1,6 +1,10 @@
 [user]
     name = Jason Hamilton
     email = git@laydros.net
+
+[includeIf "gitdir:~/src/f500/"]
+    path = ~/.config/git/config-work
+
 [core]
     excludesfile = $HOME/.config/git/gitignore
     editor = vim
