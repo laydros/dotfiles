@@ -44,29 +44,25 @@
 [color "interactive"]
     prompt = bold normal
     help = black
-[difftool "Kaleidoscope"]
-	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-[mergetool "Kaleidoscope"]
-	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-	trustExitCode = true
-[difftool "meld"]
-    cmd = meld "$LOCAL" "$REMOTE"
+[diff]
+	tool = multi
+[difftool "multi"]
+	cmd = ~/bin/git-diff-wrapper.sh
+[merge]
+	tool = multi
+[mergetool "multi"]
+	cmd = ~/bin/git-merge-wrapper.sh
+	keepBackup = false
+	prompt = false
 [delta]
     navigate = true # use n and N to move between diff sections
     side-by-side = true
     line-numbers = true
-[diff]
-    colorMoved = default
-    tool = meld
-#	tool = Kaleidoscope
 [difftool]
-	prompt = false
-[merge]
-	tool = Kaleidoscope
-	conflictstyle = diff3
-[mergetool]
 	prompt = false
 [init]
 	defaultBranch = main
 [safe]
 	directory = /home/m3db/it/doc/hosts
+[difftool "ksdiff"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
