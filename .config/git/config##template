@@ -44,16 +44,29 @@
 [color "interactive"]
     prompt = bold normal
     help = black
+
 [diff]
-	tool = multi
-[difftool "multi"]
-	cmd = ~/bin/git-diff-wrapper.sh
-[merge]
-	tool = multi
-[mergetool "multi"]
-	cmd = ~/bin/git-merge-wrapper.sh
-	keepBackup = false
-	prompt = false
+{% if yadm.os == "Darwin" %}
+    tool = kaleidoscope
+{% endif %}
+{% if yadm.os == "Linux" %}
+    tool = meld
+{% endif %}
+
+{% if yadm.os == "Darwin" %}
+[difftool "kaleidoscope"]
+    cmd = ksdiff --partial-changeset --relative-path "$MERGED" -- "$LOCAL" "$REMOTE"
+[mergetool "kaleidoscope"]
+    cmd = ksdiff --merge --output "$MERGED" --base "$BASE" -- "$LOCAL" --snapshot "$REMOTE" --snapshot
+    trustExitCode = true
+{% endif %}
+{% if yadm.os == "Linux" %}
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
+[mergetool "meld"]
+    cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+{% endif %}
+
 [delta]
     navigate = true # use n and N to move between diff sections
     side-by-side = true
@@ -64,5 +77,7 @@
 	defaultBranch = main
 [safe]
 	directory = /home/m3db/it/doc/hosts
-[difftool "ksdiff"]
-	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+	
+	
+[difftool "kaleidoscope"]
+	cmd = ksdiff --wait --label \"$LOCAL\" \"$LOCAL\" --label \"$REMOTE\" \"$REMOTE\"
