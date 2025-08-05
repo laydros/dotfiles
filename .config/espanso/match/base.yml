@@ -14,6 +14,33 @@ matches:
 
   # NOTE: espanso uses YAML to define matches, so pay attention to the indentation!
 
+  # Your original sdate for YYYY-MM-DD
+  - trigger: "sdate"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y-%m-%d"
+
+  # Your original fdate for full timestamp
+  - trigger: "fdate"
+    replace: "{{mydatetime}}"
+    vars:
+      - name: mydatetime
+        type: date
+        params:
+          format: "%Y-%m-%d %H:%M:%S"
+          
+  # Recreate AutoHotkey supdate with cursor positioning
+  - trigger: "supdate"
+    replace: "{{mydate}} - $|$ - JWH"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y-%m-%d"
+
   # But matches can also be dynamic:
 
   # Print the current date
