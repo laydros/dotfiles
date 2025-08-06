@@ -90,12 +90,76 @@ try {
 }
 
 # =============================================================================
+# PACKAGE MANAGER CLEANUP
+# =============================================================================
+
+Write-BoxstarterMessage "Checking for winget package conflicts..."
+
+# Common packages that might be installed via winget that we'll install via chocolatey
+$wingetToChocoMap = @{
+    "Git.Git" = "git"
+    "Microsoft.VisualStudioCode" = "vscode" 
+    "7zip.7zip" = "7zip"
+    "Notepad++.Notepad++" = "notepadplusplus"
+    "Microsoft.PowerShell" = "powershell-core"
+    "Microsoft.WindowsTerminal" = "windows-terminal"
+}
+
+$installedWingetPackages = @()
+$wingetAvailable = $false
+
+# Check if winget is available
+try {
+    winget --version | Out-Null
+    $wingetAvailable = $true
+    Write-BoxstarterMessage "✓ Winget detected, checking for conflicting packages..."
+    
+    # Check each package
+    foreach ($wingetId in $wingetToChocoMap.Keys) {
+        try {
+            $result = winget list --id $wingetId --accept-source-agreements 2>$null
+            if ($LASTEXITCODE -eq 0) {
+                $installedWingetPackages += @{
+                    WingetId = $wingetId
+                    ChocoName = $wingetToChocoMap[$wingetId]
+                }
+            }
+        } catch {
+            # Package not found, continue
+        }
+    }
+} catch {
+    Write-BoxstarterMessage "✓ Winget not available, no conflicts to resolve"
+}
+
+# Handle conflicts if found
+$cleanupWingetPackages = $true
+if ($wingetAvailable -and $installedWingetPackages.Count -gt 0) {
+    Write-Warning "Found packages installed via winget that conflict with chocolatey installs:"
+    foreach ($pkg in $installedWingetPackages) {
+        Write-Warning "  - $($pkg.WingetId) (will install $($pkg.ChocoName) via chocolatey)"
+    }
+    Write-Host ""
+    $cleanup = Read-Host "Remove winget versions to avoid conflicts? (Y/n)"
+    
+    if ($cleanup -match "^[Nn]") {
+        $cleanupWingetPackages = $false
+        Write-BoxstarterMessage "Keeping existing winget packages (may cause conflicts)"
+    }
+} else {
+    Write-BoxstarterMessage "✓ No winget package conflicts detected"
+}
+
+# =============================================================================
 # USER CONFIRMATION
 # =============================================================================
 
 Write-Host ""
 Write-Host "=== BOXSTARTER SETUP PLAN ===" -ForegroundColor Cyan
 Write-Host "This script will:"
+if ($wingetAvailable -and $installedWingetPackages.Count -gt 0 -and $cleanupWingetPackages) {
+    Write-Host "  • Remove $($installedWingetPackages.Count) conflicting winget package(s)" -ForegroundColor Yellow
+}
 Write-Host "  • Install applications via Chocolatey" -ForegroundColor Green
 Write-Host "  • Configure Windows settings and disable telemetry" -ForegroundColor Green  
 Write-Host "  • Deploy dotfiles using your existing script" -ForegroundColor Green
@@ -103,6 +167,13 @@ Write-Host "  • May require restarts (will auto-login and continue)" -Foregrou
 Write-Host ""
 Write-Host "Current location: $(Get-Location)" -ForegroundColor Gray
 Write-Host "Free disk space: ${freeSpaceGB}GB" -ForegroundColor Gray
+if ($wingetAvailable -and $installedWingetPackages.Count -gt 0) {
+    if ($cleanupWingetPackages) {
+        Write-Host "Winget packages to remove: $($installedWingetPackages.Count)" -ForegroundColor Gray
+    } else {
+        Write-Host "Winget conflicts: $($installedWingetPackages.Count) (will be ignored)" -ForegroundColor Gray
+    }
+}
 Write-Host ""
 
 $confirmation = Read-Host "Proceed with setup? (y/N)"
@@ -111,6 +182,30 @@ if ($confirmation -notmatch "^[Yy]") {
 }
 
 Write-BoxstarterMessage "All checks passed! Starting installation..."
+
+# =============================================================================
+# PACKAGE MANAGER CLEANUP 
+# =============================================================================
+
+if ($wingetAvailable -and $installedWingetPackages.Count -gt 0 -and $cleanupWingetPackages) {
+    Write-BoxstarterMessage "Removing conflicting winget packages..."
+    
+    foreach ($pkg in $installedWingetPackages) {
+        try {
+            Write-BoxstarterMessage "Removing winget package: $($pkg.WingetId)"
+            winget uninstall --id $pkg.WingetId --silent --accept-source-agreements
+            if ($LASTEXITCODE -eq 0) {
+                Write-BoxstarterMessage "✓ Successfully removed $($pkg.WingetId)"
+            } else {
+                Write-Warning "Failed to remove $($pkg.WingetId) (exit code: $LASTEXITCODE)"
+            }
+        } catch {
+            Write-Warning "Error removing $($pkg.WingetId): $_"
+        }
+    }
+    
+    Write-BoxstarterMessage "Winget cleanup complete"
+}
 
 # =============================================================================
 # PACKAGE INSTALLATIONS
