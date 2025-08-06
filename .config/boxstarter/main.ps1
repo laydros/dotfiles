@@ -1,6 +1,39 @@
 # main.ps1 - Boxstarter setup script for laydros/dotfiles
 # Location: .config/boxstarter/main.ps1
 
+<#
+.SYNOPSIS
+    Automated Windows system setup using Boxstarter + Chocolatey
+
+.DESCRIPTION
+    This script automates Windows configuration by:
+    • Removing conflicting winget packages (with user consent)
+    • Installing applications via Chocolatey (development tools, browsers, utilities, etc.)
+    • Configuring Windows settings (developer mode, file extensions, disable telemetry)
+    • Deploying dotfiles using your existing deploy-windows-dotfiles.ps1 script
+    • Handling UAC prompts and automatic reboots as needed
+
+.USAGE
+    Prerequisites: Run bootstrap.ps1 first to install Chocolatey, Git, and Boxstarter
+    
+    1. Clone dotfiles: git clone https://github.com/laydros/dotfiles.git
+    2. Navigate to repo: cd dotfiles  
+    3. Run setup: Install-BoxstarterPackage -PackageName .\.config\boxstarter\main.ps1
+    
+    The script uses temporary autologin for unattended reboots during setup.
+
+.EMERGENCY CLEANUP
+    Only needed if setup fails/crashes and autologin remains enabled:
+    
+    reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /f
+    reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /f
+    
+    (Boxstarter normally cleans this up automatically on completion)
+
+.AUTHOR
+    Generated for laydros/dotfiles repository
+#>
+
 #Requires -RunAsAdministrator
 
 # Boxstarter configuration
@@ -95,14 +128,40 @@ try {
 
 Write-BoxstarterMessage "Checking for winget package conflicts..."
 
-# Common packages that might be installed via winget that we'll install via chocolatey
+# Comprehensive winget to chocolatey package mapping
 $wingetToChocoMap = @{
-    "Git.Git" = "git"
-    "Microsoft.VisualStudioCode" = "vscode" 
     "7zip.7zip" = "7zip"
+    "Git.Git" = "git"
+    "HeidiSQL.HeidiSQL" = "heidisql"
+    "Mozilla.Firefox" = "firefox"
+    "Mozilla.Thunderbird.ESR" = "thunderbird"
+    "WinMerge.WinMerge" = "winmerge"
+    "TheDocumentFoundation.LibreOffice" = "libreoffice-fresh"
+    "WireGuard.WireGuard" = "wireguard"
+    "Google.Chrome" = "googlechrome"
+    "Oracle.JDK.17" = "openjdk17"
+    "Microsoft.msodbcsql.17" = "sqlserver-odbcdriver"
+    "PuTTY.PuTTY" = "putty"
+    "Microsoft.SQLServer.2012.NativeClient" = "sqlserver-2012-nativeclient"
+    "Python.Python.2" = "python2"
+    "Python.Python.3.12" = "python3"
+    "Microsoft.Edge" = "microsoft-edge"
     "Notepad++.Notepad++" = "notepadplusplus"
+    "WinSCP.WinSCP" = "winscp"
+    "Microsoft.DotNet.DesktopRuntime.5" = "dotnet-5.0-desktopruntime"
+    "Microsoft.SQLServerManagementStudio" = "sql-server-management-studio"
+    "Microsoft.DotNet.DesktopRuntime.7" = "dotnet-7.0-desktopruntime"
+    "Oracle.JavaRuntimeEnvironment" = "jre8"
+    "Microsoft.VCRedist.2013.x86" = "vcredist2013"
+    "Microsoft.VCRedist.2015+.x64" = "vcredist140"
+    "Microsoft.VCRedist.2015+.x86" = "vcredist140"
+    "AltSnap.AltSnap" = "altsnap"
+    "AutoHotkey.AutoHotkey" = "autohotkey"
+    "Ferdium.Ferdium" = "ferdium"
+    "GoTo.GoTo" = "gotomeeting"
+    "Microsoft.VisualStudioCode" = "vscode"
+    "Microsoft.WindowsTerminal" = "microsoft-windows-terminal"
     "Microsoft.PowerShell" = "powershell-core"
-    "Microsoft.WindowsTerminal" = "windows-terminal"
 }
 
 $installedWingetPackages = @()
@@ -213,20 +272,53 @@ if ($wingetAvailable -and $installedWingetPackages.Count -gt 0 -and $cleanupWing
 
 Write-BoxstarterMessage "Installing applications..."
 
-# Essential development tools
+# Development tools
 choco install -y git
-choco install -y vscode
+choco install -y vscode  
 choco install -y powershell-core
-choco install -y windows-terminal
+choco install -y microsoft-windows-terminal
+choco install -y autohotkey
 
-# System utilities
+# System utilities  
 choco install -y 7zip
 choco install -y notepadplusplus
-choco install -y sysinternals
+choco install -y altsnap
+choco install -y putty
+choco install -y winscp
+choco install -y winmerge
 
-# Add your other packages here - keeping minimal for now
-# Examples you might want:
-# choco install -y nodejs python docker-desktop
+# Web browsers
+choco install -y firefox
+choco install -y googlechrome
+choco install -y microsoft-edge
+
+# Communication
+choco install -y thunderbird
+choco install -y ferdium
+choco install -y gotomeeting
+
+# Office & Productivity
+choco install -y libreoffice-fresh
+
+# Development platforms & languages
+choco install -y openjdk17
+choco install -y jre8
+choco install -y python2
+choco install -y python3
+
+# Database tools
+choco install -y heidisql
+choco install -y sql-server-management-studio
+choco install -y sqlserver-odbcdriver
+
+# .NET runtimes & redistributables
+choco install -y dotnet-5.0-desktopruntime
+choco install -y dotnet-7.0-desktopruntime
+choco install -y vcredist140
+choco install -y vcredist2013
+
+# Networking & VPN
+choco install -y wireguard
 
 Write-BoxstarterMessage "Application installation complete"
 
