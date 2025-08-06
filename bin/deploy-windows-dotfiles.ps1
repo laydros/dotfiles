@@ -21,7 +21,7 @@ foreach ($dir in $configDirs) {
 }
 
 # Deploy Git config (remove ##template suffix)
-Copy-Item ".\.config\git\config##template" "$env:USERPROFILE\.config\git\config" -Force
+Copy-Item ".\.config\git\config" "$env:USERPROFILE\.config\git\config" -Force
 Write-Host "✓ Git config"
 
 # Deploy Git ignore  
