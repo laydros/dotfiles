@@ -19,7 +19,7 @@
     postBuffer = 100000000
 [alias]
     co = checkout
-    st = status -s -uno
+    st = status -sb
     ix = diff --cached
     tree = log --oneline --decorate --graph
     news = log -p @{1}..
@@ -28,7 +28,6 @@
     dc = diff --cached
     lc = log ORIG_HEAD.. --stat --no-merges
     gl = log --oneline --decorate --stat --graph
-    st = status -sb
     # show verbose output
     tags = tags -l
     branches = branches -a
@@ -46,38 +45,28 @@
     help = black
 
 [diff]
-{% if yadm.os == "Darwin" %}
-    tool = kaleidoscope
-{% endif %}
-{% if yadm.os == "Linux" %}
-    tool = meld
-{% endif %}
+    tool = vscode
+[difftool "vscode"]
+    cmd = code --wait --diff $LOCAL $REMOTE
+[difftool "ksdiff"]
+    cmd = ksdiff --wait --label \"$LOCAL\" \"$LOCAL\" --label \"$REMOTE\" \"$REMOTE\"
+[difftool]
+    prompt = false
 
-{% if yadm.os == "Darwin" %}
-[difftool "kaleidoscope"]
-    cmd = ksdiff --partial-changeset --relative-path "$MERGED" -- "$LOCAL" "$REMOTE"
-[mergetool "kaleidoscope"]
+[merge]
+    tool = vscode
+[mergetool "vscode"]
+    cmd = code --wait $MERGED
+[mergetool "ksdiff"]
     cmd = ksdiff --merge --output "$MERGED" --base "$BASE" -- "$LOCAL" --snapshot "$REMOTE" --snapshot
     trustExitCode = true
-{% endif %}
-{% if yadm.os == "Linux" %}
-[difftool "meld"]
-    cmd = meld "$LOCAL" "$REMOTE"
-[mergetool "meld"]
-    cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
-{% endif %}
 
 [delta]
     navigate = true # use n and N to move between diff sections
     side-by-side = true
     line-numbers = true
-[difftool]
-	prompt = false
+
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [safe]
-	directory = /home/m3db/it/doc/hosts
-	
-	
-[difftool "kaleidoscope"]
-	cmd = ksdiff --wait --label \"$LOCAL\" \"$LOCAL\" --label \"$REMOTE\" \"$REMOTE\"
+    directory = /home/m3db/it/doc/hosts
