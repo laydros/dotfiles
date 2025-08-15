@@ -337,7 +337,6 @@ ecat() {
   } =(:)
 }
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # sbin for homebrew
 export PATH="/usr/local/sbin:$PATH"
@@ -359,3 +358,5 @@ elif [[ $OSTYPE = linux* ]]; then
 fi
 
 
+
+test -e /home/laydros/.config/zsh/.iterm2_shell_integration.zsh && source /home/laydros/.config/zsh/.iterm2_shell_integration.zsh || true
