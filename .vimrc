@@ -71,6 +71,7 @@ set tabpagemax=50
 set tags=./tags;,tags
 set ttyfast
 set viminfo+=!
+set viminfo+=n~/.vim/viminfo
 set wildmenu                    " broader command line completion
 
 " Load matchit.vim, if a newer version isn't already installed.
