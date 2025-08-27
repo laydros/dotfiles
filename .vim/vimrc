@@ -1,21 +1,12 @@
-" vimrc - 2025-01-27 - jwh
+" vimrc - 2025-08-27 - jwh
 " vim config - converted from neovim init.vim to use XDG paths
 " Based on init.vim from 2024-05-06
 
 " Define config file path for reliable sourcing
 let s:config_file = expand('<sfile>:p')
 
-" Bootstrap vim-plug
-" Determine the correct path for vim config
-if has('nvim')
-  let data_dir = stdpath('data') . '/site'
-else
-  if exists('$XDG_CONFIG_HOME')
-    let data_dir = expand('$XDG_CONFIG_HOME') . '/vim'
-  else
-    let data_dir = expand('~/.vim')
-  endif
-endif
+" Bootstrap vim-plug - SIMPLIFIED FOR RELIABILITY
+let data_dir = expand('~/.vim')
 
 " Install vim-plug if not present
 let plug_file = data_dir . '/autoload/plug.vim'
@@ -25,7 +16,7 @@ if empty(glob(plug_file))
   silent execute '!curl -fLo ' . plug_file . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   if v:shell_error == 0
     echo "vim-plug installed successfully. Restarting vim..."
-    autocmd VimEnter * PlugInstall --sync \| execute 'source' s:config_file
+    autocmd VimEnter * PlugInstall --sync | execute 'source' s:config_file
   else
     echo "Failed to install vim-plug. Please install manually."
     finish
@@ -34,7 +25,7 @@ endif
 
 " Auto-install missing plugins
 autocmd VimEnter * if exists('g:plugs') && !empty(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \| PlugInstall --sync \| execute 'source' s:config_file
+  \| PlugInstall --sync | execute 'source' s:config_file
 \| endif
 
 " Always use the system clipboard (requires vim compiled with +clipboard)
@@ -94,7 +85,7 @@ set hidden                      " abandon hidden buffers
 " save undo-trees in files (using XDG paths)
 if has('persistent_undo')
   set undofile
-  let &undodir = expand(data_dir) . '/undo'
+  let &undodir = data_dir . '/undo'
   if !isdirectory(&undodir)
     call mkdir(&undodir, "p", 0700)
   endif
@@ -150,9 +141,8 @@ autocmd FileType python setlocal et ts=4 sw=4
 "let g:markdown_folding = 1
 
 " VIM-PLUG
-" Reuse data_dir from bootstrap section
-let plug_dir = data_dir . '/plugged'
-call plug#begin(plug_dir)
+" Simplified - just use ~/.vim/plugged
+call plug#begin('~/.vim/plugged')
 Plug 'wellle/context.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'preservim/vim-markdown'
