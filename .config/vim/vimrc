@@ -15,7 +15,7 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 
 " Run PlugInstall if there are missing plugins
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+autocmd VimEnter * if exists('g:plugs') && len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync \| execute 'source' s:config_file
 \| endif
 
