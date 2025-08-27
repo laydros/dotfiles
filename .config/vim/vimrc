@@ -11,12 +11,12 @@ let s:config_file = expand('<sfile>:p')
 let data_dir = exists('$XDG_CONFIG_HOME') ? expand('$XDG_CONFIG_HOME') . '/vim' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | execute 'source' s:config_file
+  autocmd VimEnter * PlugInstall --sync \| execute 'source' s:config_file
 endif
 
 " Run PlugInstall if there are missing plugins
 autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \| PlugInstall --sync | execute 'source' s:config_file
+  \| PlugInstall --sync \| execute 'source' s:config_file
 \| endif
 
 " Always use the system clipboard (requires vim compiled with +clipboard)
@@ -136,6 +136,9 @@ let plug_dir = expand(data_dir) . '/plugged'
 call plug#begin(plug_dir)
 Plug 'wellle/context.vim'
 Plug 'sheerun/vim-polyglot'
+Plug 'preservim/vim-markdown'
+Plug 'dense-analysis/ale'    " Linting support
+Plug 'dhruvasagar/vim-table-mode'
 Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'jkramer/vim-checkbox'
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -156,6 +159,95 @@ set smartcase                   " but look for case if I search with it
 if &term =~ '256color'
   set t_Co=256
 endif
+
+" vim-markdown configuration
+let g:vim_markdown_no_default_key_mappings = 1
+let g:vim_markdown_folding_style_pythonic = 1
+let g:vim_markdown_folding_disabled = 0
+let g:vim_markdown_strikethrough = 1
+let g:tex_conceal = ""
+let g:vim_markdown_math = 1
+let g:vim_markdown_frontmatter = 1
+
+" vim-table-mode configuration
+let g:table_mode_corner = '|'
+let g:table_mode_corner_corner = '|'
+let g:table_mode_header_fillchar = '-'
+
+" ALE linter configuration
+let g:ale_linters = {
+\   'markdown': ['markdownlint'],
+\}
+let g:ale_fixers = {
+\   'markdown': ['trim_whitespace', 'remove_trailing_lines'],
+\}
+let g:ale_fix_on_save = 1
+
+
+" Markdown-specific settings
+augroup MarkdownSettings
+  autocmd!
+  autocmd FileType markdown setlocal shiftwidth=2
+  autocmd FileType markdown setlocal tabstop=2
+  autocmd FileType markdown setlocal softtabstop=2
+  autocmd FileType markdown setlocal expandtab
+  autocmd FileType markdown setlocal wrap
+  autocmd FileType markdown setlocal linebreak
+  autocmd FileType markdown setlocal spell
+  autocmd FileType markdown setlocal spelllang=en_us
+  autocmd FileType markdown setlocal textwidth=0
+  autocmd FileType markdown setlocal wrapmargin=0
+augroup END
+
+" Key mappings for markdown
+augroup MarkdownMappings
+  autocmd!
+  " Bold and italic in visual mode
+  autocmd FileType markdown vnoremap <buffer> <leader>b c**<C-r>"**<Esc>
+  autocmd FileType markdown vnoremap <buffer> <leader>i c*<C-r>"*<Esc>
+  
+  " Strikethrough
+  autocmd FileType markdown vnoremap <buffer> <leader>s c~~<C-r>"~~<Esc>
+  
+  " Code block
+  autocmd FileType markdown vnoremap <buffer> <leader>c c`<C-r>"`<Esc>
+  
+  " Insert link
+  autocmd FileType markdown vnoremap <buffer> <leader>l c[](<C-r>")<Esc>F]i
+  
+  " Table mode toggle
+  autocmd FileType markdown nnoremap <buffer> <leader>tm :TableModeToggle<CR>
+augroup END
+
+" Additional markdown helpers
+function! MarkdownLevel()
+  if getline(v:lnum) =~ '^# .*$'
+    return ">1"
+  endif
+  if getline(v:lnum) =~ '^## .*$'
+    return ">2"
+  endif
+  if getline(v:lnum) =~ '^### .*$'
+    return ">3"
+  endif
+  if getline(v:lnum) =~ '^#### .*$'
+    return ">4"
+  endif
+  if getline(v:lnum) =~ '^##### .*$'
+    return ">5"
+  endif
+  if getline(v:lnum) =~ '^###### .*$'
+    return ">6"
+  endif
+  return "="
+endfunction
+
+augroup MarkdownFolding
+  autocmd!
+  autocmd FileType markdown setlocal foldexpr=MarkdownLevel()  
+  autocmd FileType markdown setlocal foldmethod=expr
+augroup END
+
 
 " KEYS
 if has('paste')
