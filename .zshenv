@@ -59,6 +59,8 @@ export TERMINFO="$XDG_DATA_HOME"/terminfo
 export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
 export COLIMA_HOME="$XDG_DATA_HOME/colima"
 export OLLAMA_HOME="$XDG_DATA_HOME/ollama"
+# Vim XDG compliance
+export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 
 # since I don't have any options set, this breaks
 # export WGETRC="$XDG_CONFIG_HOME/wgetrc"
