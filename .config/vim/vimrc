@@ -5,17 +5,35 @@
 " Define config file path for reliable sourcing
 let s:config_file = expand('<sfile>:p')
 
-" plug.vim install and run
-" Download plug.vim if it doesn't exist yet
-" Using XDG_CONFIG_HOME paths
-let data_dir = exists('$XDG_CONFIG_HOME') ? expand('$XDG_CONFIG_HOME') . '/vim' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync \| execute 'source' s:config_file
+" Bootstrap vim-plug
+" Determine the correct path for vim config
+if has('nvim')
+  let data_dir = stdpath('data') . '/site'
+else
+  if exists('$XDG_CONFIG_HOME')
+    let data_dir = expand('$XDG_CONFIG_HOME') . '/vim'
+  else
+    let data_dir = expand('~/.vim')
+  endif
 endif
 
-" Run PlugInstall if there are missing plugins
-autocmd VimEnter * if exists('g:plugs') && len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+" Install vim-plug if not present
+let plug_file = data_dir . '/autoload/plug.vim'
+if empty(glob(plug_file))
+  echo "Installing vim-plug..."
+  silent execute '!mkdir -p ' . data_dir . '/autoload'
+  silent execute '!curl -fLo ' . plug_file . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  if v:shell_error == 0
+    echo "vim-plug installed successfully. Restarting vim..."
+    autocmd VimEnter * PlugInstall --sync \| execute 'source' s:config_file
+  else
+    echo "Failed to install vim-plug. Please install manually."
+    finish
+  endif
+endif
+
+" Auto-install missing plugins
+autocmd VimEnter * if exists('g:plugs') && !empty(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync \| execute 'source' s:config_file
 \| endif
 
@@ -131,8 +149,9 @@ autocmd FileType python setlocal et ts=4 sw=4
 " MARKDOWN FOLDING
 "let g:markdown_folding = 1
 
-" VIM-PLUG (using XDG paths)
-let plug_dir = expand(data_dir) . '/plugged'
+" VIM-PLUG
+" Reuse data_dir from bootstrap section
+let plug_dir = data_dir . '/plugged'
 call plug#begin(plug_dir)
 Plug 'wellle/context.vim'
 Plug 'sheerun/vim-polyglot'
