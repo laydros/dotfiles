@@ -22,7 +22,6 @@ brew "colima", restart_service: true
 brew "OpenSSH"   # to get sftp with tab complete
 brew "signify-osx"
 
-cask "arc"
 cask "autodesk-fusion"
 cask "bambu-studio"
 cask "bartender"
@@ -45,7 +44,7 @@ cask "font-iosevka-nerd-font"
 cask "font-source-code-pro"
 # cask "font-terminus"
 # cask "freac"
-cask "ghostty"
+# cask "ghostty"
 cask "google-chrome"
 cask "hammerspoon"
 cask "handbrake-app"
@@ -62,7 +61,7 @@ cask "makemkv"
 cask "musicbrainz-picard"
 cask "obsidian"
 # cask "onyx"
-cask "openscad"
+# cask "openscad"
 # cask "orion"
 cask "permute"
 cask "plexamp"
@@ -76,7 +75,7 @@ cask "qmk-toolbox"
 cask "quicklook-json"
 cask "qutebrowser"
 # cask "rio"
-cask "rustdesk"
+# cask "rustdesk"
 cask "setapp"
 cask "signal"
 cask "soundsource"
@@ -87,11 +86,11 @@ cask "stolendata-mpv"
 
 # Eclipse JDK
 cask "temurin"
-cask "tigervnc-viewer"
+# cask "tigervnc-viewer"
 cask "tor-browser"
 cask "transmission"
 cask "transmit"
-cask "upscayl"
+# cask "upscayl"
 cask "veracrypt"
 cask "viscosity"
 cask "visual-studio-code"
@@ -99,7 +98,7 @@ cask "vmware-fusion"
 # cask "vscodium"
 # cask "wezterm"
 cask "whichspace"
-cask "whisky"
+# cask "whisky"
 cask "xbar"
 cask "xquartz"
 cask "zoom"
@@ -134,9 +133,8 @@ mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Parcel", id: 639968404
 # mas "Pastebot", id: 1179623856
-mas "Perplexity", id: 6714467650
-mas "Reaper", id: 698147017
-mas "Resident Evil 2", id: 1640632432
+# mas "Perplexity", id: 6714467650
+# mas "Resident Evil 2", id: 1640632432
 mas "SponsorBlock", id: 1573461917
 mas "Tailscale", id: 1475387142
 # mas "Telephone", id: 406825478
