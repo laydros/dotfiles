@@ -138,6 +138,11 @@ autocmd FileType html setlocal et ts=2 sw=2
 autocmd FileType markdown setlocal et ts=2 sw=2 tw=80
 autocmd FileType python setlocal et ts=4 sw=4
 
+autocmd FileType go setlocal nolist  " disable whitespace markers for Go
+
+" Basic Go support (built into vim 8+)
+autocmd BufRead,BufNewFile *.go set filetype=go
+
 " MARKDOWN FOLDING
 "let g:markdown_folding = 1
 
@@ -152,6 +157,7 @@ Plug 'dhruvasagar/vim-table-mode'
 Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'jkramer/vim-checkbox'
 Plug 'dracula/vim', { 'as': 'dracula' }
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 " colorscheme nord
