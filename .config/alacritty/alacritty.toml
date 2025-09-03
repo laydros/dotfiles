@@ -1,4 +1,6 @@
-general.import = ["$HOME/.config/alacritty/themes/dracula.toml"]
+general.import = [
+  "$HOME/.config/alacritty/themes/dracula.toml"
+]
 
 [bell]
 animation = "EaseOutExpo"
@@ -10,10 +12,23 @@ unfocused_hollow = true
 TERM = "xterm-256color"
 
 [font]
-size = 10.0
+size = 11.0
 
 [font.normal]
-family = "Hack"
+family = "Hack Nerd Font Mono"
+style  = "Regular"
+
+[font.bold]
+family = "Hack Nerd Font Mono"
+style  = "Bold"
+
+[font.italic]
+family = "Hack Nerd Font Mono"
+style  = "Italic"
+
+[font.bold_italic]
+family = "Hack Nerd Font Mono"
+style  = "Bold Italic"
 
 [[keyboard.bindings]]
 action = "SpawnNewInstance"
