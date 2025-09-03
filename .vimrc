@@ -139,7 +139,10 @@ autocmd FileType markdown setlocal et ts=2 sw=2 tw=80
 autocmd FileType python setlocal et ts=4 sw=4
 
 " MARKDOWN FOLDING
-"let g:markdown_folding = 1
+" let g:markdown_folding = 1
+
+" temporarily disable folding completely
+set nofoldenable
 
 " VIM-PLUG
 " Simplified - just use ~/.vim/plugged
