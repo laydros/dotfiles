@@ -53,14 +53,29 @@
 # Additionally, each config option is also explained in detail
 # on Ghostty's website, at https://ghostty.org/docs/config.
 
-theme = Dracula
+theme = Dracula+
 window-decoration = client
 copy-on-select = true
 window-padding-x = 4
 window-padding-y = 2
 
-font-family = "Hack Nerd Font"
-font-size = 10
+# font-family = "Hack Nerd Font"
+#font-size = 10
+
+# font-family = "Cascadia Code"
+
+font-family = "Monaco"
+font-size = 12
+
+# Force font smoothing on macOS
+macos-option-as-alt = true
+font-thicken = true
+bold-is-bright = false
+
+# Adjust antialiasing 
+macos-non-native-fullscreen = true
+
+term = xterm-256color
 
 # Config syntax crash course
 # ==========================
