@@ -239,7 +239,7 @@ alias l='ls -CF'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-    
+
 # if using exa
 #alias ls="exa --color=auto -a -g"
 
@@ -258,6 +258,7 @@ alias cat="bat -p"
 alias clear="clear -x"
 alias ip="ip -c"
 alias feh="echo imv"
+alias gst="git status"
 
 # alias ls='LC_COLLATE=C ls -FG'
 
