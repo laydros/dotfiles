@@ -79,6 +79,7 @@ brew "syncthing", restart_service: true
 brew "tealdeer"
 # brew "tmux"
 # brew "tmuxp"
+brew "tgpt"
 brew "tokei"
 brew "tree"
 brew "tut"
