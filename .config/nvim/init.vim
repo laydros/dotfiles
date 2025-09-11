@@ -56,17 +56,6 @@ endif
 " start my options
 set hidden                      " abandon hidden buffers
 
-" save undo-trees in files (using XDG paths)
-if has('persistent_undo')
-  set undofile
-  let &undodir = stdpath('state') . '/undo'
-  if !isdirectory(&undodir)
-    call mkdir(&undodir, "p", 0700)
-  endif
-  set undolevels=10000
-  set undoreload=10000
-endif
-
 " seems to cause issue with abbrv starting with _
 "set iskeyword-=_                " treat '_' as word separator
 

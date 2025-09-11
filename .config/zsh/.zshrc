@@ -6,8 +6,8 @@
 
 # Lots borrowed from https://leahneukirchen.org/dotfiles/.zshrc
 
-
-#PATH=/opt/homebrew/sbin:/opt/homebrew/bin:/opt/homebrew/opt/python@3.9/libexec/bin:$PATH
+# hopefully avoid PATH duplication
+typeset -U PATH
 
 ## completion for homebrew: https://docs.brew.sh/Shell-Completion
 if type brew &>/dev/null; then
@@ -104,15 +104,15 @@ fi
 #   EXPORT
 # =============
 
+# Start with system PATH, then add our directories in priority order
 PATH=$HOME/bin:$HOME/.local/bin:$PATH
-# for rust
+
+# Rust
 PATH=$HOME/.local/share/cargo/bin:$PATH
-# for brew
-PATH=/opt/homebrew/sbin:/opt/homebrew/bin:/opt/homebrew/opt/python@3.9/libexec/bin:$PATH
-# for go
-export GOPATH="$HOME/go"
-export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
-# PATH=$HOME/.local/share/go/bin:$PATH
+
+# sbin for homebrew
+PATH="/usr/local/sbin:$PATH"
+
 # for m3-info
 if [[ "$OSTYPE" != "darwin" && "$OSTYPE" != "cygwin" && "$OSTYPE" != "msys" && "$OSTYPE" != "win32" ]]; then
     PATH=/home/m3db/data/linux/bin:$PATH
@@ -342,8 +342,6 @@ ecat() {
 }
 
 
-# sbin for homebrew
-export PATH="/usr/local/sbin:$PATH"
 # source zsh functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
