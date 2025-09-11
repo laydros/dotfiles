@@ -72,7 +72,6 @@ set showcmd
 
 " LINE NUMBERING
 set number
-"set relativenumber
 
 " number when in insert or focus is lost. relative in command mode
 " could instead use Plug 'jeffkreeftmeijer/vim-numbertoggle'
@@ -125,7 +124,6 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
-" colorscheme nord
 " in theory dim allows the terminals colors to work
 " use colorscheme grim for greyscale
 
@@ -255,19 +253,3 @@ function! s:CodeSnippet(...)
   put ='```'
 endfunction
 
-" it's a .vimrc file that makes you look like a ninja. it's the absolute
-" minimal setup. no colors, no highlights, no messages, no status bar,
-" nothing. just text.
-
-"ninja vimrc http://xero.nu
-"set nocompatible
-"set modelines=0
-"set shortmess+=I
-"set noshowmode
-"set noshowcmd
-"set hidden
-"set lazyredraw
-"set noruler
-"set laststatus=0
-"syntax off
-"filetype off
