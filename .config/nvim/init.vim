@@ -2,6 +2,8 @@
 " neovim config - migrated from vim .vimrc
 " Based on vimrc from 2025-08-27
 
+let mapleader = ","             " map leader to comma
+
 " Define config file path for reliable sourcing
 let s:config_file = expand('<sfile>:p')
 
@@ -27,17 +29,13 @@ autocmd VimEnter * if exists('g:plugs') && !empty(filter(values(g:plugs), '!isdi
 \| endif
 
 " Core settings
-set hidden                          " abandon hidden buffers
 set clipboard^=unnamed,unnamedplus  " use system clipboard
 set number relativenumber
 set ignorecase smartcase            " ignore case for searching, unless I specify
 set splitbelow splitright
 set report=0                        " always report # of lines changed for command
-set ruler
 set scrolloff=1
 set showmatch                       " show matching brackets
-set showcmd
-set showmode
 set sidescroll=3
 
 " show tabs as "▸·", end-of-line as "↲", and trailing spaces as "·"
@@ -131,7 +129,6 @@ augroup END
 
 " KEYS
 inoremap jk <Esc>               " use jk for esc while in insert mode
-let mapleader = ","             " map leader to comma
 
 nnoremap <F5> "=strftime("%Y-%m-%d_%X")<CR>P
 inoremap <F5> <C-R>=strftime("%Y-%m-%d_%X")<CR>
