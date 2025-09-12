@@ -118,16 +118,13 @@ Plug 'sheerun/vim-polyglot'
 Plug 'preservim/vim-markdown'
 Plug 'dense-analysis/ale'    " Linting support
 Plug 'dhruvasagar/vim-table-mode'
-Plug 'jeffkreeftmeijer/vim-dim'
-Plug 'jkramer/vim-checkbox'
+" Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 " in theory dim allows the terminals colors to work
 " use colorscheme grim for greyscale
-
-" colorscheme dim
 colorscheme dracula
 
 " case search
