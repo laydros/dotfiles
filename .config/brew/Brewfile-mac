@@ -18,7 +18,8 @@
 #
 # Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
 
-brew "colima", restart_service: true
+# brew "colima", restart_service: true
+# brew "coreutils"
 brew "OpenSSH"   # to get sftp with tab complete
 brew "signify-osx"
 
@@ -28,11 +29,8 @@ cask "bambu-studio"
 cask "bartender"
 cask "bbedit"
 cask "bettertouchtool"
-# cask "calibre"
 cask "chatgpt"
-# cask "coteditor"
 cask "daisydisk"
-# cask "discord"
 cask "easy-move+resize"
 cask "espanso"
 cask "ferdium"
@@ -43,21 +41,18 @@ cask "font-inter"
 cask "font-iosevka"
 cask "font-iosevka-nerd-font"
 cask "font-source-code-pro"
-# cask "font-terminus"
-# cask "freac"
 cask "ghostty"
 cask "google-chrome"
-cask "hammerspoon"
+#cask "hammerspoon"
 cask "handbrake-app"
 cask "iina"
-cask "iterm2"
+#cask "iterm2"
 cask "kaleidoscope"
 # cask "karabiner-elements"
 cask "keka"
-# cask "keymapp"
 cask "libreoffice"
 # cask "librewolf"
-cask "lm-studio"
+#cask "lm-studio"
 cask "maccy"
 cask "macfuse"
 cask "makemkv"
@@ -66,7 +61,6 @@ cask "musicbrainz-picard"
 cask "nomachine"
 cask "obsidian"
 # cask "onyx"
-# cask "openscad"
 cask "permute"
 cask "plexamp"
 cask "proton-mail-bridge"
@@ -84,23 +78,18 @@ cask "setapp"
 cask "signal"
 cask "soundsource"
 cask "spotify"
-cask "standard-notes"
 cask "steam"
 cask "stolendata-mpv"
 
 # Eclipse JDK
 cask "temurin"
 # cask "tigervnc-viewer"
-cask "tor-browser"
+# cask "tor-browser"
 cask "transmission"
 cask "transmit"
-# cask "upscayl"
 cask "veracrypt"
 cask "viscosity"
 cask "visual-studio-code"
-# cask "vmware-fusion"
-# cask "vscodium"
-# cask "wezterm"
 # cask "whichspace"
 # cask "whisky"
 cask "xbar"
@@ -113,24 +102,18 @@ mas "1Blocker", id: 1365531024
 mas "Acorn", id: 6737921844
 mas "Amphetamine", id: 937984704
 # mas "AutoMounter", id: 1160435653
-# mas "Barbee", id: 1548711022
 # mas "Be Focused Pro", id: 961632517
 mas "Bitwarden", id: 1352778147
 # mas "Capo", id: 696977615
 # mas "Capture", id: 6458535284
-# mas "CotEditor", id: 1024640650
-# mas "CoverSutra", id: 404128139
 # mas "DeArrow", id: 6451469297
-# mas "Deliveries", id: 290986013
 mas "Drafts", id: 1435957248
 mas "Disk Speed Test", id: 425264550
-mas "Equinox", id: 1591510203
 mas "Fantastical", id: 975937182
 mas "GarageBand", id: 682658836
 mas "HomePass", id: 1330266650
-# mas "Hyperspace", id: 6739505345
 mas "iMovie", id: 408981434
-# mas "Ivory", id: 6444602274
+mas "Ivory", id: 6444602274
 mas "Keynote", id: 409183694
 mas "Navicat Premium Essentials", id: 466416967
 mas "Numbers", id: 409203825
