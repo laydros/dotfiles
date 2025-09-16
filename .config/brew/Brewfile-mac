@@ -22,6 +22,7 @@
 # brew "coreutils"
 brew "OpenSSH"   # to get sftp with tab complete
 brew "signify-osx"
+brew "syncthing", restart_service: true
 
 # cask "alacritty"
 cask "autodesk-fusion"

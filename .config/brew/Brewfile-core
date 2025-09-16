@@ -73,7 +73,6 @@ brew "rustup"
 brew "shellcheck"
 # brew "slashem"
 # brew "smartmontools"
-brew "syncthing", restart_service: true
 # brew "telnet"
 brew "tealdeer"
 # brew "tmux"
