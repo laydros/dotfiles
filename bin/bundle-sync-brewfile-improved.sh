@@ -3,11 +3,10 @@
 # Brewfile Cross-Platform Installer (Improved)
 #
 # Usage:
-#   ./bundle-sync-brewfile.sh [--preview] [--no-vscode] [--verbose] [--help]
+#   ./bundle-sync-brewfile.sh [--preview] [--verbose] [--help]
 #
 # Options:
 #   --preview     Show what changes would be made without executing
-#   --no-vscode   Skip VS Code extension sync
 #   --verbose     Show all packages including already installed ones
 #   --help        Show this help message
 #
@@ -22,7 +21,6 @@ set -euo pipefail  # Exit on error, undefined vars, pipe failures
 BREWFILE_DIR=~/.config/brew
 BREWFILE_TEMP="/tmp/Brewfile.$$"  # Use PID for unique temp file
 PREVIEW_MODE=false
-SKIP_VSCODE=false
 VERBOSE=false
 
 # Colors for output
@@ -68,10 +66,6 @@ while [[ $# -gt 0 ]]; do
             PREVIEW_MODE=true
             shift
             ;;
-        --no-vscode)
-            SKIP_VSCODE=true
-            shift
-            ;;
         --verbose)
             VERBOSE=true
             shift
@@ -104,7 +98,7 @@ if [[ ! -f "$BREWFILE_DIR/Brewfile-core" ]]; then
     exit 1
 fi
 
-# Determine OS and validate OS-specific Brewfile
+# Determine OS and check for OS-specific Brewfile
 OS=$(uname)
 if [[ "$OS" == "Darwin" ]]; then
     OS_BREWFILE="$BREWFILE_DIR/Brewfile-mac"
@@ -117,15 +111,22 @@ else
     exit 1
 fi
 
-if [[ ! -f "$OS_BREWFILE" ]]; then
-    error "OS-specific Brewfile not found: $OS_BREWFILE"
-    exit 1
+# Check if OS-specific Brewfile exists (optional)
+HAS_OS_BREWFILE=false
+if [[ -f "$OS_BREWFILE" ]]; then
+    HAS_OS_BREWFILE=true
+    log "Found OS-specific Brewfile: $OS_BREWFILE"
+else
+    warn "OS-specific Brewfile not found: $OS_BREWFILE (continuing with core only)"
 fi
 
 # Build combined Brewfile
 log "Building combined Brewfile..."
 cp "$BREWFILE_DIR/Brewfile-core" "$BREWFILE_TEMP"
-cat "$OS_BREWFILE" >> "$BREWFILE_TEMP"
+
+if [[ "$HAS_OS_BREWFILE" == true ]]; then
+    cat "$OS_BREWFILE" >> "$BREWFILE_TEMP"
+fi
 
 # Additional safety for Linux
 if [[ "$OS" == "Linux" ]]; then
@@ -137,10 +138,14 @@ fi
 # Show what's in the combined Brewfile
 log "Combined Brewfile contains:"
 echo "  Core packages: $(grep -c '^brew ' "$BREWFILE_DIR/Brewfile-core" || echo 0)"
-echo "  OS-specific packages: $(grep -c '^brew ' "$OS_BREWFILE" || echo 0)"
-if [[ "$OS" == "Darwin" ]]; then
-    echo "  Casks: $(grep -c '^cask ' "$OS_BREWFILE" || echo 0)"
-    echo "  Mac App Store: $(grep -c '^mas ' "$OS_BREWFILE" || echo 0)"
+if [[ "$HAS_OS_BREWFILE" == true ]]; then
+    echo "  OS-specific packages: $(grep -c '^brew ' "$OS_BREWFILE" || echo 0)"
+    if [[ "$OS" == "Darwin" ]]; then
+        echo "  Casks: $(grep -c '^cask ' "$OS_BREWFILE" || echo 0)"
+        echo "  Mac App Store: $(grep -c '^mas ' "$OS_BREWFILE" || echo 0)"
+    fi
+else
+    echo "  OS-specific packages: 0 (no OS-specific Brewfile)"
 fi
 
 # Preview mode - show what would change
@@ -192,11 +197,6 @@ if [[ "$PREVIEW_MODE" == true ]]; then
             sed 's/^/  - /'
     fi
     
-    if [[ "$SKIP_VSCODE" != true ]]; then
-        echo ""
-        echo "VS Code extensions would be synced (use --no-vscode to skip)"
-    fi
-    
     echo ""
     echo "To execute these changes, run without --preview"
     exit 0
@@ -226,22 +226,6 @@ if brew bundle cleanup --file="$BREWFILE_TEMP" --force; then
     success "Cleanup completed successfully"
 else
     warn "Cleanup had issues, but continuing..."
-fi
-
-# VS Code extension sync (optional)
-if [[ "$SKIP_VSCODE" != true ]]; then
-    VSCODE_SYNC_SCRIPT=~/bin/vscode-sync-extensions.sh
-    if [[ -f "$VSCODE_SYNC_SCRIPT" ]]; then
-        log "Syncing VS Code extensions..."
-        if "$VSCODE_SYNC_SCRIPT"; then
-            success "VS Code extensions synced"
-        else
-            warn "VS Code extension sync failed"
-        fi
-    else
-        warn "VS Code sync script not found: $VSCODE_SYNC_SCRIPT"
-        echo "Consider using --no-vscode if you're using Microsoft's built-in sync"
-    fi
 fi
 
 success "Brewfile sync completed successfully"
