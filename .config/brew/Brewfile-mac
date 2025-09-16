@@ -22,7 +22,6 @@
 # brew "coreutils"
 brew "OpenSSH"   # to get sftp with tab complete
 brew "signify-osx"
-brew "syncthing", restart_service: true
 
 # cask "alacritty"
 cask "autodesk-fusion"
@@ -135,5 +134,5 @@ mas "Windows App", id: 1295203466
 mas "WireGuard", id: 1451685025
 
 
-vscode "kaleidoscope-app.vscode-ksdiff"
+# vscode "kaleidoscope-app.vscode-ksdiff"
 
