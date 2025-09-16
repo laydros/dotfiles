@@ -19,7 +19,7 @@
 set -euo pipefail  # Exit on error, undefined vars, pipe failures
 
 BREWFILE_DIR=~/.config/brew
-BREWFILE_TEMP="/tmp/Brewfile.$$"  # Use PID for unique temp file
+BREWFILE_TEMP="$(mktemp)"  # Use mktemp for unique temp file
 PREVIEW_MODE=false
 VERBOSE=false
 
@@ -122,6 +122,7 @@ fi
 
 # Build combined Brewfile
 log "Building combined Brewfile..."
+log "Using temporary Brewfile: $BREWFILE_TEMP"
 cp "$BREWFILE_DIR/Brewfile-core" "$BREWFILE_TEMP"
 
 if [[ "$HAS_OS_BREWFILE" == true ]]; then
