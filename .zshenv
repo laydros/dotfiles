@@ -74,11 +74,10 @@ export LC_TIME=C
 # less: use UTF-8
 export LESSCHARSET=UTF-8
 
-#. "$HOME/.cargo/env"
+# add cargo for rust
+. "$HOME/.local/share/cargo/env"
 
 # == SITE LOCAL CONFIG
 
 # [[ -e ~/.zshenv.local ]] && . ~/.zshenv.local || :
 
-
-#if [ -e /home/laydros/.nix-profile/etc/profile.d/nix.sh ]; then . /home/laydros/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

@@ -58,3 +58,6 @@ fi
 
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/laydros/.lmstudio/bin"
+
+# add cargo
+. "$HOME/.local/share/cargo/env"

@@ -318,30 +318,6 @@ zpass() {
   echo
 }
 
-# cde - cd to working directory of current emacs buffer
-# 11nov2014  +chris+
-# 13dec2017  +leah+  print when not on a tty
-# 26nov2019  +leah+  append $1
-cde() {
-  local op=print
-  [[ -t 1 ]] && op=cd
-  $op ${(A):-${(Q)~$(emacsclient -e '(with-current-buffer
-                                       (window-buffer (selected-window))
-                                       default-directory) ')}${1:-/.}}
-}
-
-# ecat - print current emacs buffer
-# 15aug2016  +chris+
-ecat() {
-  () {
-    emacsclient -e '(with-current-buffer (window-buffer (selected-window))
-                      (write-region (point-min) (point-max) "'$1'" nil :quiet))
-                   ' >/dev/null &&
-    cat $1
-  } =(:)
-}
-
-
 # source zsh functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
@@ -355,10 +331,6 @@ if [[ $OSTYPE = darwin* ]]; then
    export STORE_LASTDIR=1
 
 elif [[ $OSTYPE = linux* ]]; then
-   . "/home/laydros/.local/share/cargo/env"
-   . "/home/laydros/.config/broot/launcher/bash/br"
+    # rust init now handled in .zshenv
 fi
 
-
-
-test -e /home/laydros/.config/zsh/.iterm2_shell_integration.zsh && source /home/laydros/.config/zsh/.iterm2_shell_integration.zsh || true
