@@ -30,8 +30,8 @@ matches:
       - name: mydatetime
         type: date
         params:
-          format: "%Y-%m-%d %H:%M:%S"
-          
+          format: "%Y-%m-%d_%H:%M:%S"
+
   # Recreate AutoHotkey supdate with cursor positioning
   - trigger: "supdate"
     replace: "{{mydate}} - $|$ - JWH"
