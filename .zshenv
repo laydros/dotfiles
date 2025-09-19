@@ -51,6 +51,8 @@ export PASSWORD_STORE_DIR="$XDG_DATA_HOME"/pass
 export WEECHAT_HOME="$XDG_CONFIG_HOME"/weechat
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
+export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
+
 export NVM_DIR="$XDG_DATA_HOME"/nvm
 export SQLITE_HISTORY=$XDG_DATA_HOME/sqlite_history
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg

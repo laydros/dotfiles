@@ -86,12 +86,33 @@ Plug 'wellle/context.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'preservim/vim-markdown'
 Plug 'dense-analysis/ale'    " Linting support
+Plug 'simrat39/rust-tools.nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/plenary.nvim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'dhruvasagar/vim-table-mode'
 " Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
+
+" minimal LSP setup
+lua << EOF
+require'lspconfig'.rust_analyzer.setup{}
+EOF
+
+lua << EOF
+local rt = require("rust-tools")
+rt.setup({
+  server = {
+    on_attach = function(_, bufnr)
+      -- Minimal keybindings
+      vim.keymap.set("n", "K", rt.hover_actions.hover_actions, { buffer = bufnr })
+      vim.keymap.set("n", "<Leader>a", rt.code_action_groups.code_action_groups, { buffer = bufnr })
+    end,
+  },
+})
+EOF
 
 " in theory dim allows the terminals colors to work
 " use colorscheme grim for greyscale

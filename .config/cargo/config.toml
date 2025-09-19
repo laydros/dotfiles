@@ -1,0 +1,9 @@
+[build]
+# Faster linking on Mac/Linux
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+
+[target.x86_64-apple-darwin]
+linker = "clang"
