@@ -2,6 +2,6 @@
   "model": "opusplan",
   "statusLine": {
     "type": "command",
-    "command": "input=$(cat); printf '\\033[1m%s\\033[0m \\033[36m%s\\033[0m' \"$(echo \"$input\" | jq -r '.model.display_name')\" \"$(echo \"$input\" | jq -r '.workspace.current_dir' | sed 's|.*/\\([^/]*/[^/]*\\)$|\\1|')\""
+    "command": "bash /Users/laydros/.claude/statusline.sh"
   }
 }
