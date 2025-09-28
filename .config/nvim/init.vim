@@ -2,6 +2,7 @@
 " neovim config - migrated from vim .vimrc
 " Based on vimrc from 2025-08-27
 
+" Leader
 let mapleader = ","             " map leader to comma
 
 " Define config file path for reliable sourcing
@@ -28,15 +29,32 @@ autocmd VimEnter * if exists('g:plugs') && !empty(filter(values(g:plugs), '!isdi
   \| PlugInstall --sync | execute 'source' s:config_file
 \| endif
 
-" Core settings
-set clipboard^=unnamed,unnamedplus  " use system clipboard
-set number relativenumber
-set ignorecase smartcase            " ignore case for searching, unless I specify
+" UI
+set hidden
 set splitbelow splitright
+set number relativenumber
 set report=0                        " always report # of lines changed for command
 set scrolloff=1
-set showmatch                       " show matching brackets
 set sidescroll=3
+
+" Search
+set ignorecase smartcase            " ignore case for searching, unless I specify
+set showmatch                       " show matching brackets
+
+
+" INDENTATION
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+set expandtab
+set copyindent
+set shiftround                  " round indent to multiple of shiftwidth
+set autoindent
+set smartindent
+set cindent
+
+" Clipboard
+set clipboard^=unnamed,unnamedplus  " use system clipboard
 
 " show tabs as "▸·", end-of-line as "↲", and trailing spaces as "·"
 set listchars=tab:▸·,trail:·,eol:↲,nbsp:␣
@@ -57,15 +75,6 @@ if exists('+relativenumber')
   augroup END
 endif
 
-" INDENTATION
-set smartindent
-set softtabstop=4
-set shiftwidth=4
-set tabstop=4
-set shiftround                  " round indent to multiple of shiftwidth
-set copyindent
-set expandtab
-set cindent
 
 autocmd FileType c setlocal noet ts=8 sw=8 tw=80                            " K&R style
 autocmd FileType go setlocal noet ts=4 sw=4 nolist                          " Go fmt std
