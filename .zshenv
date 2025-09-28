@@ -53,6 +53,14 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 
+export ANSIBLE_HOME="$XDG_DATA_HOME"/ansible
+export HISTFILE="${XDG_STATE_HOME}"/bash/history
+
+export BUNDLE_USER_CONFIG="$XDG_CONFIG_HOME"/bundle
+export BUNDLE_USER_CACHE="$XDG_CACHE_HOME"/bundle
+export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME"/bundle
+export GEM_HOME="$XDG_DATA_HOME"/gem
+export PLATFORMIO_CORE_DIR="$XDG_DATA_HOME"/platformio
 export NVM_DIR="$XDG_DATA_HOME"/nvm
 export SQLITE_HISTORY=$XDG_DATA_HOME/sqlite_history
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
@@ -61,6 +69,7 @@ export TERMINFO="$XDG_DATA_HOME"/terminfo
 export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
 export COLIMA_HOME="$XDG_DATA_HOME/colima"
 export OLLAMA_HOME="$XDG_DATA_HOME/ollama"
+export W3M_DIR="$XDG_DATA_HOME"/w3m
 # Vim XDG compliance
 #export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 
