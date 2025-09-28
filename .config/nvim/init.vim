@@ -75,7 +75,6 @@ if exists('+relativenumber')
   augroup END
 endif
 
-
 autocmd FileType c setlocal noet ts=8 sw=8 tw=80                            " K&R style
 autocmd FileType go setlocal noet ts=4 sw=4 nolist                          " Go fmt std
 autocmd FileType html setlocal et ts=2 sw=2
@@ -102,6 +101,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'dhruvasagar/vim-table-mode'
 " Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'phanviet/vim-monokai-pro'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
@@ -125,7 +125,8 @@ EOF
 
 " in theory dim allows the terminals colors to work
 " use colorscheme grim for greyscale
-colorscheme dracula
+# colorscheme dracula
+colorscheme monokai_pro
 
 " vim-markdown configuration
 let g:vim_markdown_no_default_key_mappings = 1

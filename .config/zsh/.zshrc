@@ -285,6 +285,26 @@ export NVM_DIR="$HOME/.nvm"
 # == calculator
 c() { printf "%s\n" "$@" | bc -l }
 
+cx() {
+    # If no argument was given, show a helpful message
+    if [ -z "$1" ]; then
+        echo "cdl: missing directory argument"
+        return 1
+    fi
+
+    # Expand the argument (handles ~, relative paths, etc.)
+    target="${1/#\~/$HOME}"
+
+    # Try to change into the directory; abort if it fails
+    if ! cd "$target" 2>/dev/null; then
+        echo "cdl: cannot cd to '$target'"
+        return 1
+    fi
+
+    # List the directory contents
+    eza -la
+}
+
 # == To try from leahneukirchen.org
 
 # keep - poor man's version control, make freshly numbered copies
@@ -320,6 +340,7 @@ zpass() {
 
 # source zsh functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
+eval "$(zoxide init zsh)"
 
 # from walk github page  https://github.com/antonmedv/walk
 function lk {
