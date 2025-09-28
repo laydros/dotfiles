@@ -36,13 +36,19 @@ export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 export LESS="RiMQXL"
 
 # stuff to keep $HOME clean
-export GNUPGHOME=${XDG_CONFIG_HOME}/gnupg
+export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
+export XPROFILE="$XDG_CONFIG_HOME/x11/xprofile"
+export XRESOURCES="$XDG_CONFIG_HOME/x11/xresources"
+export GNUPGHOME="$XDG_CONFIG_HOME"/gnupg
 export MPLAYER_HOME=$XDG_CONFIG_HOME/mplayer
 export ELINKS_CONFDIR="$XDG_CONFIG_HOME"/elinks
 export GOPATH="$XDG_DATA_HOME"/go
+export GOBIN="$GOPATH/bin"
+export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
 export RXVT_SOCKET="$XDG_RUNTIME_DIR"/urxvtd
 export PYLINTHOME="$XDG_CONFIG_HOME"/pylint
 export IPYTHONDIR="$XDG_CONFIG_HOME"/ipython
+export PYTHON_HISTORY="$XDG_DATA_HOME"/python/history
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
 export DVDCSS_CACHE="$XDG_DATA_HOME"/dvdcss
 export NOTMUCH_CONFIG="$XDG_CONFIG_HOME"/notmuch/notmuchrc

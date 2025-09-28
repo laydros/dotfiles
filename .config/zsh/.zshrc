@@ -104,6 +104,9 @@ fi
 #   EXPORT
 # =============
 
+export EDITOR="nvim"
+export VISUAL="nvim"
+
 # Start with system PATH, then add our directories in priority order
 PATH=$HOME/bin:$HOME/.local/bin:$PATH
 
