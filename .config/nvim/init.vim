@@ -95,6 +95,11 @@ Plug 'sheerun/vim-polyglot'
 Plug 'preservim/vim-markdown'
 Plug 'dense-analysis/ale'    " Linting support
 Plug 'simrat39/rust-tools.nvim'
+Plug 'folke/which-key.nvim'
+Plug 'goolord/alpha-nvim' " fancy startup
+Plug 'nvim-lualine/lualine.nvim' " statusline
+Plug 'romgrk/barbar.nvim' " bufferline
+Plug 'nvim-tree/nvim-web-devicons' " required by barbar
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'editorconfig/editorconfig-vim'
@@ -125,7 +130,7 @@ EOF
 
 " in theory dim allows the terminals colors to work
 " use colorscheme grim for greyscale
-# colorscheme dracula
+" colorscheme dracula
 colorscheme monokai_pro
 
 " vim-markdown configuration
