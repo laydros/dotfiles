@@ -4,17 +4,15 @@
 SMB_PATH="smb://ral/m3db"  # Your exact share path
 MOUNT_POINT="/Volumes/m3db"
 
-# Check if mounted
+# Check if mounted and set color
 if [[ -d "$MOUNT_POINT" ]]; then
-    STATUS="🟢"
+    echo "m3db | color=#00ff00 font=bold"  # Bright green and bold
     ACTION="Unmount"
 else
-    STATUS="🔴"
+    echo "m3db | color=red font=bold"  # Red and bold
     ACTION="Mount"
 fi
 
-# Menu bar display
-echo "$STATUS m3db"
 echo "---"
 
 # Toggle action
