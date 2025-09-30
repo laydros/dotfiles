@@ -38,6 +38,7 @@ macos-non-native-fullscreen = true
 
 term = xterm-256color
 
+keybind = global:cmd+Enter=new_window
 # Config syntax crash course
 # ==========================
 # # The config file consists of simple key-value pairs,
