@@ -20,8 +20,10 @@
 
 # brew "colima", restart_service: true
 # brew "coreutils"
+tap "jeffreywildman/homebrew-virt-manager"
 brew "OpenSSH"   # to get sftp with tab complete
 brew "signify-osx"
+brew "virt-viewer"
 
 # cask "alacritty"
 cask "autodesk-fusion"
