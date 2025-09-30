@@ -25,6 +25,7 @@ alias feh="echo imv"
 alias gst="git status"
 alias yst="yadm status"
 alias v="nvim"
+alias gcm='git commit -m'
 alias pyclean='find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null; find . -name "*.pyc" -delete 2>/dev/null'
 
 

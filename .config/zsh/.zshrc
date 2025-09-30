@@ -2,6 +2,7 @@
 
 # source global alias file
 [ -f "$XDG_CONFIG_HOME/shell/alias" ] && source "$XDG_CONFIG_HOME/shell/alias"
+[ -f "$XDG_CONFIG_HOME/shell/func" ] && source "$XDG_CONFIG_HOME/shell/func"
 
 # =========
 #   INIT
@@ -236,15 +237,10 @@ case "$(uname)" in
         ;;
 esac
 
-
 # == nvm on the mac
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-# == calculator
-c() { printf "%s\n" "$@" | bc -l }
 
 cx() {
     # If no argument was given, show a helpful message
@@ -266,47 +262,9 @@ cx() {
     eza -la
 }
 
-# == To try from leahneukirchen.org
-
-# keep - poor man's version control, make freshly numbered copies
-keep() {
-  local f v
-  [[ $# = 0 ]] && return 255
-  for f; do
-    f=$f:A
-    v=($f.<->(nOnN[1]))
-    if [[ -n "$v" ]] && cmp $v $f >/dev/null 2>&1; then
-      print -u2 $v not modified
-    else
-      cp -va $f $f.$((${${v:-.0}##*.} + 1))
-    fi
-  done
-}
-
-# 0x0 FILE - paste to 0x0.st
-# 16dec2015  +chris+
-0x0() { curl -F "file=@${1:--}" https://0x0.st/ }
-
-# ixio FILE - paste to ix.io
-# 02apr2018  +leah+
-ixio() { curl -F "f:1=@${1:--}" http://ix.io/ }
-
-# zpass - generate random password
-# 01nov2014  +chris+
-# 10mar2017  +leah+  default to length 12
-zpass() {
-  LC_ALL=C tr -dc '0-9A-Za-z_@#%*,.:?!~' </dev/urandom | head -c${1:-12}
-  echo
-}
-
 # source zsh functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 eval "$(zoxide init zsh)"
-
-# from walk github page  https://github.com/antonmedv/walk
-function lk {
-  cd "$(walk "$@")"
-}
 
 # platform specific stuff
 if [[ $OSTYPE = darwin* ]]; then
