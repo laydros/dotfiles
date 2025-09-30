@@ -1,5 +1,8 @@
 # -*- conf-unix -*-
 
+# source global alias file
+[ -f "$XDG_CONFIG_HOME/shell/alias" ] && source "$XDG_CONFIG_HOME/shell/alias"
+
 # =========
 #   INIT
 # =========
@@ -233,53 +236,6 @@ case "$(uname)" in
         ;;
 esac
 
-# Some more ls aliases (compatible across systems)
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
-# Enable color for grep (works on Linux and BSD/macOS)
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-
-# if using exa
-#alias ls="exa --color=auto -a -g"
-
-# for wireguard
-alias vpnup='sudo wg-quick up f500'
-alias vpndown='sudo wg-quick down f500'
-alias dnsfix='sudo /usr/sbin/networksetup -setdnsservers Wi-Fi "Empty"'
-
-#alias df='df -h -x"squashfs"'
-alias sort='LC_ALL=C sort'
-# alias em='emacsclient -n'
-alias dotf='ls .[a-zA-Z0-9_]*'
-alias qr='qrencode -t UTF8'
-alias cp="cp -iv"                    # confirm before overwriting, verbose
-alias cat="bat -p"
-alias clear="clear -x"
-alias ip="ip -c"
-alias feh="echo imv"
-alias gst="git status"
-alias yst="yadm status"
-alias v="nvim"
-alias pyclean='find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null; find . -name "*.pyc" -delete 2>/dev/null'
-
-# alias ls='LC_COLLATE=C ls -FG'
-
-# == Aliases for XDG
-alias wget="wget --hsts-file=$XDG_CACHE_HOME/wget-hsts"
-alias mbsync="mbsync -c $XDG_CONFIG_HOME/isync/mbsyncrc"
-alias irssi="irssi --config=$XDG_CONFIG_HOME/irssi/config --home=$XDG_DATA_HOME/irssi"
-alias gpg2="gpg2 --homedir $XDG_DATA_HOME/gnupg"
-alias dosbox="dosbox -conf $XDG_CONFIG_HOME/dosbox/dosbox.conf"
-alias sqlite3="sqlite3 -init $XDG_CONFIG_HOME/sqlite3/sqliterc"
-alias mocp="mocp -M $XDG_CONFIG_HOME/moc"
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'    ')"'
 
 # == nvm on the mac
 
