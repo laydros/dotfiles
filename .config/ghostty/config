@@ -15,7 +15,8 @@
 
 #theme = Dracula+
 #theme = Catppuccin Mocha
-theme = Monokai Pro
+#theme = Monokai Pro
+theme = Monokai Soda
 window-decoration = client
 copy-on-select = true
 window-padding-x = 4

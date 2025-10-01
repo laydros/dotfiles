@@ -106,9 +106,14 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'dhruvasagar/vim-table-mode'
 " Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'phanviet/vim-monokai-pro'
+" Plug 'phanviet/vim-monokai-pro'
+Plug 'tanvirtin/monokai.nvim'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
+
+" in theory dim allows the terminals colors to work
+" use colorscheme grim for greyscale
+colorscheme monokai_soda
 
 " minimal LSP setup
 lua << EOF
@@ -128,10 +133,6 @@ rt.setup({
 })
 EOF
 
-" in theory dim allows the terminals colors to work
-" use colorscheme grim for greyscale
-" colorscheme dracula
-colorscheme monokai_pro
 
 " vim-markdown configuration
 let g:vim_markdown_no_default_key_mappings = 1

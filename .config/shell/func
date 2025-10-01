@@ -22,8 +22,9 @@ img2jpg-small() {
 # zpass - generate random password
 # 01nov2014  +chris+
 # 10mar2017  +leah+  default to length 12
+# 2025-09-30 +jwh+   default to length 16 
 zpass() {
-  LC_ALL=C tr -dc '0-9A-Za-z_@#%*,.:?!~' </dev/urandom | head -c${1:-12}
+  LC_ALL=C tr -dc '0-9A-Za-z_@#%*,.:?!~' </dev/urandom | head -c${1:-16}
   echo
 }
 
