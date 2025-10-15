@@ -8,10 +8,10 @@
   "MD007": {
     "indent": 2
   },
-  "MD013": {
-    "line_length": 120,
-    "tables": false
+  "MD012": {
+    "maximum": 1
   },
+  "MD013": false,
   "MD022": {
     "lines_above": 1,
     "lines_below": 1
@@ -23,6 +23,10 @@
   },
   "MD046": {
     "style": "fenced"
+  },
+  "MD047": true,
+  "MD048": {
+    "style": "backtick"
   },
   "MD049": {
     "style": "asterisk"

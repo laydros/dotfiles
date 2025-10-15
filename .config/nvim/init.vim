@@ -41,8 +41,7 @@ set sidescroll=3
 set ignorecase smartcase            " ignore case for searching, unless I specify
 set showmatch                       " show matching brackets
 
-
-" INDENTATION
+" Indentation
 set shiftwidth=4
 set tabstop=4
 set softtabstop=4
