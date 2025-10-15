@@ -54,10 +54,10 @@ Write-Host "   git clone https://github.com/laydros/dotfiles.git" -ForegroundCol
 Write-Host "2. Navigate to the dotfiles directory:" -ForegroundColor Yellow
 Write-Host "   cd dotfiles" -ForegroundColor Gray
 Write-Host "3. Run the boxstarter setup:" -ForegroundColor Yellow
-Write-Host "   Install-BoxstarterPackage -PackageName .\.config\boxstarter\main.ps1" -ForegroundColor Gray
+Write-Host "   Install-BoxstarterPackage -PackageName `$HOME\src\dev\dotfiles\.config\boxstarter\main.ps1" -ForegroundColor Gray
 Write-Host ""
 Write-Host "Or run all at once (in a new PowerShell window after this completes):" -ForegroundColor White
 Write-Host "git clone https://github.com/laydros/dotfiles.git" -ForegroundColor Cyan
 Write-Host "cd dotfiles" -ForegroundColor Cyan
-Write-Host "Install-BoxstarterPackage -PackageName .\.config\boxstarter\main.ps1" -ForegroundColor Cyan
+Write-Host "Install-BoxstarterPackage -PackageName `$HOME\src\dev\dotfiles\.config\boxstarter\main.ps1" -ForegroundColor Cyan
 Write-Host ""

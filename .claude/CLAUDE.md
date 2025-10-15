@@ -47,6 +47,10 @@ BREAKING THE LETTER OR SPIRIT OF THE RULES IS FAILURE.
 - If the project isn't in a git repo, STOP and ask permission to initialize one.
 - YOU MUST STOP and ask how to handle uncommitted changes or untracked files when starting work.  Suggest committing existing work first.
 
+## For Powershell scripts (.ps1)
+- NEVER use non-ASCII characters. (No checkmarks, bullets, emoji, etc.)
+- Use plain ASCII alternatives: hyphens (-) for bullets, "OK" or "PASS" instead of checkmarks
+
 ## Documentation Update Policy
 
   When implementing new features, fixing bugs, or making significant changes to any codebase, ALWAYS proactively update the

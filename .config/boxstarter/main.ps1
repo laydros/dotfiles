@@ -15,11 +15,12 @@
 
 .USAGE
     Prerequisites: Run bootstrap.ps1 first to install Chocolatey, Git, and Boxstarter
-    
-    1. Clone dotfiles: git clone https://github.com/laydros/dotfiles.git
-    2. Navigate to repo: cd dotfiles  
-    3. Run setup: Install-BoxstarterPackage -PackageName .\.config\boxstarter\main.ps1
-    
+
+    1. Clone dotfiles: git clone https://github.com/laydros/dotfiles.git $env:USERPROFILE\src\dev\dotfiles
+    2. Navigate to repo: cd $env:USERPROFILE\src\dev\dotfiles
+    3. Run setup: Install-BoxstarterPackage -PackageName "$env:USERPROFILE\src\dev\dotfiles\.config\boxstarter\main.ps1"
+
+    IMPORTANT: Use the absolute path (as shown above) so Boxstarter can find the script after reboots.
     The script uses temporary autologin for unattended reboots during setup.
 
 .EMERGENCY CLEANUP
@@ -62,12 +63,12 @@ Write-BoxstarterMessage "Windows environment confirmed"
 $expectedRepo = "dotfiles"
 $currentDir = Split-Path -Leaf (Get-Location)
 if ($currentDir -ne $expectedRepo) {
-    $dotfilesPath = Join-Path $env:USERPROFILE $expectedRepo
+    $dotfilesPath = Join-Path $env:USERPROFILE "src\dev\dotfiles"
     if (Test-Path $dotfilesPath) {
         Write-BoxstarterMessage "Switching to dotfiles directory: $dotfilesPath"
         Set-Location $dotfilesPath
     } else {
-        throw "Could not find dotfiles directory. Expected to run from ~/dotfiles or find it at $dotfilesPath"
+        throw "Could not find dotfiles directory. Expected to run from ~/src/dev/dotfiles or find it at $dotfilesPath"
     }
 }
 Write-BoxstarterMessage "Dotfiles directory confirmed: $(Get-Location)"
