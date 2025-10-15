@@ -1,4 +1,4 @@
-# main.ps1 - Boxstarter setup script for laydros/dotfiles
+﻿# main.ps1 - Boxstarter setup script for laydros/dotfiles
 # Location: .config/boxstarter/main.ps1
 
 <#
@@ -88,7 +88,7 @@ Write-BoxstarterMessage "✓ All required dotfiles scripts found"
 # Check 4: Verify Chocolatey is available
 try {
     choco --version | Out-Null
-    Write-BoxstarterMessage "✓ Chocolatey is available"
+    Write-BoxstarterMessage "Chocolatey is available"
 } catch {
     throw "Chocolatey is not installed or not in PATH. Run bootstrap.ps1 first."
 }
@@ -116,7 +116,7 @@ try {
         Write-Warning "  user.email: '$gitEmail'"
         Write-Warning "You may want to configure git after setup completes"
     } else {
-        Write-BoxstarterMessage "✓ Git is configured for: $gitUser <$gitEmail>"
+        Write-BoxstarterMessage "Git is configured for: $gitUser <$gitEmail>"
     }
 } catch {
     Write-Warning "Git configuration could not be checked"
@@ -171,7 +171,7 @@ $wingetAvailable = $false
 try {
     winget --version | Out-Null
     $wingetAvailable = $true
-    Write-BoxstarterMessage "✓ Winget detected, checking for conflicting packages..."
+    Write-BoxstarterMessage "Winget detected, checking for conflicting packages..."
     
     # Check each package
     foreach ($wingetId in $wingetToChocoMap.Keys) {
@@ -188,7 +188,7 @@ try {
         }
     }
 } catch {
-    Write-BoxstarterMessage "✓ Winget not available, no conflicts to resolve"
+    Write-BoxstarterMessage "Winget not available, no conflicts to resolve"
 }
 
 # Handle conflicts if found
@@ -206,7 +206,7 @@ if ($wingetAvailable -and $installedWingetPackages.Count -gt 0) {
         Write-BoxstarterMessage "Keeping existing winget packages (may cause conflicts)"
     }
 } else {
-    Write-BoxstarterMessage "✓ No winget package conflicts detected"
+    Write-BoxstarterMessage "No winget package conflicts detected"
 }
 
 # =============================================================================
@@ -254,7 +254,7 @@ if ($wingetAvailable -and $installedWingetPackages.Count -gt 0 -and $cleanupWing
             Write-BoxstarterMessage "Removing winget package: $($pkg.WingetId)"
             winget uninstall --id $pkg.WingetId --silent --accept-source-agreements
             if ($LASTEXITCODE -eq 0) {
-                Write-BoxstarterMessage "✓ Successfully removed $($pkg.WingetId)"
+                Write-BoxstarterMessage "Successfully removed $($pkg.WingetId)"
             } else {
                 Write-Warning "Failed to remove $($pkg.WingetId) (exit code: $LASTEXITCODE)"
             }
@@ -370,12 +370,12 @@ if (Test-Path $deployScript) {
 Write-BoxstarterMessage "Setup complete!"
 Write-Host ""
 Write-Host "=== SETUP SUMMARY ===" -ForegroundColor Green
-Write-Host "✓ Applications installed via Chocolatey" -ForegroundColor Green
-Write-Host "✓ Windows settings configured" -ForegroundColor Green
-Write-Host "✓ Dotfiles deployed" -ForegroundColor Green
+Write-Host "Applications installed via Chocolatey" -ForegroundColor Green
+Write-Host "Windows settings configured" -ForegroundColor Green
+Write-Host "Dotfiles deployed" -ForegroundColor Green
 Write-Host ""
 Write-Host "You may want to:" -ForegroundColor Yellow
-Write-Host "  • Configure git if not already done: git config --global user.name/email" -ForegroundColor Yellow
-Write-Host "  • Review installed applications" -ForegroundColor Yellow
-Write-Host "  • Customize Windows Terminal/VS Code settings" -ForegroundColor Yellow
+Write-Host "  - Configure git if not already done: git config --global user.name email" -ForegroundColor Yellow
+Write-Host "  - Review installed applications" -ForegroundColor Yellow
+Write-Host "  - Customize Windows Terminal VS Code settings" -ForegroundColor Yellow
 Write-Host ""
