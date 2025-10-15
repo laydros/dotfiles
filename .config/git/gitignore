@@ -95,3 +95,5 @@ docs/_build/
 ._.DS_Store
 **/.DS_Store
 **/._.DS_Store
+
+.private-journal/

@@ -9,6 +9,7 @@
     excludesfile = $HOME/.config/git/gitignore
     editor = vim
     pager = delta
+	attributesfile = /Users/laydros/.config/git/attributes
 [status]
     relativePaths = false
 [push]
