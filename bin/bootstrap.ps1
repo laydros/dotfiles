@@ -1,4 +1,4 @@
-# bootstrap.ps1 - Initial setup script for Windows
+﻿# bootstrap.ps1 - Initial setup script for Windows
 # Run this first in an elevated PowerShell prompt
 
 #Requires -RunAsAdministrator
@@ -10,12 +10,15 @@ Write-Host ""
 
 # Install Chocolatey
 Write-Host "Installing Chocolatey package manager..." -ForegroundColor Yellow
-try {
+try
+{
     Set-ExecutionPolicy Bypass -Scope Process -Force
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
     iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
     Write-Host "Chocolatey installed successfully" -ForegroundColor Green
-} catch {
+}
+catch
+{
     throw "Failed to install Chocolatey: $_"
 }
 
@@ -25,16 +28,20 @@ refreshenv
 
 # Verify Chocolatey is available
 $chocoCmd = Get-Command choco -ErrorAction SilentlyContinue
-if (-not $chocoCmd) {
+if (-not $chocoCmd)
+{
     throw "Chocolatey installation failed or is not in PATH. Please close this window and run the script again."
 }
 
 # Install essential tools
 Write-Host "Installing Git and Boxstarter..." -ForegroundColor Yellow
-try {
+try
+{
     choco install git boxstarter -y
     Write-Host "Git and Boxstarter installed successfully" -ForegroundColor Green
-} catch {
+}
+catch
+{
     throw "Failed to install Git and Boxstarter: $_"
 }
 
