@@ -7,11 +7,11 @@
 
 .DESCRIPTION
     This script automates Windows configuration by:
-    • Removing conflicting winget packages (with user consent)
-    • Installing applications via Chocolatey (development tools, browsers, utilities, etc.)
-    • Configuring Windows settings (developer mode, file extensions, disable telemetry)
-    • Deploying dotfiles using your existing deploy-windows-dotfiles.ps1 script
-    • Handling UAC prompts and automatic reboots as needed
+    - Removing conflicting winget packages (with user consent)
+    - Installing applications via Chocolatey (development tools, browsers, utilities, etc.)
+    - Configuring Windows settings (developer mode, file extensions, disable telemetry)
+    - Deploying dotfiles using your existing deploy-windows-dotfiles.ps1 script
+    - Handling UAC prompts and automatic reboots as needed
 
 .USAGE
     Prerequisites: Run bootstrap.ps1 first to install Chocolatey, Git, and Boxstarter
@@ -56,7 +56,7 @@ if ($PSVersionTable.PSEdition -eq "Core" -and $IsLinux) {
 if ($PSVersionTable.PSEdition -eq "Core" -and $IsMacOS) {
     throw "This script is designed for Windows. Detected macOS environment."
 }
-Write-BoxstarterMessage "✓ Windows environment confirmed"
+Write-BoxstarterMessage "Windows environment confirmed"
 
 # Check 2: Verify we're in the dotfiles directory
 $expectedRepo = "dotfiles"
@@ -70,7 +70,7 @@ if ($currentDir -ne $expectedRepo) {
         throw "Could not find dotfiles directory. Expected to run from ~/dotfiles or find it at $dotfilesPath"
     }
 }
-Write-BoxstarterMessage "✓ Dotfiles directory confirmed: $(Get-Location)"
+Write-BoxstarterMessage "Dotfiles directory confirmed: $(Get-Location)"
 
 # Check 3: Verify required files exist
 $requiredFiles = @(
@@ -83,7 +83,7 @@ foreach ($file in $requiredFiles) {
         throw "Required file not found: $file"
     }
 }
-Write-BoxstarterMessage "✓ All required dotfiles scripts found"
+Write-BoxstarterMessage "All required dotfiles scripts found"
 
 # Check 4: Verify Chocolatey is available
 try {
@@ -103,7 +103,7 @@ if ($freeSpaceGB -lt 5) {
         throw "Setup cancelled due to low disk space"
     }
 }
-Write-BoxstarterMessage "✓ Sufficient disk space available: ${freeSpaceGB}GB"
+Write-BoxstarterMessage "Sufficient disk space available: ${freeSpaceGB}GB"
 
 # Check 6: Git configuration check (warn if not configured)
 try {
@@ -217,12 +217,12 @@ Write-Host ""
 Write-Host "=== BOXSTARTER SETUP PLAN ===" -ForegroundColor Cyan
 Write-Host "This script will:"
 if ($wingetAvailable -and $installedWingetPackages.Count -gt 0 -and $cleanupWingetPackages) {
-    Write-Host "  • Remove $($installedWingetPackages.Count) conflicting winget package(s)" -ForegroundColor Yellow
+    Write-Host "  - Remove $($installedWingetPackages.Count) conflicting winget package(s)" -ForegroundColor Yellow
 }
-Write-Host "  • Install applications via Chocolatey" -ForegroundColor Green
-Write-Host "  • Configure Windows settings and disable telemetry" -ForegroundColor Green  
-Write-Host "  • Deploy dotfiles using your existing script" -ForegroundColor Green
-Write-Host "  • May require restarts (will auto-login and continue)" -ForegroundColor Yellow
+Write-Host "  - Install applications via Chocolatey" -ForegroundColor Green
+Write-Host "  - Configure Windows settings and disable telemetry" -ForegroundColor Green
+Write-Host "  - Deploy dotfiles using your existing script" -ForegroundColor Green
+Write-Host "  - May require restarts (will auto-login and continue)" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "Current location: $(Get-Location)" -ForegroundColor Gray
 Write-Host "Free disk space: ${freeSpaceGB}GB" -ForegroundColor Gray
