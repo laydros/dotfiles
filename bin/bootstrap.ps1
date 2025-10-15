@@ -5,14 +5,8 @@
 
 Write-Host "=== DOTFILES BOOTSTRAP SCRIPT ===" -ForegroundColor Cyan
 Write-Host "This script will install the minimal tools needed to run your dotfiles setup" -ForegroundColor White
-Write-Host ""
-
-# Check if running as administrator
-if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    throw "This script must be run as Administrator. Right-click PowerShell and 'Run as administrator'"
-}
-
 Write-Host "✓ Running as Administrator" -ForegroundColor Green
+Write-Host ""
 
 # Install Chocolatey
 Write-Host "Installing Chocolatey package manager..." -ForegroundColor Yellow
@@ -26,7 +20,14 @@ try {
 }
 
 # Refresh environment to get choco in PATH
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User") 
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+refreshenv
+
+# Verify Chocolatey is available
+$chocoCmd = Get-Command choco -ErrorAction SilentlyContinue
+if (-not $chocoCmd) {
+    throw "Chocolatey installation failed or is not in PATH. Please close this window and run the script again."
+}
 
 # Install essential tools
 Write-Host "Installing Git and Boxstarter..." -ForegroundColor Yellow
@@ -48,6 +49,8 @@ Write-Host "   cd dotfiles" -ForegroundColor Gray
 Write-Host "3. Run the boxstarter setup:" -ForegroundColor Yellow
 Write-Host "   Install-BoxstarterPackage -PackageName .\.config\boxstarter\main.ps1" -ForegroundColor Gray
 Write-Host ""
-Write-Host "Or run all at once:" -ForegroundColor White
-Write-Host "git clone https://github.com/laydros/dotfiles.git && cd dotfiles && Install-BoxstarterPackage -PackageName .\.config\boxstarter\main.ps1" -ForegroundColor Cyan
-Write-Host ""
+Write-Host "Or run all at once (in a new PowerShell window after this completes):" -ForegroundColor White
+Write-Host "git clone https://github.com/laydros/dotfiles.git" -ForegroundColor Cyan
+Write-Host "cd dotfiles" -ForegroundColor Cyan
+Write-Host "Install-BoxstarterPackage -PackageName .\.config\boxstarter\main.ps1" -ForegroundColor Cyan
+Write-Host ""
