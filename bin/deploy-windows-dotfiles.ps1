@@ -8,9 +8,11 @@ Write-Host "Deploying dotfiles to Windows..." -ForegroundColor Green
 # Ensure target directories exist
 $configDirs = @(
     "$env:USERPROFILE\.config\git",
-    "$env:USERPROFILE\.config\nvim",
+    "$env:LOCALAPPDATA\nvim",
     "$env:APPDATA\espanso\config",
-    "$env:APPDATA\espanso\match"
+    "$env:APPDATA\espanso\match",
+    "$env:USERPROFILE\.claude",
+    "$env:USERPROFILE\.ssh"
 )
 
 foreach ($dir in $configDirs) {
@@ -22,19 +24,27 @@ foreach ($dir in $configDirs) {
 
 # Deploy Git config (remove ##template suffix)
 Copy-Item ".\.config\git\config" "$env:USERPROFILE\.config\git\config" -Force
-Write-Host "✓ Git config"
+Write-Host "OK Git config"
 
-# Deploy Git ignore  
+# Deploy Git ignore
 Copy-Item ".\.config\git\gitignore" "$env:USERPROFILE\.config\git\ignore" -Force
-Write-Host "✓ Git ignore"
+Write-Host "OK Git ignore"
 
 # Deploy Neovim config
-Copy-Item ".\.config\nvim\init.vim" "$env:USERPROFILE\.config\nvim\init.vim" -Force
-Write-Host "✓ Neovim config"
+Copy-Item ".\.config\nvim\init.vim" "$env:LOCALAPPDATA\nvim\init.vim" -Force
+Write-Host "OK Neovim config"
 
 # Deploy Espanso configs
 Copy-Item ".\.config\espanso\config\*" "$env:APPDATA\espanso\config\" -Force
-Copy-Item ".\.config\espanso\match\*" "$env:APPDATA\espanso\match\" -Force  
-Write-Host "✓ Espanso configs"
+Copy-Item ".\.config\espanso\match\*" "$env:APPDATA\espanso\match\" -Force
+Write-Host "OK Espanso configs"
+
+# Deploy Claude config
+Copy-Item ".\.claude\*" "$env:USERPROFILE\.claude\" -Force -Recurse
+Write-Host "OK Claude config"
+
+# Deploy SSH config
+Copy-Item ".\.ssh\config" "$env:USERPROFILE\.ssh\config" -Force
+Write-Host "OK SSH config"
 
 Write-Host "Dotfiles deployment complete!" -ForegroundColor Green
