@@ -1,7 +1,7 @@
 {
-  "model": "opusplan",
   "statusLine": {
     "type": "command",
     "command": "bash /Users/laydros/.claude/statusline.sh"
-  }
+  },
+  "alwaysThinkingEnabled": true
 }

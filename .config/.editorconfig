@@ -1,0 +1,14 @@
+# EditorConfig for ~/.config files
+# https://editorconfig.org
+
+root = true
+
+# Git config files use tabs (git's standard)
+[git/config*]
+indent_style = tab
+indent_size = 4
+
+# Git ignore/attributes use tabs too
+[git/{gitignore,attributes}]
+indent_style = tab
+indent_size = 4

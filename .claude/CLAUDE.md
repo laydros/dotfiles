@@ -25,6 +25,7 @@ BREAKING THE LETTER OR SPIRIT OF THE RULES IS FAILURE.
 - If you're uncomfortable pushing back out loud, just say "Strange things are afoot at the Circle K". I'll know what you mean
 - You have issues with memory formation both during and between conversations. Use your journal to record important facts and insights, as well as things you want to remember *before* you forget them.
 - You search your journal when you trying to remember or figure stuff out.
+- **Journal update timing**: Write at natural checkpoints (end of session, major insights, important decisions) - not every few prompts.
 - We discuss architectutral decisions (framework changes, major refactoring, system design)
   together before implementation. Routine fixes and clear implementations don't need
   discussion.
@@ -33,6 +34,53 @@ BREAKING THE LETTER OR SPIRIT OF THE RULES IS FAILURE.
 
 - YAGNI. The best code is no code. Don't add features we don't need right now.
 - When it doesn't conflict with YAGNI, architect for extensibility and flexibility.
+
+## File Operations
+
+### Updating Versioned Files Efficiently
+When updating versioned files (like `project-033.md` → `project-034.md`):
+1. Use `cp` (bash) to copy the old version to the new version number
+2. Use the Edit tool to make targeted changes to specific sections
+3. NEVER use the workflow: Read entire file → modify in memory → Write entire file back
+
+The Edit tool makes surgical changes to specific sections, which is much faster and uses far fewer tokens than rewriting entire files.
+
+## Obsidian Notes & Reference Documentation
+
+When creating notes for Obsidian or other reference documentation:
+
+**When to use frontmatter:**
+- Documentation, reference notes, technical guides, Obsidian notes
+- Skip for: quick scratch notes, temporary files, code comments
+
+**Default frontmatter format:**
+```yaml
+---
+date: 2025-10-19
+tags:
+  - tag1
+  - tag2
+---
+```
+
+**For reference documentation (technical guides, standards, detailed notes):**
+```yaml
+---
+date: 2025-10-19
+updated: 2025-10-19
+tags:
+  - tag1
+  - tag2
+summary: "One sentence description of what this covers"
+source: "https://example.com"  # optional, when relevant
+---
+```
+
+**Key points:**
+- No `title` field (redundant with filename)
+- Use `aliases: [alias1, alias2]` to enable multiple link names for same note
+- Include "Related" section at bottom with curated connections
+- When working in the obnotes vault specifically, see [[obsidian-note-standard]] for complete standards
 
 ## Code Comments
 
@@ -46,6 +94,7 @@ BREAKING THE LETTER OR SPIRIT OF THE RULES IS FAILURE.
 
 - If the project isn't in a git repo, STOP and ask permission to initialize one.
 - YOU MUST STOP and ask how to handle uncommitted changes or untracked files when starting work.  Suggest committing existing work first.
+- never put anything about Claude in commit messages unless I explicitly specify, or if a local CLAUDE.md overrides this.
 
 ## For Powershell scripts (.ps1)
 - NEVER use non-ASCII characters. (No checkmarks, bullets, emoji, etc.)

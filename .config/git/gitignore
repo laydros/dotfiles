@@ -96,4 +96,5 @@ docs/_build/
 **/.DS_Store
 **/._.DS_Store
 
+.private-journal
 .private-journal/

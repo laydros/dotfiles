@@ -1,73 +1,73 @@
 [user]
-    name = Jason Hamilton
-    email = git@laydros.net
+	name = Jason Hamilton
+	email = git@laydros.net
 
 [includeIf "gitdir:~/src/f500/"]
-    path = ~/.config/git/config-f500
+	path = ~/.config/git/config-f500
 
 [core]
-    excludesfile = $HOME/.config/git/gitignore
-    editor = vim
-    pager = delta
-	attributesfile = /Users/laydros/.config/git/attributes
+	excludesfile = ~/.config/git/gitignore
+	editor = vim
+	pager = delta
+	attributesfile = ~/.config/git/attributes
 [status]
-    relativePaths = false
+	relativePaths = false
 [push]
-    default = simple
+	default = simple
 [pull]
-    rebase = false
+	rebase = false
 [http]
-    postBuffer = 100000000
+	postBuffer = 100000000
 [alias]
-    co = checkout
-    st = status -sb
-    ix = diff --cached
-    tree = log --oneline --decorate --graph
-    news = log -p @{1}..
-    lg = log --date=short --pretty='%cd %h%d %s'
-    d  = diff
-    dc = diff --cached
-    lc = log ORIG_HEAD.. --stat --no-merges
-    gl = log --oneline --decorate --stat --graph
-    # show verbose output
-    tags = tags -l
-    branches = branches -a
-    hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
+	co = checkout
+	st = status -sb
+	ix = diff --cached
+	tree = log --oneline --decorate --graph
+	news = log -p @{1}..
+	lg = log --date=short --pretty='%cd %h%d %s'
+	d  = diff
+	dc = diff --cached
+	lc = log ORIG_HEAD.. --stat --no-merges
+	gl = log --oneline --decorate --stat --graph
+	# show verbose output
+	tags = tags -l
+	branches = branches -a
+	hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
 [interactive]
-    diffFilter = delta --color-only
+	diffFilter = delta --color-only
 [color]
-    ui = false
-    interactive = auto
-    diff = auto
-    status = auto
-    branch = auto
+	ui = false
+	interactive = auto
+	diff = auto
+	status = auto
+	branch = auto
 [color "interactive"]
-    prompt = bold normal
-    help = black
+	prompt = bold normal
+	help = black
 
 [diff]
-    tool = vscode
+	tool = vscode
 [difftool "vscode"]
-    cmd = code --wait --diff $LOCAL $REMOTE
+	cmd = code --wait --diff $LOCAL $REMOTE
 [difftool "ksdiff"]
-    cmd = ksdiff --wait --label \"$LOCAL\" \"$LOCAL\" --label \"$REMOTE\" \"$REMOTE\"
+	cmd = ksdiff --wait --label \"$LOCAL\" \"$LOCAL\" --label \"$REMOTE\" \"$REMOTE\"
 [difftool]
-    prompt = false
+	prompt = false
 
 [merge]
-    tool = vscode
+	tool = vscode
 [mergetool "vscode"]
-    cmd = code --wait $MERGED
+	cmd = code --wait $MERGED
 [mergetool "ksdiff"]
-    cmd = ksdiff --merge --output "$MERGED" --base "$BASE" -- "$LOCAL" --snapshot "$REMOTE" --snapshot
-    trustExitCode = true
+	cmd = ksdiff --merge --output "$MERGED" --base "$BASE" -- "$LOCAL" --snapshot "$REMOTE" --snapshot
+	trustExitCode = true
 
 [delta]
-    navigate = true # use n and N to move between diff sections
-    side-by-side = true
-    line-numbers = true
+	navigate = true # use n and N to move between diff sections
+	side-by-side = true
+	line-numbers = true
 
 [init]
-    defaultBranch = main
+	defaultBranch = main
 [safe]
-    directory = /home/m3db/it/doc/hosts
+	directory = /home/m3db/it/doc/hosts
