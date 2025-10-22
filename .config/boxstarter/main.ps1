@@ -193,7 +193,9 @@ try {
 }
 
 # Handle conflicts if found
-$cleanupWingetPackages = $true
+#$cleanupWingetPackages = $true
+$cleanupWingetPackages = $false
+
 if ($wingetAvailable -and $installedWingetPackages.Count -gt 0) {
     Write-Warning "Found packages installed via winget that conflict with chocolatey installs:"
     foreach ($pkg in $installedWingetPackages) {
