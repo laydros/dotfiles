@@ -162,8 +162,6 @@ else
     PROMPT='%F{red}%(?.. %??)%(1j. %j&.)%f%F{cyan}%2~%f$(venv_info)${vcs_info_msg_0_} %B%#%b '
 fi
 
-## Test some manjaro zsh stuff
-
 # enable substitution for prompt
 setopt prompt_subst
 
@@ -179,11 +177,6 @@ zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' unstagedstr '*'
 zstyle ':vcs_info:*' stagedstr '+'
 zstyle ':vcs_info:git:*' formats ' %F{yellow}(%b%u%c)%f'
-
-# Maia prompt
-#PROMPT="%B%{$fg[cyan]%}%(4~|%-1~/.../%2~|%~)%u%b >%{$fg[cyan]%}>%B%(?.%{$fg[cyan]%}.%{$fg[red]%})>%{$reset_color%}%b "
-#RPROMPT="%{$fg[red]%} %(?..[%?])"
-
 
 # set docker to use colima on Mac only
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -264,6 +257,15 @@ case "$(uname)" in
         alias ls='ls -GF'
         ;;
 esac
+
+# Use eza if available (overrides ls aliases from shell/alias)
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza'
+    alias ll='eza -la --icons=auto'
+    alias l='eza --icons=auto'
+    alias la='eza -a --icons=auto'
+    alias lsa='eza -a --icons=auto'
+fi
 
 # == nvm on the mac
 export NVM_DIR="$HOME/.nvm"

@@ -3,7 +3,7 @@
 ## ls ##
 alias ll='ls -alF'
 alias l='ls -CF'
-alias la='ls-A'
+alias la='ls -A'
 # alias ls='eza -lh --group-directories-first --icons=auto'
 # alias ls='LC_COLLATE=C ls -FG'
 alias lsa='ls -a'
