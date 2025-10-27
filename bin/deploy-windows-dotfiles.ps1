@@ -27,7 +27,7 @@ Copy-Item ".\.config\git\config" "$env:USERPROFILE\.config\git\config" -Force
 Write-Host "OK Git config"
 
 # Deploy Git ignore
-Copy-Item ".\.config\git\gitignore" "$env:USERPROFILE\.config\git\ignore" -Force
+Copy-Item ".\.config\git\gitignore" "$env:USERPROFILE\.config\git\gitignore" -Force
 Write-Host "OK Git ignore"
 
 # Deploy Neovim config

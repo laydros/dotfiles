@@ -98,3 +98,5 @@ docs/_build/
 
 .private-journal
 .private-journal/
+
+.claude/settings.local.json
