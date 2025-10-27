@@ -146,12 +146,20 @@ export LESS=-R
 # the chunk of %(?.. %??)%(1j. %j&.) seems to show last cmd error code
 
 #PS1='%B%m%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~ %f%B%#%b '
-PROMPT='%B%m%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~ %f%B%#%b '
+PROMPT='%B%m%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~%f${vcs_info_msg_0_} %B%#%b '
 
 ## Test some manjaro zsh stuff
 
 # enable substitution for prompt
 setopt prompt_subst
+
+# Load version control info
+autoload -Uz vcs_info
+precmd() { vcs_info }
+
+# Format the vcs_info_msg_0_ variable
+zstyle ':vcs_info:git:*' formats ' %F{yellow}(%b)%f'
+
 # Maia prompt
 #PROMPT="%B%{$fg[cyan]%}%(4~|%-1~/.../%2~|%~)%u%b >%{$fg[cyan]%}>%B%(?.%{$fg[cyan]%}.%{$fg[red]%})>%{$reset_color%}%b "
 #RPROMPT="%{$fg[red]%} %(?..[%?])"
@@ -265,6 +273,16 @@ cx() {
 # source zsh functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 eval "$(zoxide init zsh)"
+
+# fzf - fuzzy finder
+# Ctrl+R: Fuzzy command history search
+# Ctrl+T: Fuzzy file search (insert path into command)
+# Alt+C:  Fuzzy cd into directory
+# Configure fzf to use fd for file search (faster, respects .gitignore)
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+source $(brew --prefix)/opt/fzf/shell/key-bindings.zsh
+source $(brew --prefix)/opt/fzf/shell/completion.zsh
 
 # platform specific stuff
 if [[ $OSTYPE = darwin* ]]; then
