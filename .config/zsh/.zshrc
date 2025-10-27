@@ -146,7 +146,13 @@ export LESS=-R
 # the chunk of %(?.. %??)%(1j. %j&.) seems to show last cmd error code
 
 #PS1='%B%m%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~ %f%B%#%b '
-PROMPT='%B%m%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~%f${vcs_info_msg_0_} %B%#%b '
+
+# Show hostname only on SSH or remote connections
+if [[ -n "$SSH_CONNECTION" ]]; then
+    PROMPT='%B%m%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~%f${vcs_info_msg_0_} %B%#%b '
+else
+    PROMPT='%F{red}%(?.. %??)%(1j. %j&.)%f%F{cyan}%2~%f${vcs_info_msg_0_} %B%#%b '
+fi
 
 ## Test some manjaro zsh stuff
 
