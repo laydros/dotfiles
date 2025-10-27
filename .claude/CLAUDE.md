@@ -138,3 +138,4 @@ source: "https://example.com"  # optional, when relevant
 
   **Priority**: Documentation updates should be treated as high-priority tasks that are completed alongside code changes, not
   optional afterthoughts.
+- Don't put anything about claude in git commit messages

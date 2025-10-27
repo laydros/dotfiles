@@ -274,3 +274,4 @@ elif [[ $OSTYPE = linux* ]]; then
     # rust init now handled in .zshenv
 fi
 
+eval "$(rbenv init - zsh)"
