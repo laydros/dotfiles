@@ -32,6 +32,15 @@ matches:
         params:
           format: "%Y-%m-%d_%H:%M:%S"
 
+  # wychecks-admin (Scotts) style timestamp
+  - trigger: "wydate"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y%m%d"
+
   # Recreate AutoHotkey supdate with cursor positioning
   - trigger: "supdate"
     replace: "{{mydate}} - $|$ - JWH"
