@@ -147,11 +147,19 @@ export LESS=-R
 
 #PS1='%B%m%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~ %f%B%#%b '
 
+# Python virtual environment indicator
+# Disable venv's automatic prompt modification - we'll handle it ourselves
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+function venv_info {
+    [[ -n "$VIRTUAL_ENV" ]] && echo " %F{green}(v)%f"
+}
+
 # Show hostname only on SSH or remote connections
 if [[ -n "$SSH_CONNECTION" ]]; then
-    PROMPT='%B%m%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~%f${vcs_info_msg_0_} %B%#%b '
+    PROMPT='%B%m%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~%f$(venv_info)${vcs_info_msg_0_} %B%#%b '
 else
-    PROMPT='%F{red}%(?.. %??)%(1j. %j&.)%f%F{cyan}%2~%f${vcs_info_msg_0_} %B%#%b '
+    PROMPT='%F{red}%(?.. %??)%(1j. %j&.)%f%F{cyan}%2~%f$(venv_info)${vcs_info_msg_0_} %B%#%b '
 fi
 
 ## Test some manjaro zsh stuff
@@ -164,7 +172,13 @@ autoload -Uz vcs_info
 precmd() { vcs_info }
 
 # Format the vcs_info_msg_0_ variable
-zstyle ':vcs_info:git:*' formats ' %F{yellow}(%b)%f'
+# Shows: (main) clean, (main*) unstaged changes, (main+) staged, (main*+) both
+# If this causes slowness in large repos or network mounts, disable with:
+#   zstyle ':vcs_info:*' check-for-changes false
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' unstagedstr '*'
+zstyle ':vcs_info:*' stagedstr '+'
+zstyle ':vcs_info:git:*' formats ' %F{yellow}(%b%u%c)%f'
 
 # Maia prompt
 #PROMPT="%B%{$fg[cyan]%}%(4~|%-1~/.../%2~|%~)%u%b >%{$fg[cyan]%}>%B%(?.%{$fg[cyan]%}.%{$fg[red]%})>%{$reset_color%}%b "
