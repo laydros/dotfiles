@@ -10,6 +10,9 @@ project_dir=$(echo "$input" | jq -r '.workspace.project_dir')
 version=$(echo "$input" | jq -r '.version')
 output_style=$(echo "$input" | jq -r '.output_style.name')
 
+# Get hostname
+hostname=$(hostname -s)
+
 # Format directory display (show last two path components)
 display_dir=$(echo "$current_dir" | sed 's|.*/\([^/]*/[^/]*\)$|\1|')
 
@@ -56,4 +59,4 @@ if [ "$output_style" != "null" ] && [ -n "$output_style" ] && [ "$output_style" 
 fi
 
 # Output formatted status line using printf with -e flag to interpret escape sequences
-printf "\033[1m%s\033[0m \033[36m%s\033[0m%s%s%s\n" "$model_name" "$display_dir" "$git_info" "$version_info" "$style_info"
+printf "\033[1m%s\033[0m \033[32m@%s\033[0m \033[36m%s\033[0m%s%s%s\n" "$model_name" "$hostname" "$display_dir" "$git_info" "$version_info" "$style_info"

@@ -1,5 +1,8 @@
 # vim: filetype=zsh
 
+## lazygit for yadm
+alias lazyadm='lazygit --git-dir="$HOME/.local/share/yadm/repo.git" --work-tree="$HOME"'
+
 ## ls ##
 alias ll='ls -alF'
 alias l='ls -CF'
