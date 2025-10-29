@@ -1,7 +1,7 @@
 {
   "statusLine": {
     "type": "command",
-    "command": "bash /Users/laydros/.claude/statusline.sh"
+    "command": "bash $HOME/.claude/statusline.sh"
   },
   "alwaysThinkingEnabled": true
 }
