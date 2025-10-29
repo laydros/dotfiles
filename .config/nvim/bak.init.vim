@@ -114,11 +114,6 @@ call plug#end()
 " use colorscheme grim for greyscale
 colorscheme monokai_soda
 
-" minimal LSP setup
-lua << EOF
-require'lspconfig'.rust_analyzer.setup{}
-EOF
-
 lua << EOF
 local rt = require("rust-tools")
 rt.setup({
