@@ -18,6 +18,8 @@
 #
 # Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
 
+brew "syncthing", restart_service: true
+
 # brew "colima", restart_service: true
 # brew "coreutils"
 tap "jeffreywildman/homebrew-virt-manager"
@@ -32,6 +34,7 @@ cask "bartender"
 cask "bbedit"
 cask "bettertouchtool"
 cask "chatgpt"
+cask "codex"
 cask "daisydisk"
 cask "easy-move+resize"
 cask "espanso"
