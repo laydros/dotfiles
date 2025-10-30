@@ -157,7 +157,7 @@ function venv_info {
 
 # Show hostname only on SSH or remote connections
 if [[ -n "$SSH_CONNECTION" ]]; then
-    PROMPT='%B%m%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~%f$(venv_info)${vcs_info_msg_0_} %B%#%b '
+    PROMPT='%B%F{green}%m%f%F{red}%(?.. %??)%(1j. %j&.)%f%b %F{cyan}%2~%f$(venv_info)${vcs_info_msg_0_} %B%#%b '
 else
     PROMPT='%F{red}%(?.. %??)%(1j. %j&.)%f%F{cyan}%2~%f$(venv_info)${vcs_info_msg_0_} %B%#%b '
 fi
