@@ -18,6 +18,10 @@ set -g base-index 1
 setw -g pane-base-index 1
 set -g renumber-windows on
 
+# Show title from escape sequences
+set-option -g automatic-rename on
+set-option -g automatic-rename-format "#{pane-title}"
+
 # Faster command sequences
 set -sg escape-time 1
 
@@ -31,11 +35,27 @@ set -g mouse on
 # Focus events for terminals that support them and neovim
 set -g focus-events on
 
+# Longer display time for messages
+set -g display-time 3000
+
 # Status bar with hostname
 set -g status-style 'bg=#333333 fg=cyan'
 set -g status-right '#[fg=yellow]#H #[fg=white]%H:%M'
 set -g status-right-length 50
 set -g status-interval 60
+
+# Status bar colors - different for local vs remote
+if-shell "[ $(hostname) = 'jaguar' ]" \
+    "set -g status-style 'bg=#1a4d2e fg=#4fc978'"
+
+if-shell "[ $(hostname) = 'ibanez' ]" \
+    "set -g status-style 'bg=#002b36 fg=#839496'"
+
+if-shell "[ $(hostname) = 'vox' ]" \
+    "set -g status-style 'bg=#2e1a4d fg=#c94f4f'"
+
+if-shell "[ $(hostname -s) = 'gibson-mgmt' ]" \
+    "set -g status-style 'bg=#4d2e1a fg=#c9784f'"
 
 # Window titles
 set -g set-titles on
@@ -47,12 +67,16 @@ bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
 
-# Use C-h and C-l to cycle through panes
+# Window cycling
 bind -r C-h select-window -t :-
 bind -r C-l select-window -t :+
 
 # Last window
 bind C-z last-window
+
+# Split windows (new panes open in current directory)
+bind | split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
 
 # Reload config
 bind r source-file ~/.config/tmux/tmux.conf \; display "Config reloaded!"
@@ -60,32 +84,3 @@ bind r source-file ~/.config/tmux/tmux.conf \; display "Config reloaded!"
 # Vi copy mode bindings
 bind-key -T copy-mode-vi v send-keys -X begin-selection
 bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
-
-# longer display time for messages
-set -g display-time 3000
-
-# bind split window to h and v
-#bind h split-window -h
-#bind v split-window -v
-
-# bind split window to - and |
-# bind | split-window -h
-# bind - split-window -v
-
-
-#set -g update-environment "DISPLAY WINDOWID SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_CONNECTION GNOME_KEYRING_PID GNOME_KEYRING_SOCKET"
-#setw -g aggressive-resize on
-
-# command line/message text
-# set -g message-bg black
-# set -g message-fg yellow
-# set -g message-attr default
-
-# pane number display
-# set -g display-panes-active-colour yellow
-# set -g display-panes-colour brightblue
-
-# clock
-#setw -g clock-mode-colour yellow
-# ---- end solarized colors
-

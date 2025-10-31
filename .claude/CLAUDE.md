@@ -139,3 +139,4 @@ source: "https://example.com"  # optional, when relevant
   **Priority**: Documentation updates should be treated as high-priority tasks that are completed alongside code changes, not
   optional afterthoughts.
 - Don't put anything about claude in git commit messages
+- I like to use XDG Base Directory for my config files, so check $HOME/.config if the software in question supports it.
