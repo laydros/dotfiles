@@ -145,35 +145,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
-    -- Syntax and language support
-    { 'sheerun/vim-polyglot' },
-    { 'preservim/vim-markdown' },
-
-    -- LSP and completion
-    { 'hrsh7th/nvim-cmp' },
-    { 'hrsh7th/cmp-nvim-lsp' },
-    { 'hrsh7th/cmp-buffer' },
-    { 'hrsh7th/cmp-path' },
-
-    -- Linting
-    { 'dense-analysis/ale' },
-
-    -- UI components
-    { 'nvim-lualine/lualine.nvim' },
-    { 'romgrk/barbar.nvim' },
-    { 'nvim-tree/nvim-web-devicons' },
-    { 'goolord/alpha-nvim' },
-    { 'folke/which-key.nvim' },
-
-    -- Utilities
-    { 'editorconfig/editorconfig-vim' },
-    { 'wellle/context.vim' },
-    { 'dhruvasagar/vim-table-mode' },
-    { 'nvim-lua/plenary.nvim' },
-
-    -- Colorschemes
-    { 'dracula/vim', name = 'dracula' },
-    { 'tanvirtin/monokai.nvim' },
+    { import = "plugins" },  -- Import all plugin specs from lua/plugins/
   },
   install = { colorscheme = { "habamax" } },
   checker = { enabled = false },
@@ -184,19 +156,6 @@ vim.cmd('colorscheme monokai_soda')
 
 -- Plugin configurations
 vim.g.polyglot_disabled = { 'markdown' }
-
--- vim-markdown configuration
-vim.g.vim_markdown_no_default_key_mappings = 1
-vim.g.vim_markdown_folding_disabled = 1
-vim.g.vim_markdown_strikethrough = 1
-vim.g.tex_conceal = ""
-vim.g.vim_markdown_math = 1
-vim.g.vim_markdown_frontmatter = 1
-
--- vim-table-mode configuration
-vim.g.table_mode_corner = '|'
-vim.g.table_mode_corner_corner = '|'
-vim.g.table_mode_header_fillchar = '-'
 
 -- ALE linter configuration
 vim.g.ale_linters = { markdown = { 'markdownlint' } }
@@ -225,6 +184,3 @@ vim.keymap.set('i', 'jk', '<Esc>', { noremap = true })  -- jk for escape
 -- Date insertion
 vim.keymap.set('n', '<F5>', '"=strftime("%Y-%m-%d_%X")<CR>P', { noremap = true })
 vim.keymap.set('i', '<F5>', '<C-R>=strftime("%Y-%m-%d_%X")<CR>', { noremap = true })
-
--- Load LSP configuration
-require('lsp')

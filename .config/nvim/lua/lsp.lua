@@ -112,7 +112,9 @@ vim.lsp.config.bashls = {
 }
 vim.lsp.enable('bashls')
 
--- Lua LSP Configuration (for neovim config editing)
+-- Lua LSP Configuration
+-- Generic settings for all Lua files
+-- Neovim-specific settings (vim global, runtime files) are in .luarc.json at nvim config root
 vim.lsp.config.lua_ls = {
   cmd = { 'lua-language-server' },
   filetypes = { 'lua' },
@@ -120,13 +122,9 @@ vim.lsp.config.lua_ls = {
   settings = {
     Lua = {
       runtime = {
-        version = 'LuaJIT',  -- Neovim uses LuaJIT
-      },
-      diagnostics = {
-        globals = { 'vim' },  -- Recognize 'vim' global
+        version = 'LuaJIT',
       },
       workspace = {
-        library = vim.api.nvim_get_runtime_file("", true),  -- Make server aware of Neovim runtime files
         checkThirdParty = false,
       },
       telemetry = {
