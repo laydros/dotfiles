@@ -21,6 +21,7 @@
 [alias]
 	co = checkout
 	st = status -sb
+	ci = commit
 	ix = diff --cached
 	tree = log --oneline --decorate --graph
 	news = log -p @{1}..
