@@ -93,6 +93,14 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "WinLeave"
   end
 })
 
+-- Highlight yanked text briefly
+vim.api.nvim_create_autocmd('TextYankPost', {
+  group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
+
 -- File-type specific settings
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "c",
