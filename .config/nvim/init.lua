@@ -37,6 +37,7 @@ opt.report = 0
 opt.ruler = true
 opt.scrolloff = 1
 opt.sidescroll = 3
+vim.g.netrw_banner = 0
 
 -- Search
 opt.ignorecase = true
@@ -44,6 +45,7 @@ opt.smartcase = true
 opt.hlsearch = false
 opt.incsearch = true
 opt.showmatch = true
+opt.wildignore:append {"*.venv/", "*.git/", "*.target/*", "*/__pycache__/*"}
 
 -- Indentation
 opt.shiftwidth = 4
