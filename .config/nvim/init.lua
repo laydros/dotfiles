@@ -191,6 +191,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Key mappings
 vim.keymap.set('i', 'jk', '<Esc>', { noremap = true })  -- jk for escape
+vim.keymap.set('n', ';;', ':w<cr>')
+-- vim.keymap.set('n', '<leader>f', ':find **/*')
 
 -- Date insertion
 vim.keymap.set('n', '<F5>', '"=strftime("%Y-%m-%d_%X")<CR>P', { noremap = true })

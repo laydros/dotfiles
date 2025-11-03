@@ -3,5 +3,8 @@
     "type": "command",
     "command": "bash $HOME/.claude/statusline.sh"
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "env": {
+    "OBNOTES_PATH": "$HOME/Documents/obnotes"
+  }
 }
