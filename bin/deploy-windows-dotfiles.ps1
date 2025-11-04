@@ -31,7 +31,8 @@ Copy-Item ".\.config\git\gitignore" "$env:USERPROFILE\.config\git\gitignore" -Fo
 Write-Host "OK Git ignore"
 
 # Deploy Neovim config
-Copy-Item ".\.config\nvim\init.vim" "$env:LOCALAPPDATA\nvim\init.vim" -Force
+Copy-Item ".\.config\nvim\init.lua" "$env:LOCALAPPDATA\nvim\init.lua" -Force
+Copy-Item ".\.config\nvim\lua" "$env:LOCALAPPDATA\nvim\lua" -Force -Recurse
 Write-Host "OK Neovim config"
 
 # Deploy Espanso configs
