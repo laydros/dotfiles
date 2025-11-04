@@ -1,0 +1,52 @@
+#compdef tmuxp
+
+# Zsh completion for tmuxp
+# Place in $fpath (e.g., ~/.config/zsh/.zsh_functions/_tmuxp)
+
+_tmuxp() {
+  local -a commands
+  commands=(
+    'load:Load tmuxp workspaces'
+    'freeze:Snapshot tmux session'
+    'convert:Convert between YAML and JSON'
+    'import:Import tmuxinator/teamocil configs'
+    'shell:Launch into new session'
+    'ls:List available configs'
+    'debug-info:Show debug info'
+  )
+
+  local state
+
+  _arguments -C \
+    '1: :->command' \
+    '*::arg:->args'
+
+  case $state in
+    command)
+      _describe -t commands 'tmuxp command' commands
+      ;;
+    args)
+      case $words[1] in
+        load|convert)
+          # Offer available configs and file paths
+          local -a configs
+          configs=(${(f)"$(tmuxp ls 2>/dev/null)"})
+          _alternative \
+            "configs:available configs:($configs)" \
+            "files:config files:_files -g '*.{yaml,yml,json}'"
+          ;;
+        freeze)
+          # Complete with tmux sessions
+          local -a sessions
+          sessions=(${(f)"$(tmux list-sessions -F '#S' 2>/dev/null)"})
+          _describe -t sessions 'tmux sessions' sessions
+          ;;
+        *)
+          _files
+          ;;
+      esac
+      ;;
+  esac
+}
+
+_tmuxp "$@"
