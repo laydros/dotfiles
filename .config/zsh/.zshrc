@@ -24,8 +24,6 @@ bindkey -e
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/laydros/.config/zsh/.zshrc'
 
-autoload -Uz compinit
-compinit
 # End of lines added by compinstall
 
 # == HISTORY
@@ -127,7 +125,15 @@ fi
 
 export PATH
 
-compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
+# Load completions with daily cache
+autoload -Uz compinit
+typeset -i updated_at=$(date +'%j' -r "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION" 2>/dev/null || stat -f '%Sm' -t '%j' "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION" 2>/dev/null || echo 0)
+typeset -i today=$(date +'%j')
+if [ $updated_at -ne $today ]; then
+  compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+else
+  compinit -C -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+fi
 
 # Color man pages
 export LESS_TERMCAP_mb=$'\E[01;32m'
@@ -314,4 +320,11 @@ elif [[ $OSTYPE = linux* ]]; then
     # rust init now handled in .zshenv
 fi
 
-eval "$(rbenv init - zsh)"
+# Lazy load rbenv - add shims to PATH immediately, defer full init until first use
+export PATH="$HOME/.rbenv/shims:$PATH"
+rbenv() {
+  unfunction rbenv
+  eval "$(command rbenv init - zsh)"
+  rbenv "$@"
+}
+
