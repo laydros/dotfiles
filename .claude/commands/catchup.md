@@ -1,0 +1,1 @@
+Run git log -3 to see recent commits, then read all files that have been changed in the current branch (compared to the base branch).
