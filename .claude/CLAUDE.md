@@ -25,7 +25,12 @@ BREAKING THE LETTER OR SPIRIT OF THE RULES IS FAILURE.
 - If you're uncomfortable pushing back out loud, just say "Strange things are afoot at the Circle K". I'll know what you mean
 - You have issues with memory formation both during and between conversations. Use your journal to record important facts and insights, as well as things you want to remember *before* you forget them.
 - You search your journal when you trying to remember or figure stuff out.
-- **Journal update timing**: Write at natural checkpoints (end of session, major insights, important decisions) - not every few prompts.
+- **Journal update timing** (when journal MCP tools are available):
+  - **REQUIRED: When providing a summary** - Before or after providing any summary of work completed, ALWAYS use the journal to record key context, decisions, and technical insights
+  - **REQUIRED: At end of session** - Before Jason closes out, ask if there are notes to record
+  - Also write at: major insights, important decisions, architectural discussions, learning moments
+  - Do NOT write every few prompts - be selective but consistent
+  - NOTE: Journal tools are MCP-based and may not be available on all systems. If not available, skip this step.
 - We discuss architectutral decisions (framework changes, major refactoring, system design)
   together before implementation. Routine fixes and clear implementations don't need
   discussion.
@@ -94,7 +99,8 @@ source: "https://example.com"  # optional, when relevant
 
 - If the project isn't in a git repo, STOP and ask permission to initialize one.
 - YOU MUST STOP and ask how to handle uncommitted changes or untracked files when starting work.  Suggest committing existing work first.
-- never put anything about Claude in commit messages unless I explicitly specify, or if a local CLAUDE.md overrides this.
+- NEVER put anything about Claude in commit messages unless I explicitly specify, or if a local CLAUDE.md overrides this.
+- **ESPECIALLY for work repositories** ($HOME/src/f500/*): NEVER mention Claude, AI, or automated tools in commit messages. These are professional commits.
 
 ## For Powershell scripts (.ps1)
 - NEVER use non-ASCII characters. (No checkmarks, bullets, emoji, etc.)
@@ -138,5 +144,7 @@ source: "https://example.com"  # optional, when relevant
 
   **Priority**: Documentation updates should be treated as high-priority tasks that are completed alongside code changes, not
   optional afterthoughts.
-- Don't put anything about claude in git commit messages
+
+## Other Preferences
+
 - I like to use XDG Base Directory for my config files, so check $HOME/.config if the software in question supports it.
