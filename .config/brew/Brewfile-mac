@@ -3,7 +3,7 @@
 #
 # Usage:
 # 1. Install all listed packages: `brew bundle install --file=~/.config/brew/Brewfile`
-# 2. Remove unlisted packages (except VS Code extensions): 
+# 2. Remove unlisted packages (except VS Code extensions):
 #    `brew bundle cleanup --file=~/.config/brew/Brewfile --force && ~/bin/sync-vscode-extensions.sh`
 # 3. Update this file with current packages: `brew bundle dump --file=~/.config/brew/Brewfile --force`
 # 4. Sync VS Code extensions separately: `~/bin/sync-vscode-extensions.sh`
@@ -22,10 +22,8 @@ brew "syncthing", restart_service: true
 
 # brew "colima", restart_service: true
 # brew "coreutils"
-tap "jeffreywildman/homebrew-virt-manager"
-brew "OpenSSH"   # to get sftp with tab complete
-brew "signify-osx"
-brew "virt-viewer"
+#tap "jeffreywildman/homebrew-virt-manager"
+#brew "virt-viewer"
 
 # cask "alacritty"
 cask "autodesk-fusion"
