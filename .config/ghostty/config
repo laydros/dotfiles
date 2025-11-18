@@ -20,8 +20,8 @@ theme = Monokai Soda
 window-decoration = client
 window-padding-x = 4
 window-padding-y = 2
-background-blur-radius = 20
-background-opacity = 0.9
+background-blur-radius = 40
+background-opacity = 0.95
 
 #font-family = "Monaco"
 font-family = "Hack Nerd Font"
