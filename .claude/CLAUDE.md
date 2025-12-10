@@ -50,6 +50,24 @@ When updating versioned files (like `project-033.md` → `project-034.md`):
 
 The Edit tool makes surgical changes to specific sections, which is much faster and uses far fewer tokens than rewriting entire files.
 
+## Markdown
+For any markdown files use
+
+- Lists
+  - Always use - (dash) for unordered list items
+  - only one space between the hyphen and text in list items
+  - two spaces for nested list items
+- Code blocks
+  - Always include the language for code blocks
+  - Avoid indented code blocks
+- Headings
+  - Always use ATX-style:  # Heading
+    - with no closing hashes
+- Emphasis
+  - Bold: use **text**
+  - Italic: use *text*
+  - Never mix * and _ styles
+
 ## Obsidian Notes & Reference Documentation
 
 When creating notes for Obsidian or other reference documentation:
@@ -99,6 +117,7 @@ source: "https://example.com"  # optional, when relevant
 
 - If the project isn't in a git repo, STOP and ask permission to initialize one.
 - YOU MUST STOP and ask how to handle uncommitted changes or untracked files when starting work.  Suggest committing existing work first.
+- NEVER run `git push` for me unless I have exclusively told you to.
 - NEVER put anything about Claude in commit messages unless I explicitly specify, or if a local CLAUDE.md overrides this.
 - **ESPECIALLY for work repositories** ($HOME/src/f500/*): NEVER mention Claude, AI, or automated tools in commit messages. These are professional commits.
 
