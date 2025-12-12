@@ -1,232 +1,94 @@
 #!/bin/bash
 
-# Brewfile Cross-Platform Installer (Improved)
+# Brewfile Cross-Platform Sync
 #
 # Usage:
-#   ./bundle-sync-brewfile.sh [--preview] [--verbose] [--help]
+#   ./bundle-sync-brewfile.sh [--help]
 #
-# Options:
-#   --preview     Show what changes would be made without executing
-#   --verbose     Show all packages including already installed ones
-#   --help        Show this help message
-#
-# Safety features:
-# - Preview mode shows all changes before execution
-# - Validates Brewfile existence before proceeding
-# - Better error handling and logging
-# - Confirms destructive operations
+# Shows what changes would be made, asks for confirmation, then executes.
+# Combines Brewfile-core with OS-specific Brewfile (Brewfile-mac or Brewfile-linux).
 
-set -euo pipefail  # Exit on error, undefined vars, pipe failures
+set -euo pipefail
 
 BREWFILE_DIR=~/.config/brew
-BREWFILE_TEMP="$(mktemp)"  # Use mktemp for unique temp file
-PREVIEW_MODE=false
-VERBOSE=false
+BREWFILE_TEMP="$(mktemp)"
 
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-log() {
-    echo -e "${BLUE}[$(date '+%H:%M:%S')]${NC} $1"
-}
-
-warn() {
-    echo -e "${YELLOW}[WARN]${NC} $1"
-}
-
-error() {
-    echo -e "${RED}[ERROR]${NC} $1" >&2
-}
-
-success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
+log()     { echo -e "${BLUE}[INFO]${NC} $1"; }
+warn()    { echo -e "${YELLOW}[WARN]${NC} $1"; }
+error()   { echo -e "${RED}[ERROR]${NC} $1" >&2; }
+success() { echo -e "${GREEN}[OK]${NC} $1"; }
 
 cleanup() {
-    if [[ -f "$BREWFILE_TEMP" ]]; then
-        rm "$BREWFILE_TEMP"
-        log "Cleaned up temporary Brewfile"
-    fi
+    [[ -f "$BREWFILE_TEMP" ]] && rm -f "$BREWFILE_TEMP"
 }
-
 trap cleanup EXIT
 
 show_help() {
-    head -n 20 "$0" | grep '^#' | sed 's/^# *//'
+    head -n 12 "$0" | grep '^#' | sed 's/^# *//'
 }
 
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        --preview)
-            PREVIEW_MODE=true
-            shift
-            ;;
-        --verbose)
-            VERBOSE=true
-            shift
-            ;;
-        --help)
-            show_help
-            exit 0
-            ;;
-        *)
-            error "Unknown option: $1"
-            show_help
-            exit 1
-            ;;
-    esac
-done
+# Handle --help
+[[ "${1:-}" == "--help" ]] && { show_help; exit 0; }
 
 # Validate prerequisites
-if ! command -v brew &> /dev/null; then
-    error "Homebrew not found. Please install Homebrew first."
-    exit 1
-fi
+command -v brew &>/dev/null || { error "Homebrew not found."; exit 1; }
+[[ -d "$BREWFILE_DIR" ]] || { error "Brewfile directory not found: $BREWFILE_DIR"; exit 1; }
+[[ -f "$BREWFILE_DIR/Brewfile-core" ]] || { error "Brewfile-core not found"; exit 1; }
 
-if [[ ! -d "$BREWFILE_DIR" ]]; then
-    error "Brewfile directory not found: $BREWFILE_DIR"
-    exit 1
-fi
-
-if [[ ! -f "$BREWFILE_DIR/Brewfile-core" ]]; then
-    error "Core Brewfile not found: $BREWFILE_DIR/Brewfile-core"
-    exit 1
-fi
-
-# Determine OS and check for OS-specific Brewfile
+# Detect OS and set OS-specific Brewfile
 OS=$(uname)
-if [[ "$OS" == "Darwin" ]]; then
-    OS_BREWFILE="$BREWFILE_DIR/Brewfile-mac"
-    log "Detected macOS"
-elif [[ "$OS" == "Linux" ]]; then
-    OS_BREWFILE="$BREWFILE_DIR/Brewfile-linux"
-    log "Detected Linux"
-else
-    error "Unsupported operating system: $OS"
-    exit 1
-fi
-
-# Check if OS-specific Brewfile exists (optional)
-HAS_OS_BREWFILE=false
-if [[ -f "$OS_BREWFILE" ]]; then
-    HAS_OS_BREWFILE=true
-    log "Found OS-specific Brewfile: $OS_BREWFILE"
-else
-    warn "OS-specific Brewfile not found: $OS_BREWFILE (continuing with core only)"
-fi
+case "$OS" in
+    Darwin) OS_BREWFILE="$BREWFILE_DIR/Brewfile-mac"; log "Detected macOS" ;;
+    Linux)  OS_BREWFILE="$BREWFILE_DIR/Brewfile-linux"; log "Detected Linux" ;;
+    *)      error "Unsupported OS: $OS"; exit 1 ;;
+esac
 
 # Build combined Brewfile
-log "Building combined Brewfile..."
-log "Using temporary Brewfile: $BREWFILE_TEMP"
 cp "$BREWFILE_DIR/Brewfile-core" "$BREWFILE_TEMP"
-
-if [[ "$HAS_OS_BREWFILE" == true ]]; then
+if [[ -f "$OS_BREWFILE" ]]; then
     cat "$OS_BREWFILE" >> "$BREWFILE_TEMP"
-fi
-
-# Additional safety for Linux
-if [[ "$OS" == "Linux" ]]; then
-    log "Filtering macOS-only entries for Linux..."
-    sed -i '/^cask /d' "$BREWFILE_TEMP"
-    sed -i '/^mas /d' "$BREWFILE_TEMP"
-fi
-
-# Show what's in the combined Brewfile
-log "Combined Brewfile contains:"
-echo "  Core packages: $(grep -c '^brew ' "$BREWFILE_DIR/Brewfile-core" || echo 0)"
-if [[ "$HAS_OS_BREWFILE" == true ]]; then
-    echo "  OS-specific packages: $(grep -c '^brew ' "$OS_BREWFILE" || echo 0)"
-    if [[ "$OS" == "Darwin" ]]; then
-        echo "  Casks: $(grep -c '^cask ' "$OS_BREWFILE" || echo 0)"
-        echo "  Mac App Store: $(grep -c '^mas ' "$OS_BREWFILE" || echo 0)"
-    fi
+    log "Combined Brewfile-core + $(basename "$OS_BREWFILE")"
 else
-    echo "  OS-specific packages: 0 (no OS-specific Brewfile)"
+    warn "OS-specific Brewfile not found: $OS_BREWFILE (using core only)"
 fi
 
-# Preview mode - show what would change
-if [[ "$PREVIEW_MODE" == true ]]; then
-    log "PREVIEW MODE - No changes will be made"
-    
-    echo ""
-    echo "=== PACKAGES THAT WOULD BE INSTALLED ==="
-    NEW_PACKAGES=()
-    EXISTING_PACKAGES=0
-    while read -r formula; do
-        if ! brew list --formula --quiet "$formula" &>/dev/null && 
-           ! brew list --cask --quiet "$formula" &>/dev/null; then
-            NEW_PACKAGES+=("$formula")
-            echo "  + $formula"
-        else
-            ((EXISTING_PACKAGES++))
-            if [[ "$VERBOSE" == true ]]; then
-                echo "  ✓ $formula (already installed)"
-            fi
-        fi
-    done < <(brew bundle list --file="$BREWFILE_TEMP")
-    
-    if [[ ${#NEW_PACKAGES[@]} -eq 0 ]]; then
-        echo "  (no new packages to install)"
-    fi
-    
-    echo ""
-    echo "Summary: ${#NEW_PACKAGES[@]} new, $EXISTING_PACKAGES already installed"
-    if [[ "$VERBOSE" != true && $EXISTING_PACKAGES -gt 0 ]]; then
-        echo "(use --verbose to see already installed packages)"
-    fi
-    
-    echo ""
-    echo "=== PACKAGES THAT WOULD BE REMOVED ==="
-    # This is a bit complex to preview accurately without actually running cleanup
-    # We can show currently installed packages not in the Brewfile
-    comm -23 \
-        <(brew list --formula | sort) \
-        <(grep '^brew ' "$BREWFILE_TEMP" | cut -d'"' -f2 | sort) | \
-        sed 's/^/  - /'
-    
-    if [[ "$OS" == "Darwin" ]]; then
-        echo ""
-        echo "=== CASKS THAT WOULD BE REMOVED ==="
-        comm -23 \
-            <(brew list --cask | sort) \
-            <(grep '^cask ' "$BREWFILE_TEMP" | cut -d'"' -f2 | sort) | \
-            sed 's/^/  - /'
-    fi
-    
-    echo ""
-    echo "To execute these changes, run without --preview"
-    exit 0
+# Filter out macOS-only entries on Linux
+if [[ "$OS" == "Linux" ]]; then
+    sed -i '/^cask /d; /^mas /d' "$BREWFILE_TEMP"
 fi
 
-# Confirm destructive operations
+# Show what would change
 echo ""
-warn "This will install packages and REMOVE packages not in your Brewfiles."
+echo "=== PACKAGES TO INSTALL ==="
+if brew bundle check --verbose --file="$BREWFILE_TEMP" 2>&1; then
+    echo "  (all packages already installed)"
+fi
+
+echo ""
+echo "=== PACKAGES TO REMOVE ==="
+if brew bundle cleanup --file="$BREWFILE_TEMP" 2>&1; then
+    echo "  (nothing to remove)"
+fi
+
+# Confirm before proceeding
+echo ""
+warn "This will install missing packages and remove unlisted packages."
 read -p "Continue? [y/N] " -n 1 -r
 echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    log "Cancelled by user"
-    exit 0
-fi
+[[ $REPLY =~ ^[Yy]$ ]] || { log "Cancelled."; exit 0; }
 
-# Execute the installation and cleanup
-log "Installing packages..."
-if brew bundle install --no-upgrade --file="$BREWFILE_TEMP"; then
-    success "Packages installed successfully"
+# Execute
+log "Syncing packages..."
+if brew bundle install --cleanup --no-upgrade --file="$BREWFILE_TEMP"; then
+    success "Brewfile sync completed."
 else
-    error "Package installation failed"
+    error "Sync failed."
     exit 1
 fi
-
-log "Cleaning up unused packages..."
-if brew bundle cleanup --file="$BREWFILE_TEMP" --force; then
-    success "Cleanup completed successfully"
-else
-    warn "Cleanup had issues, but continuing..."
-fi
-
-success "Brewfile sync completed successfully"
