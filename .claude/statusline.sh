@@ -10,6 +10,23 @@ project_dir=$(echo "$input" | jq -r '.workspace.project_dir')
 version=$(echo "$input" | jq -r '.version')
 output_style=$(echo "$input" | jq -r '.output_style.name')
 
+# Context window usage
+context_size=$(echo "$input" | jq -r '.context_window.context_window_size // 0')
+usage=$(echo "$input" | jq '.context_window.current_usage')
+context_info=""
+if [ "$usage" != "null" ] && [ "$context_size" != "0" ]; then
+    current_tokens=$(echo "$usage" | jq '.input_tokens + .cache_creation_input_tokens + .cache_read_input_tokens')
+    percent_used=$((current_tokens * 100 / context_size))
+    # Color based on usage: green < 65%, yellow 65-85%, red >= 85%
+    if [ "$percent_used" -lt 65 ]; then
+        context_info=$(printf " \033[32m%d%%\033[0m" "$percent_used")
+    elif [ "$percent_used" -lt 85 ]; then
+        context_info=$(printf " \033[33m%d%%\033[0m" "$percent_used")
+    else
+        context_info=$(printf " \033[31m%d%%\033[0m" "$percent_used")
+    fi
+fi
+
 # Get hostname
 hostname=$(hostname -s)
 
@@ -59,4 +76,4 @@ if [ "$output_style" != "null" ] && [ -n "$output_style" ] && [ "$output_style" 
 fi
 
 # Output formatted status line using printf with -e flag to interpret escape sequences
-printf "\033[1m%s\033[0m \033[32m@%s\033[0m \033[36m%s\033[0m%s%s%s\n" "$model_name" "$hostname" "$display_dir" "$git_info" "$version_info" "$style_info"
+printf "\033[1m%s\033[0m%s \033[32m@%s\033[0m \033[36m%s\033[0m%s%s%s\n" "$model_name" "$context_info" "$hostname" "$display_dir" "$git_info" "$version_info" "$style_info"
