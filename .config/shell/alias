@@ -3,6 +3,9 @@
 ## lazygit for yadm
 alias lazyadm='lazygit --git-dir="$HOME/.local/share/yadm/repo.git" --work-tree="$HOME"'
 
+alias gst="git status"
+alias yst="yadm status"
+
 ## ls ##
 alias ll='ls -alF'
 alias l='ls -CF'
@@ -15,9 +18,10 @@ alias lta='lt -a'
 alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
 
 
-#alias df='df -h -x"squashfs"'
-alias sort='LC_ALL=C sort'
+alias tn='tmux new -s'
 # alias em='emacsclient -n'
+# alias df='df -h -x"squashfs"'
+alias sort='LC_ALL=C sort'
 alias dotf='ls .[a-zA-Z0-9_]*'
 alias qr='qrencode -t UTF8'
 alias cp="cp -iv"                    # confirm before overwriting, verbose
@@ -25,8 +29,6 @@ alias cat="bat -p"
 alias clear="clear -x"
 alias ip="ip -c"
 alias feh="echo imv"
-alias gst="git status"
-alias yst="yadm status"
 alias v="nvim"
 alias gcm='git commit -m'
 alias pyclean='find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null; find . -name "*.pyc" -delete 2>/dev/null'

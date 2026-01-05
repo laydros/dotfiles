@@ -18,6 +18,10 @@
 #
 # Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
 
+tap "microsoft/mssql-release"
+
+brew "mssql-tools18"
+brew "msodbcsql18"
 brew "syncthing", restart_service: true
 
 # brew "colima", restart_service: true
@@ -26,6 +30,7 @@ brew "syncthing", restart_service: true
 #brew "virt-viewer"
 
 # cask "alacritty"
+cask "antinote"
 cask "autodesk-fusion"
 cask "bambu-studio"
 cask "bartender"
@@ -35,6 +40,7 @@ cask "chatgpt"
 cask "codex"
 cask "daisydisk"
 cask "dotnet-sdk@8"
+cask "dotnet-sdk"
 cask "easy-move+resize"
 cask "espanso"
 cask "ferdium"
@@ -79,6 +85,7 @@ cask "qlvideo"
 # cask "qmk-toolbox"
 cask "quicklook-json"
 cask "qutebrowser"
+cask "raycast"
 cask "royal-tsx"
 # cask "rio"
 # cask "rustdesk"
