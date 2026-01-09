@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILL_DIR="$(dirname "$SCRIPT_DIR")"
+VENV_PYTHON="$SKILL_DIR/.venv/bin/python"
+
+if [ ! -x "$VENV_PYTHON" ]; then
+    echo "Error: Venv not found. Run setup.sh first:" >&2
+    echo "  $SKILL_DIR/setup.sh" >&2
+    exit 1
+fi
+
+exec "$VENV_PYTHON" "$SCRIPT_DIR/set_field_value.py" "$@"
