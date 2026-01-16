@@ -118,8 +118,7 @@ source: "https://example.com"  # optional, when relevant
 - If the project isn't in a git repo, STOP and ask permission to initialize one.
 - YOU MUST STOP and ask how to handle uncommitted changes or untracked files when starting work.  Suggest committing existing work first.
 - NEVER run `git push` for me unless I have explicitly told you to.
-- NEVER put anything about Claude in commit messages unless I explicitly specify, or if a local CLAUDE.md overrides this.
-- **ESPECIALLY for work repositories** ($HOME/src/f500/*): NEVER mention Claude, AI, or automated tools in commit messages. These are professional commits.
+- NEVER put anything about Claude in commit messages unless I explicitly specify.
 
 ## For Powershell scripts (.ps1)
 - NEVER use non-ASCII characters. (No checkmarks, bullets, emoji, etc.)

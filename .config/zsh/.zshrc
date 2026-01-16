@@ -115,6 +115,9 @@ PATH=$HOME/bin:$HOME/.local/bin:$PATH
 # Rust
 PATH=$HOME/.local/share/cargo/bin:$PATH
 
+# Go
+PATH=$HOME/.local/share/go/bin:$PATH
+
 # sbin for homebrew
 PATH="/usr/local/sbin:$PATH"
 

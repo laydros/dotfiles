@@ -23,6 +23,8 @@ tap "microsoft/mssql-release"
 brew "mssql-tools18"
 brew "msodbcsql18"
 brew "syncthing", restart_service: true
+brew "colima"
+brew "docker"
 
 # brew "colima", restart_service: true
 # brew "coreutils"
