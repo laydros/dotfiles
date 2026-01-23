@@ -10,13 +10,10 @@ project_dir=$(echo "$input" | jq -r '.workspace.project_dir')
 version=$(echo "$input" | jq -r '.version')
 output_style=$(echo "$input" | jq -r '.output_style.name')
 
-# Context window usage
-context_size=$(echo "$input" | jq -r '.context_window.context_window_size // 0')
-usage=$(echo "$input" | jq '.context_window.current_usage')
+# Context window usage - use pre-calculated percentage for accuracy
+percent_used=$(echo "$input" | jq -r '.context_window.used_percentage // 0' | awk '{printf "%.0f", $1}')
 context_info=""
-if [ "$usage" != "null" ] && [ "$context_size" != "0" ]; then
-    current_tokens=$(echo "$usage" | jq '.input_tokens + .cache_creation_input_tokens + .cache_read_input_tokens')
-    percent_used=$((current_tokens * 100 / context_size))
+if [ "$percent_used" != "0" ]; then
     # Color based on usage: green < 65%, yellow 65-85%, red >= 85%
     if [ "$percent_used" -lt 65 ]; then
         context_info=$(printf " \033[32m%d%%\033[0m" "$percent_used")
