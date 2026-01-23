@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+"""
+Fill PDF form fields from WyDocs XML data.
+
+Extracts all leaf elements from XML (using tag name as field name) and
+populates matching fields in the PDF. Silently skips fields that don't
+exist in the PDF or XML.
+"""
+
+import sys
+import argparse
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+# Add parent directory to path to import from venv
+sys.path.insert(0, str(Path(__file__).parent.parent / ".venv" / "lib" / "python3.14" / "site-packages"))
+
+import pikepdf
+
+
+def extract_fields_from_xml(xml_path):
+    """Extract all leaf elements from XML as field_name: value dict."""
+    tree = ET.parse(xml_path)
+    root = tree.getroot()
+
+    fields = {}
+
+    def walk_tree(element):
+        """Recursively walk tree and collect leaf elements."""
+        if len(element) == 0:  # Leaf element
+            tag = element.tag
+            value = element.text or ""
+            fields[tag] = value
+        else:
+            for child in element:
+                walk_tree(child)
+
+    walk_tree(root)
+    return fields
+
+
+def get_pdf_field_names(pdf):
+    """Get all form field names from PDF."""
+    field_names = set()
+
+    if "/AcroForm" not in pdf.Root or "/Fields" not in pdf.Root.AcroForm:
+        return field_names
+
+    def walk_fields(field):
+        """Recursively walk form fields."""
+        if "/T" in field:
+            field_name = str(field["/T"])
+            field_names.add(field_name)
+
+        # Check for child fields (field hierarchy)
+        if "/Kids" in field:
+            for kid in field["/Kids"]:
+                walk_fields(kid)
+
+    for field in pdf.Root.AcroForm.Fields:
+        walk_fields(field)
+
+    return field_names
+
+
+def set_field_value(pdf, field_name, value):
+    """Set a form field's value in the PDF."""
+    if "/AcroForm" not in pdf.Root or "/Fields" not in pdf.Root.AcroForm:
+        return False
+
+    def find_and_set_field(field, target_name):
+        """Recursively find and set field value."""
+        if "/T" in field and str(field["/T"]) == target_name:
+            field["/V"] = value
+            return True
+
+        if "/Kids" in field:
+            for kid in field["/Kids"]:
+                if find_and_set_field(kid, target_name):
+                    return True
+
+        return False
+
+    for field in pdf.Root.AcroForm.Fields:
+        if find_and_set_field(field, field_name):
+            return True
+
+    return False
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Fill PDF form fields from WyDocs XML data",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s input.pdf data.xml -o output.pdf
+  %(prog)s input.pdf data.xml                    # Modify in place
+  %(prog)s input.pdf data.xml -o output.pdf -v   # Verbose output
+"""
+    )
+    parser.add_argument("pdf", help="Input PDF file")
+    parser.add_argument("xml", help="Input XML file with field data")
+    parser.add_argument("-o", "--output", help="Output PDF file (default: modify input in place)")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Show detailed output")
+
+    args = parser.parse_args()
+
+    # Validate input files
+    pdf_path = Path(args.pdf)
+    xml_path = Path(args.xml)
+
+    if not pdf_path.exists():
+        print(f"Error: PDF file not found: {args.pdf}", file=sys.stderr)
+        sys.exit(1)
+
+    if not xml_path.exists():
+        print(f"Error: XML file not found: {args.xml}", file=sys.stderr)
+        sys.exit(1)
+
+    # Extract fields from XML
+    if args.verbose:
+        print(f"Reading XML: {args.xml}")
+
+    try:
+        xml_fields = extract_fields_from_xml(xml_path)
+    except Exception as e:
+        print(f"Error parsing XML: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if args.verbose:
+        print(f"Found {len(xml_fields)} fields in XML")
+
+    # Open PDF
+    if args.verbose:
+        print(f"Opening PDF: {args.pdf}")
+
+    try:
+        pdf = pikepdf.open(pdf_path, allow_overwriting_input=True)
+    except Exception as e:
+        print(f"Error opening PDF: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    # Get PDF field names
+    pdf_field_names = get_pdf_field_names(pdf)
+
+    if not pdf_field_names:
+        print("Warning: PDF has no form fields", file=sys.stderr)
+        pdf.close()
+        sys.exit(0)
+
+    if args.verbose:
+        print(f"Found {len(pdf_field_names)} fields in PDF")
+
+    # Fill matching fields
+    filled = []
+    skipped_empty = []
+
+    for field_name, value in xml_fields.items():
+        if field_name in pdf_field_names:
+            if value:  # Only fill non-empty values
+                if set_field_value(pdf, field_name, value):
+                    filled.append(field_name)
+                    if args.verbose:
+                        print(f"  Set {field_name} = {value[:50]}{'...' if len(value) > 50 else ''}")
+            else:
+                skipped_empty.append(field_name)
+
+    # Save output
+    output_path = Path(args.output) if args.output else pdf_path
+
+    try:
+        pdf.save(output_path)
+        pdf.close()
+    except Exception as e:
+        print(f"Error saving PDF: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    # Summary
+    print(f"Filled {len(filled)} fields in {output_path}")
+
+    if args.verbose:
+        if skipped_empty:
+            print(f"Skipped {len(skipped_empty)} empty values")
+
+        xml_only = set(xml_fields.keys()) - pdf_field_names
+        pdf_only = pdf_field_names - set(xml_fields.keys())
+
+        if xml_only:
+            print(f"Fields in XML but not PDF: {len(xml_only)}")
+        if pdf_only:
+            print(f"Fields in PDF but not XML: {len(pdf_only)}")
+
+
+if __name__ == "__main__":
+    main()

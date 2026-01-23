@@ -112,6 +112,24 @@ Set or clear the value of a form field in a PDF.
 
 Use this to set or clear field values in PDFs.
 
+### fill_from_xml
+Fill PDF form fields from WyDocs XML data files.
+
+```bash
+# Fill PDF from XML data
+~/.claude/skills/wydocs-forms/scripts/fill_from_xml input.pdf data.xml -o output.pdf
+
+# Modify in place (no -o flag)
+~/.claude/skills/wydocs-forms/scripts/fill_from_xml input.pdf data.xml
+
+# Verbose output showing each field filled
+~/.claude/skills/wydocs-forms/scripts/fill_from_xml input.pdf data.xml -o output.pdf -v
+```
+
+Extracts all field values from WyDocs XML (using tag names as field names) and populates matching fields in the PDF. Silently skips fields that exist in XML but not PDF, or vice versa. Only fills non-empty values.
+
+Use this for testing form mapping without a full WyDocs environment.
+
 ### Using the Skill's Python Environment
 
 For PDF operations not covered by the scripts above, use the skill's venv directly:
