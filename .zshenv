@@ -73,7 +73,6 @@ export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export TLDR_CACHE_DIR="$XDG_CACHE_HOME"/tldr
 export TERMINFO="$XDG_DATA_HOME"/terminfo                                     
 export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
-export COLIMA_HOME="$XDG_DATA_HOME/colima"
 export OLLAMA_HOME="$XDG_DATA_HOME/ollama"
 export W3M_DIR="$XDG_DATA_HOME"/w3m
 # Vim XDG compliance

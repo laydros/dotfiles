@@ -189,7 +189,7 @@ zstyle ':vcs_info:git:*' formats ' %F{yellow}(%b%u%c)%f'
 
 # set docker to use colima on Mac only
 if [[ "$(uname)" == "Darwin" ]]; then
-  export DOCKER_HOST=unix://$HOME/.config/colima/docker.sock
+  export DOCKER_HOST=unix://$HOME/.colima/docker.sock
 fi
 
 # Print a greeting message when shell is started
