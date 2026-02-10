@@ -19,12 +19,16 @@
 # Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
 
 tap "microsoft/mssql-release"
+tap "steipete/tap"
 
+brew "spogo"
 brew "mssql-tools18"
 brew "msodbcsql18"
 brew "syncthing", restart_service: true
 brew "colima"
 brew "docker"
+
+brew "python@3.12"
 
 # brew "colima", restart_service: true
 # brew "coreutils"
@@ -40,7 +44,10 @@ cask "bbedit"
 cask "bettertouchtool"
 cask "chatgpt"
 cask "codex"
+cask "codex-app"
+cask "codexbar"
 cask "daisydisk"
+cask "discord"
 cask "dotnet-sdk@8"
 cask "dotnet-sdk"
 cask "easy-move+resize"
@@ -80,7 +87,6 @@ cask "permute"
 cask "plexamp"
 cask "proton-mail-bridge"
 cask "protonvpn"
-cask "python@3.12"
 # cask "qlimagesize"
 cask "qlmarkdown"
 cask "qlstephen"
@@ -102,6 +108,7 @@ cask "swiftbar"
 
 # Eclipse JDK
 cask "temurin"
+cask "telegram"
 # cask "tigervnc-viewer"
 # cask "tor-browser"
 cask "transmission"
@@ -111,6 +118,7 @@ cask "viscosity"
 cask "visual-studio-code"
 # cask "whichspace"
 # cask "whisky"
+cask "wispr-flow"
 cask "xquartz"
 cask "zoom"
 
