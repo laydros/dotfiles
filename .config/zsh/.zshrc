@@ -33,7 +33,7 @@ HISTSIZE=1100000            # Max entries to keep in memory
 SAVEHIST=1000000            # Max entries to save to file
 
 HISTORY_IGNORE="(ls|cd|pwd|exit|cd)*"
-#HIST_STAMPS="yyyy-mm-dd" 
+#HIST_STAMPS="yyyy-mm-dd"
 HISTTIME_FORMAT="yyyy-mm-dd"
 
 setopt EXTENDED_HISTORY     # add timestamps to history in ':start:elapsed;command' format
@@ -61,8 +61,8 @@ colors
 # possible fix for very slow autocomplete in git repo
 # https://stackoverflow.com/questions/9810327/zsh-auto-completion-for-git-takes-significant-amount-of-time-can-i-turn-it-off/9810485#9810485
 
-__git_files () { 
-    _wanted files expl 'local files' _files     
+__git_files () {
+    _wanted files expl 'local files' _files
 }
 
 # == SSH Agent
@@ -81,7 +81,7 @@ if [[ " ${ssh_agent_hosts[@]} " =~ " $(hostname) " ]]; then
             eval "$(ssh-agent -t 24h)"
         fi
     fi
-    
+
     # Don't auto-add keys - let SSH do it on first use
     # (Remove the auto-add section that was prompting immediately)
 fi
@@ -94,12 +94,18 @@ fi
 #       source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
 #    fi
 # fi
-# 
+#
 # set homebrew stuff for mac and linux
 if [[ "$OSTYPE" = darwin* ]]; then
    eval "$(/opt/homebrew/bin/brew shellenv)"
 else
    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+# automatically start tmux when sshing in
+# in .zshrc, only for SSH sessions
+if [[ -n "$SSH_CONNECTION" ]] && command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
+  tmux attach -t ssh 2>/dev/null || tmux new -s ssh
 fi
 
 # =============
