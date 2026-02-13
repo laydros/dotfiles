@@ -25,7 +25,7 @@ background-opacity = 0.95
 
 #font-family = "Monaco"
 font-family = "Hack Nerd Font"
-#font-family = "CaskadiaMono Nerd Font"
+#font-family = "Maple Mono NF"
 font-size = 12
 
 # Disable ligatures
