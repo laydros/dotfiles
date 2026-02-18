@@ -164,6 +164,11 @@ source: "https://example.com"  # optional, when relevant
   **Priority**: Documentation updates should be treated as high-priority tasks that are completed alongside code changes, not
   optional afterthoughts.
 
+## Icon Libraries
+
+- **Default:** Lucide (https://lucide.dev) — use unless there's a specific reason not to
+- Exceptions are fine when a project needs something different (e.g., vellum-fields uses Phosphor)
+
 ## Other Preferences
 
 - I like to use XDG Base Directory for my config files, so check $HOME/.config if the software in question supports it.
