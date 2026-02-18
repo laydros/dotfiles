@@ -169,6 +169,15 @@ source: "https://example.com"  # optional, when relevant
 - **Default:** Lucide (https://lucide.dev) — use unless there's a specific reason not to
 - Exceptions are fine when a project needs something different (e.g., vellum-fields uses Phosphor)
 
+## Dotfiles (yadm) Commit Format
+
+Format: `scope: short description`
+
+- Lowercase everything, no period at end, imperative mood
+- Multi-scope: `ssh, brew: add zag and update packages`
+- No conventional commit prefixes (`feat:`, `fix:`) — scope replaces them
+- Scopes: `zsh`, `nvim`, `tmux`, `ghostty`, `ssh`, `brew`, `git`, `claude`, `espanso` (add new ones as needed)
+
 ## Other Preferences
 
 - I like to use XDG Base Directory for my config files, so check $HOME/.config if the software in question supports it.
