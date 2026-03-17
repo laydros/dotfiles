@@ -104,8 +104,7 @@ fi
 
 # automatically start tmux when sshing in
 # in .zshrc, only for SSH sessions
-if [[ -n "$SSH_CONNECTION" ]] && [[ -t 0 ]] && command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
-  echo "DEBUG: tty=$(tty), TERM=$TERM" >&2
+if [[ -n "$SSH_CONNECTION" ]] && command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
   tmux attach -t ssh 2>/dev/null || tmux new -s ssh
 fi
 
