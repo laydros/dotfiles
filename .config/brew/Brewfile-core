@@ -18,6 +18,8 @@
 #
 # Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
 
+tap "oven-sh/bun"
+
 # to get sftp with tab complete
 brew "OpenSSH" if OS.mac?
 brew "signify-osx" if OS.mac?
@@ -31,6 +33,7 @@ brew "bat-extras"
 brew "block-goose-cli"
 brew "boost"
 brew "btop"
+brew "bun"
 brew "glib"
 brew "chezmoi"
 brew "claude-code-templates"
