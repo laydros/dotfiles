@@ -61,3 +61,5 @@ export PATH="$PATH:/Users/laydros/.lmstudio/bin"
 
 # add cargo
 . "$HOME/.local/share/cargo/env"
+
+. "$HOME/.local/bin/env"

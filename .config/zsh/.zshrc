@@ -340,3 +340,4 @@ rbenv() {
   rbenv "$@"
 }
 
+. "$HOME/.local/bin/env"
