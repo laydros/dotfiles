@@ -34,7 +34,7 @@ if [ ! -S ~/.ssh/ssh_auth_sock ]; then
   ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
 fi
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
-ssh-add -l > /dev/null || ssh-add
+case $- in *i*) ssh-add -l > /dev/null || ssh-add ;; esac
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then

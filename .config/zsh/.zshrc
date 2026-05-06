@@ -68,14 +68,17 @@ __git_files () {
 # == SSH Agent
 
 # Hosts that should use ssh-agent with 24-hour timeout
-ssh_agent_hosts=("ibanez" "indy")
+ssh_agent_hosts=("ibanez" "indy" "vox")
 
 if [[ " ${ssh_agent_hosts[@]} " =~ " $(hostname) " ]]; then
     # Check if we can connect to existing agent
     if [[ -z "$SSH_AUTH_SOCK" ]] || ! ssh-add -l >/dev/null 2>&1; then
-        # Try to use the system openssh agent first
+        # Try to use a system-managed agent first
         if [[ -S "/run/user/$(id -u)/openssh_agent" ]]; then
             export SSH_AUTH_SOCK="/run/user/$(id -u)/openssh_agent"
+        elif [[ -S "/run/user/$(id -u)/gcr/ssh" ]]; then
+            # GNOME Keyring's ssh-agent wrapper (Ubuntu desktop)
+            export SSH_AUTH_SOCK="/run/user/$(id -u)/gcr/ssh"
         else
             # Start our own agent
             eval "$(ssh-agent -t 24h)"
