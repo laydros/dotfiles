@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/yadm-status-untracked-block.sh"
+            "command": "$HOME/.claude/hooks/yadm-status-untracked-block.py"
           }
         ]
       }
