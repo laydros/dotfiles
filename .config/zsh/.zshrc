@@ -67,26 +67,22 @@ __git_files () {
 
 # == SSH Agent
 
-# Hosts that should use ssh-agent with 24-hour timeout
+# Hosts that should use a local ssh-agent (otherwise rely on agent forwarding or system default).
 ssh_agent_hosts=("ibanez" "indy" "vox")
 
 if [[ " ${ssh_agent_hosts[@]} " =~ " $(hostname) " ]]; then
-    # Check if we can connect to existing agent
+    # Check if we can connect to an existing agent
     if [[ -z "$SSH_AUTH_SOCK" ]] || ! ssh-add -l >/dev/null 2>&1; then
-        # Try to use a system-managed agent first
-        if [[ -S "/run/user/$(id -u)/openssh_agent" ]]; then
-            export SSH_AUTH_SOCK="/run/user/$(id -u)/openssh_agent"
-        elif [[ -S "/run/user/$(id -u)/gcr/ssh" ]]; then
-            # GNOME Keyring's ssh-agent wrapper (Ubuntu desktop)
-            export SSH_AUTH_SOCK="/run/user/$(id -u)/gcr/ssh"
+        # Prefer the systemd-managed ssh-agent.service socket
+        if [[ -S "$XDG_RUNTIME_DIR/openssh_agent" ]]; then
+            export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/openssh_agent"
         else
-            # Start our own agent
-            eval "$(ssh-agent -t 24h)"
+            # Fall back to a session-scoped agent
+            eval "$(ssh-agent -t 24h)" > /dev/null
         fi
     fi
 
-    # Don't auto-add keys - let SSH do it on first use
-    # (Remove the auto-add section that was prompting immediately)
+    # Don't auto-add keys - let SSH do it on first use (AddKeysToAgent yes in ssh_config)
 fi
 
 # if [[ $OSTYPE != darwin* ]]; then

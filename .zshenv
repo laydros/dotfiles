@@ -19,6 +19,12 @@ export XDG_RUNTIME_DIR=/run/user/$UID
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
+# Use systemd-managed ssh-agent.service socket if available (Linux desktops/servers).
+# Falls through to per-shell logic in .zshrc when absent.
+if [[ -S "$XDG_RUNTIME_DIR/openssh_agent" ]]; then
+  export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/openssh_agent"
+fi
+
 # for flatpak
 #export XDG_DATA_DIRS=${XDG_DATA_DIRS}:var/lib/flatpak/exports/share:${XDG_DATA_HOME}/flatpak/exports/share
 # set some programs to use XDG
