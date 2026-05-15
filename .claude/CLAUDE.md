@@ -121,6 +121,11 @@ source: "https://example.com"  # optional, when relevant
 - NEVER run `git push` for me unless I have explicitly told you to.
 - NEVER put anything about Claude in commit messages unless I explicitly specify.
 
+## Yadm
+
+- **NEVER run `yadm status -u`, `yadm status -uall`, or `yadm status --untracked-files`.** These walk the entire home directory, take a very long time, and hold yadm's index lock — blocking every other yadm command in the session. A PreToolUse hook (`~/.claude/hooks/yadm-status-untracked-block.sh`) enforces this.
+- Use plain `yadm status` (shows tracked changes only). To check whether a specific path is tracked, use `yadm ls-files <path>` or `yadm ls-files --error-unmatch <path>`.
+
 ## For Powershell scripts (.ps1)
 - NEVER use non-ASCII characters. (No checkmarks, bullets, emoji, etc.)
 - Use plain ASCII alternatives: hyphens (-) for bullets, "OK" or "PASS" instead of checkmarks

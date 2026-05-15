@@ -22,6 +22,15 @@
             "command": "$HOME/.claude/hooks/m3db-data-guard.sh"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/yadm-status-untracked-block.py"
+          }
+        ]
       }
     ]
   },
@@ -38,12 +47,12 @@
     "code-simplifier@claude-plugins-official": true,
     "agent-sdk-dev@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
-    "playground@claude-plugins-official": true,
     "telegram@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "autoCompactEnabled": false,
+  "agentPushNotifEnabled": true,
   "voiceEnabled": true,
-  "agentPushNotifEnabled": true
+  "skipAutoPermissionPrompt": true
 }
