@@ -54,5 +54,6 @@
   "autoCompactEnabled": false,
   "agentPushNotifEnabled": true,
   "voiceEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "tui": "fullscreen"
 }
