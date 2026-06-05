@@ -1,6 +1,7 @@
 {
   "env": {
-    "OBNOTES_PATH": "$HOME/Documents/obnotes"
+    "OBNOTES_PATH": "$HOME/Documents/obnotes",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "35"
   },
   "permissions": {
     "allow": [
@@ -9,8 +10,18 @@
       "mcp__plugin_telegram_telegram__reply",
       "mcp__plugin_telegram_telegram__react",
       "mcp__plugin_telegram_telegram__edit_message",
-      "mcp__plugin_telegram_telegram__download_attachment"
-    ]
+      "mcp__plugin_telegram_telegram__download_attachment",
+      "Bash(stat:*)",
+      "Bash(for dir in eng/*/)",
+      "Bash(done)",
+      "mcp__todoist__find-tasks",
+      "WebFetch(domain:weathershogun.com)",
+      "WebSearch",
+      "mcp__context7__query-docs"
+    ],
+    "deny": [],
+    "ask": [],
+    "defaultMode": "default"
   },
   "hooks": {
     "PreToolUse": [
@@ -34,6 +45,9 @@
       }
     ]
   },
+  "worktree": {
+    "baseRef": "fresh"
+  },
   "statusLine": {
     "type": "command",
     "command": "bash $HOME/.claude/statusline.sh"
@@ -50,10 +64,13 @@
     "telegram@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
-  "autoCompactEnabled": false,
+  "effortLevel": "xhigh",
+  "tui": "fullscreen",
+  "editorMode": "normal",
+  "preferredNotifChannel": "auto",
+  "autoCompactEnabled": true,
+  "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "tui": "fullscreen"
+  "voiceEnabled": true
 }
