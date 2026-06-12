@@ -64,23 +64,46 @@ if [[ "$OS" == "Linux" ]]; then
     sed -i '/^cask /d; /^mas /d' "$BREWFILE_TEMP"
 fi
 
-# Show what would change
+# Show what would change. Capture output so we can both display it and detect
+# hard errors. Homebrew prefixes fatal errors with "Error:" (e.g. refusing to
+# load a formula from an untrusted tap). Exit codes alone are ambiguous:
+# `brew bundle check` exits non-zero both when packages are merely missing and
+# when the command fails outright, so we key off the "Error:" line instead.
+PREVIEW_FAILED=0
+
 echo ""
 echo "=== PACKAGES TO INSTALL ==="
-if brew bundle check --verbose --file="$BREWFILE_TEMP" 2>&1; then
+install_rc=0
+install_out=$(brew bundle check --verbose --file="$BREWFILE_TEMP" 2>&1) || install_rc=$?
+echo "$install_out"
+if grep -q '^Error:' <<<"$install_out"; then
+    error "brew bundle check failed (see above)."
+    PREVIEW_FAILED=1
+elif [[ $install_rc -eq 0 ]]; then
     echo "  (all packages already installed)"
 fi
 
 echo ""
 echo "=== PACKAGES TO REMOVE ==="
-if brew bundle cleanup --file="$BREWFILE_TEMP" 2>&1; then
+cleanup_rc=0
+cleanup_out=$(brew bundle cleanup --file="$BREWFILE_TEMP" 2>&1) || cleanup_rc=$?
+echo "$cleanup_out"
+if grep -q '^Error:' <<<"$cleanup_out"; then
+    error "brew bundle cleanup failed (see above)."
+    PREVIEW_FAILED=1
+elif [[ $cleanup_rc -eq 0 ]]; then
     echo "  (nothing to remove)"
 fi
 
 # Confirm before proceeding
 echo ""
 warn "This will install missing packages and remove unlisted packages."
-read -p "Continue? [y/N] " -n 1 -r
+prompt="Continue? [y/N] "
+if [[ $PREVIEW_FAILED -eq 1 ]]; then
+    warn "Preview had errors above - the sync may fail or be incomplete."
+    prompt="Continue anyway? [y/N] "
+fi
+read -p "$prompt" -n 1 -r
 echo
 [[ $REPLY =~ ^[Yy]$ ]] || { log "Cancelled."; exit 0; }
 
