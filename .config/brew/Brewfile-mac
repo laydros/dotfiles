@@ -26,7 +26,7 @@ brew "mssql-tools18"
 brew "msodbcsql18"
 brew "syncthing", restart_service: true
 brew "colima"
-brew "docker"
+brew "docker", link: false
 
 brew "python@3.12"
 
@@ -97,7 +97,7 @@ cask "qlstephen"
 # cask "qlvideo"
 cask "quicklook-video"
 # cask "qmk-toolbox"
-cask "quicklook-json"
+# cask "quicklook-json"
 cask "qutebrowser"
 cask "raycast"
 cask "royal-tsx"
@@ -105,7 +105,7 @@ cask "royal-tsx"
 # cask "rustdesk"
 # cask "setapp"
 cask "signal"
-cask "soundsource"
+# cask "soundsource"
 cask "spotify"
 cask "steam"
 cask "stolendata-mpv"
@@ -132,11 +132,12 @@ brew "mas"
 
 mas "1Blocker", id: 1365531024
 mas "Acorn", id: 6737921844
+mas "Adobe Lightroom", id: 1451544217
 mas "Amphetamine", id: 937984704
 # mas "AutoMounter", id: 1160435653
 # mas "Be Focused Pro", id: 961632517
 mas "Bitwarden", id: 1352778147
-# mas "Capo", id: 696977615
+mas "Capo", id: 696977615
 # mas "Capture", id: 6458535284
 # mas "DeArrow", id: 6451469297
 mas "Drafts", id: 1435957248
@@ -148,13 +149,16 @@ mas "iMovie", id: 408981434
 mas "Ivory", id: 6444602274
 mas "Keynote", id: 409183694
 mas "Navicat Premium Essentials", id: 466416967
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541
-# mas "Parcel", id: 639968404
+mas "Numbers", id: 361304891
+mas "Pages", id: 361309726
+mas "Parcel", id: 375589283
 # mas "Pastebot", id: 1179623856
 # mas "Perplexity", id: 6714467650
 # mas "Resident Evil 2", id: 1640632432
+mas "Save to Raindrop.io", id: 1549370672
+mas "Shellcut", id: 6746333545
 mas "SponsorBlock", id: 1573461917
+mas "Tab Space", id: 1473726602
 mas "Tailscale", id: 1475387142
 # mas "Telephone", id: 406825478
 mas "TestFlight", id: 899247664
@@ -164,6 +168,7 @@ mas "UTM", id: 1538878817
 # mas "Valheim", id: 1554294918
 mas "Windows App", id: 1295203466
 mas "WireGuard", id: 1451685025
+mas "Xcode", id: 497799835
 
 
 # vscode "kaleidoscope-app.vscode-ksdiff"
