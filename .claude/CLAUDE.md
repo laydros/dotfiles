@@ -183,6 +183,14 @@ Format: `scope: short description`
 - No conventional commit prefixes (`feat:`, `fix:`) — scope replaces them
 - Scopes: `zsh`, `nvim`, `tmux`, `ghostty`, `ssh`, `brew`, `git`, `claude`, `espanso` (add new ones as needed)
 
+## Factor 500 Forgejo (internal git server)
+
+- Internal repos live on Forgejo at https://git.factor500.com (e.g. `Factor500/sysadmin`). Plain git over SSH works as usual.
+- For API operations (issues, PRs, releases), use the `tea` CLI. One login is configured (`factor500`, user `jasonh`) and tea falls back to it automatically — no `--login` flag needed.
+- Token scopes: issue and repository read/write (full ticket + PR workflows verified). No admin scope, so issues can't be deleted via API.
+- Quirk: the first API call after idle can fail with "no route to host" — retry once before debugging the network.
+- Only reachable from the office LAN or WireGuard VPN.
+
 ## Other Preferences
 
 - I like to use XDG Base Directory for my config files, so check $HOME/.config if the software in question supports it.
