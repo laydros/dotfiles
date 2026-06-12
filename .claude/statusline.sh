@@ -12,7 +12,8 @@ fmt_tokens() {
 sep=$(printf " \033[90m|\033[0m ")
 
 # Extract data from JSON input
-model_name=$(echo "$input" | jq -r '.model.display_name')
+# Strip any trailing "(... context)" suffix; the window size is shown in the token section
+model_name=$(echo "$input" | jq -r '.model.display_name' | sed -E 's/ *\([^)]*context[^)]*\)$//')
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir')
 project_dir=$(echo "$input" | jq -r '.workspace.project_dir')
 version=$(echo "$input" | jq -r '.version')
