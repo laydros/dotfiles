@@ -9,6 +9,15 @@
 # Notes:
 # - Works cross-platform (macOS & Linux).
 # - Extracts `vscode` entries from Brewfile-core and the OS-specific Brewfile.
+# - Currently disabled. See the guard below.
+
+# Disabled 2026-07-31: VS Code is no longer part of the daily toolchain, so
+# the `vscode` entries in the Brewfiles are all commented out. With an empty
+# desired-set this script uninstalls every installed extension. Delete this
+# block once the Brewfile lists are current again.
+# shellcheck disable=SC2317  # sync logic below is dormant behind this exit
+echo "VS Code extension sync is disabled - see comment in $0"
+exit 0
 
 PREVIEW=0
 [[ "$1" == "--preview" ]] && PREVIEW=1

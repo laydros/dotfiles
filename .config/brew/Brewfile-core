@@ -6,22 +6,22 @@
 #   Brewfile-mac    - macOS only (casks, Mac App Store apps, Mac formulae)
 #   Brewfile-linux  - Linux only
 #
-# Usage:
-# 1. Sync packages - previews changes, confirms, then installs what's
-#    missing and removes what isn't listed:
-#    `~/bin/bundle-sync-brewfile.sh`
-# 2. Sync VS Code extensions - not covered by step 1:
-#    `~/bin/vscode-sync-extensions.sh --preview`   (dry-run)
-#    Every `vscode` entry is currently commented out in both files, so a run
-#    without `--preview` would uninstall every installed extension. Uncomment
-#    the ones to keep before running it for real.
+# Usage - `~/bin/bundle-sync-brewfile.sh` previews the changes, confirms,
+# then installs what's missing and removes what isn't listed.
+#
+# VS Code extensions are not synced. `~/bin/vscode-sync-extensions.sh` is
+# disabled and every `vscode` entry below is commented out. To bring it back,
+# uncomment the entries you want and remove the guard at the top of that
+# script - it exits early precisely because an empty list means "uninstall
+# everything".
 #
 # Notes:
 # - `brew` entries are command-line utilities.
 # - `cask` entries are macOS GUI applications.
 # - `mas` entries are Mac App Store applications.
-# - `vscode` entries install VS Code extensions.
-# - Both scripts concatenate this file with the OS-specific one. Running
+# - `vscode` entries would install VS Code extensions, but nothing reads
+#   them right now (see above).
+# - The sync script concatenates this file with the OS-specific one. Running
 #   `brew bundle` against a single file directly will see only half the
 #   packages and offer to uninstall the rest.
 # - The sync passes `--no-upgrade`: it installs what's missing but does not
