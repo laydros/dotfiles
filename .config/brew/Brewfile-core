@@ -1,22 +1,37 @@
-# Brewfile - Declarative Homebrew package management
-# Brewfile-core - items that should work across Mac and Linux
+# Brewfile-core - Declarative Homebrew package management
+#                 Entries here should work on both macOS and Linux.
+#
+# There is no plain `Brewfile`. Packages are split across:
+#   Brewfile-core   - cross-platform (this file)
+#   Brewfile-mac    - macOS only (casks, Mac App Store apps, Mac formulae)
+#   Brewfile-linux  - Linux only
 #
 # Usage:
-# 1. Install all listed packages: `brew bundle install --file=~/.config/brew/Brewfile`
-# 2. Remove unlisted packages (except VS Code extensions):
-#    `brew bundle cleanup --file=~/.config/brew/Brewfile --force && ~/bin/sync-vscode-extensions.sh`
-# 3. Update this file with current packages: `brew bundle dump --file=~/.config/brew/Brewfile --force`
-# 4. Sync VS Code extensions separately: `~/bin/sync-vscode-extensions.sh`
-# 5. **Do it all at once (install, cleanup, sync VS Code extensions)**:
-#    `brew bundle install --cleanup --file=~/.config/brew/Brewfile && ~/bin/sync-vscode-extensions.sh`
+# 1. Sync packages - previews changes, confirms, then installs what's
+#    missing and removes what isn't listed:
+#    `~/bin/bundle-sync-brewfile.sh`
+# 2. Sync VS Code extensions - not covered by step 1:
+#    `~/bin/vscode-sync-extensions.sh --preview`   (dry-run)
+#    Every `vscode` entry is currently commented out in both files, so a run
+#    without `--preview` would uninstall every installed extension. Uncomment
+#    the ones to keep before running it for real.
 #
 # Notes:
 # - `brew` entries are command-line utilities.
 # - `cask` entries are macOS GUI applications.
 # - `mas` entries are Mac App Store applications.
 # - `vscode` entries install VS Code extensions.
+# - Both scripts concatenate this file with the OS-specific one. Running
+#   `brew bundle` against a single file directly will see only half the
+#   packages and offer to uninstall the rest.
+# - The sync passes `--no-upgrade`: it installs what's missing but does not
+#   upgrade what's already present. Use `brew upgrade` for that.
+# - On Linux, `cask` and `mas` lines are stripped automatically.
+# - `brew bundle dump` writes one flat file and has no idea about this
+#   split, so it will clobber the layout. Add entries by hand.
 #
-# Warning: `brew bundle cleanup --force` will remove anything not listed here (except VS Code extensions).
+# Warning: syncing removes anything installed but not listed here
+# (except VS Code extensions, which `brew bundle` ignores).
 
 tap "oven-sh/bun"
 
