@@ -23,6 +23,7 @@
     "ask": [],
     "defaultMode": "default"
   },
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
