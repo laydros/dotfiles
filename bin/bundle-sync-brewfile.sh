@@ -83,16 +83,30 @@ elif [[ $install_rc -eq 0 ]]; then
     echo "  (all packages already installed)"
 fi
 
+cleanup_out=$(brew bundle cleanup --file="$BREWFILE_TEMP" 2>&1) || true
+
+# `brew bundle cleanup` reports two unrelated things in one stream: packages it
+# would uninstall, then the cached downloads `brew cleanup` would delete. Split
+# them at the cache marker so stale .zip/.dmg filenames are never mistaken for
+# apps about to be removed. The trailing "Run ... --force" hint is dropped
+# because this script confirms and runs the sync itself.
+uninstall_out=$(awk '/^Would `brew cleanup`:/ {exit} !/^Run `brew bundle cleanup --force`/ {print}' <<<"$cleanup_out")
+cache_out=$(awk 'f && !/^Run `brew bundle cleanup --force`/ {print} /^Would `brew cleanup`:/ {f=1}' <<<"$cleanup_out")
+
 echo ""
 echo "=== PACKAGES TO REMOVE ==="
-cleanup_rc=0
-cleanup_out=$(brew bundle cleanup --file="$BREWFILE_TEMP" 2>&1) || cleanup_rc=$?
-echo "$cleanup_out"
+echo "$uninstall_out"
 if grep -q '^Error:' <<<"$cleanup_out"; then
     error "brew bundle cleanup failed (see above)."
     PREVIEW_FAILED=1
-elif [[ $cleanup_rc -eq 0 ]]; then
+elif ! grep -q '^Would ' <<<"$uninstall_out"; then
     echo "  (nothing to remove)"
+fi
+
+if [[ -n "$cache_out" ]]; then
+    echo ""
+    echo "=== DOWNLOAD CACHE TO FREE (nothing is uninstalled) ==="
+    echo "$cache_out"
 fi
 
 # Confirm before proceeding
