@@ -33,6 +33,11 @@ alias v="nvim"
 alias gcm='git commit -m'
 alias pyclean='find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null; find . -name "*.pyc" -delete 2>/dev/null'
 
+## claude code ##
+# --model is session-scoped; /model would overwrite the saved default in settings.json
+alias claude-fable='claude --model fable'
+alias cf='claude --model fable'
+
 
 # Enable color for grep (works on Linux and BSD/macOS)
 alias grep='grep --color=auto'
