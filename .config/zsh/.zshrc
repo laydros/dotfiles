@@ -10,12 +10,33 @@
 
 # Lots borrowed from https://leahneukirchen.org/dotfiles/.zshrc
 
+# Lowercased OS name used by the platform guards below: darwin, linux, freebsd...
+export OS="$(uname | tr '[:upper:]' '[:lower:]')"
+
+# Guard helper. Returns true when $1 is an available command and, when $2 is
+# given, when we are also running on that OS.
+#   __is_available eza              && alias ls='eza'
+#   __is_available dircolors linux  && eval "$(dircolors -b)"
+__is_available() {
+  local prog="$1" os="$2"
+  [[ -n "$os" && "$os" != "$OS" ]] && return 1
+  command -v "$prog" >/dev/null 2>&1
+}
+
 # hopefully avoid PATH duplication
 typeset -U PATH
+# fpath picks up duplicates from brew shellenv running in nested shells;
+# duplicate entries make compinit scan the same directory repeatedly.
+typeset -U fpath FPATH
 
-## completion for homebrew: https://docs.brew.sh/Shell-Completion
-if type brew &>/dev/null; then
-	FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+# Homebrew. Must run before compinit: shellenv is what puts brew's
+# site-functions on fpath, and brew is not on PATH until it does.
+if [[ -x /opt/homebrew/bin/brew ]]; then
+   eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /usr/local/bin/brew ]]; then
+   eval "$(/usr/local/bin/brew shellenv)"
+elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 unsetopt autocd
@@ -94,12 +115,7 @@ fi
 #    fi
 # fi
 #
-# set homebrew stuff for mac and linux
-if [[ "$OSTYPE" = darwin* ]]; then
-   eval "$(/opt/homebrew/bin/brew shellenv)"
-else
-   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
+# homebrew shellenv now runs in the INIT section above, ahead of compinit
 
 # automatically start tmux when sshing in
 # in .zshrc, only for SSH sessions
@@ -127,7 +143,7 @@ PATH=$HOME/.local/share/go/bin:$PATH
 PATH="/usr/local/sbin:$PATH"
 
 # for m3-info
-if [[ "$OSTYPE" != "darwin" && "$OSTYPE" != "cygwin" && "$OSTYPE" != "msys" && "$OSTYPE" != "win32" ]]; then
+if [[ "$OS" == "linux" && -d /home/m3db/data/linux/bin ]]; then
     PATH=/home/m3db/data/linux/bin:$PATH
 fi
 
@@ -193,18 +209,21 @@ zstyle ':vcs_info:*' stagedstr '+'
 zstyle ':vcs_info:git:*' formats ' %F{yellow}(%b%u%c)%f'
 
 # set docker to use colima on Mac only
-if [[ "$(uname)" == "Darwin" ]]; then
+if [[ "$OS" == "darwin" ]]; then
   export DOCKER_HOST=unix://$HOME/.colima/docker.sock
 fi
 
-# Print a greeting message when shell is started
-if [[ "$OSTYPE" = darwin* ]]; then
-   echo $USER@$HOST  $(uname -srm)
+# Print a greeting message when shell is started.
+# lsb_release is absent on Arch, Alpine and minimal Debian; os-release is the
+# portable fallback there.
+if __is_available lsb_release; then
+   echo $USER@$HOST $(uname -srm) $(lsb_release -rcs)
+elif [[ -r /etc/os-release ]]; then
+   echo $USER@$HOST $(uname -srm) "$(. /etc/os-release && echo $VERSION_ID $VERSION_CODENAME)"
 else
-   echo $USER@$HOST  $(uname -srm) $(lsb_release -rcs)
+   echo $USER@$HOST $(uname -srm)
 fi
 
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"         # Colored completion (different colors for dirs/files/etc)
 zstyle ':completion:*' rehash true                              # automatically find new executables in path
 # Speed up completions
 zstyle ':completion:*' accept-exact '*(N)'
@@ -240,7 +259,7 @@ setopt NO_ALWAYS_LAST_PROMPT
 setopt NO_FLOW_CONTROL
 
 # Figure out the SHORT hostname
-if [[ "$OSTYPE" = darwin* ]]; then
+if [[ "$OS" == "darwin" ]]; then
   # macOS's $HOST changes with dhcp, etc. Use ComputerName if possible.
   SHORT_HOST=$(scutil --get ComputerName 2>/dev/null) || SHORT_HOST=${HOST/.*/}
 else
@@ -251,29 +270,29 @@ fi
 #   ALIASES
 # ===========
 
-# enable color support of ls and also add handy aliases
-# Detect OS type (macOS, Linux, or BSD)
-case "$(uname)" in
-    Darwin)  # macOS
+# enable color support of ls and also add handy aliases.
+# BSD ls (macOS, *BSD) takes CLICOLOR/LSCOLORS; GNU ls (Linux) takes --color.
+case "$OS" in
+    darwin|*bsd)  # macOS and FreeBSD/OpenBSD/NetBSD
         export CLICOLOR=1
         export LSCOLORS=GxFxCxDxBxegedabagaced
         alias ls='ls -GF'
         ;;
-    Linux)  # Linux
-        if command -v dircolors >/dev/null 2>&1; then
+    linux)
+        if __is_available dircolors; then
             test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
         fi
         alias ls='ls --color=auto -F'
         ;;
-    *BSD)  # BSD variants (including FreeBSD, OpenBSD, NetBSD)
-        export CLICOLOR=1
-        export LSCOLORS=GxFxCxDxBxegedabagaced
-        alias ls='ls -GF'
-        ;;
 esac
 
+# Colored completion listings. Must come after the dircolors call above, which
+# is what populates LS_COLORS; macOS has no LS_COLORS equivalent, so this is a
+# no-op there.
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
 # Use eza if available (overrides ls aliases from shell/alias)
-if command -v eza >/dev/null 2>&1; then
+if __is_available eza; then
     alias ls='eza'
     alias ll='eza -la --icons=auto'
     alias l='eza --icons=auto'
@@ -281,10 +300,14 @@ if command -v eza >/dev/null 2>&1; then
     alias lsa='eza -a --icons=auto'
 fi
 
-# == nvm on the mac
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# == nvm
+# NVM_DIR is set to its XDG location in .zshenv, so it is deliberately not set
+# here. Homebrew's nvm lives under $HOMEBREW_PREFIX/opt/nvm, which differs
+# between Apple Silicon (/opt/homebrew), Intel macOS and Linuxbrew.
+if [[ -n "$HOMEBREW_PREFIX" ]]; then
+   [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && . "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
+   [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && . "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
+fi
 
 cx() {
     # If no argument was given, show a helpful message
@@ -308,7 +331,7 @@ cx() {
 
 # source zsh functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
-eval "$(zoxide init zsh)"
+__is_available zoxide && eval "$(zoxide init zsh)"
 
 # fzf - fuzzy finder
 # Ctrl+R: Fuzzy command history search
@@ -317,23 +340,79 @@ eval "$(zoxide init zsh)"
 # Configure fzf to use fd for file search (faster, respects .gitignore)
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-source $(brew --prefix)/opt/fzf/shell/key-bindings.zsh
-source $(brew --prefix)/opt/fzf/shell/completion.zsh
+# `fzf --zsh` emits both keybindings and completions, so this works whether fzf
+# came from brew, apt, pacman or a git checkout. Requires fzf >= 0.48.
+if __is_available fzf; then
+   fzf_init="$(fzf --zsh 2>/dev/null)"
+   if [[ -n "$fzf_init" ]]; then
+      eval "$fzf_init"
+   else
+      print -u2 "fzf: 'fzf --zsh' returned nothing (needs fzf >= 0.48); keybindings not loaded"
+   fi
+   unset fzf_init
+fi
+
+# ===============
+#   KEYBINDINGS
+# ===============
+
+# Terminals disagree on what Home/End/Delete/Shift-Tab send. Query terminfo
+# rather than hardcoding escape sequences, so these behave the same in Ghostty,
+# a Linux VT, tmux and over SSH. Emacs mode is set by `bindkey -e` above, so a
+# bare bindkey lands in the right keymap.
+zmodload zsh/terminfo 2>/dev/null
+
+# Application keypad mode while the line editor is active. Without this the
+# terminfo values below do not match what the terminal actually sends.
+if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
+   function zle-line-init() {
+      echoti smkx
+   }
+   function zle-line-finish() {
+      echoti rmkx
+   }
+   zle -N zle-line-init
+   zle -N zle-line-finish
+fi
+
+# [Home] / [End]
+[[ -n "${terminfo[khome]}" ]] && bindkey "${terminfo[khome]}" beginning-of-line
+[[ -n "${terminfo[kend]}"  ]] && bindkey "${terminfo[kend]}"  end-of-line
+
+# [Delete] - fall back to the common xterm sequence when terminfo is silent
+if [[ -n "${terminfo[kdch1]}" ]]; then
+   bindkey "${terminfo[kdch1]}" delete-char
+else
+   bindkey "^[[3~" delete-char
+fi
+
+# [Shift-Tab] - step backwards through the completion menu
+[[ -n "${terminfo[kcbt]}" ]] && bindkey "${terminfo[kcbt]}" reverse-menu-complete
+
+# [Ctrl-Left] / [Ctrl-Right] - move by word
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+
+# Edit the current command line in $EDITOR
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
 
 # platform specific stuff
-if [[ $OSTYPE = darwin* ]]; then
+# (rust/cargo init is handled in .zshenv on every platform)
+if [[ "$OS" == "darwin" ]]; then
    export STORE_LASTDIR=1
-
-elif [[ $OSTYPE = linux* ]]; then
-    # rust init now handled in .zshenv
 fi
 
 # Lazy load rbenv - add shims to PATH immediately, defer full init until first use
-export PATH="$HOME/.rbenv/shims:$PATH"
-rbenv() {
-  unfunction rbenv
-  eval "$(command rbenv init - zsh)"
-  rbenv "$@"
-}
+if [[ -d "$HOME/.rbenv/shims" ]]; then
+  export PATH="$HOME/.rbenv/shims:$PATH"
+  rbenv() {
+    unfunction rbenv
+    eval "$(command rbenv init - zsh)"
+    rbenv "$@"
+  }
+fi
 
-. "$HOME/.local/bin/env"
+# uv drops its shell env file here; absent on machines without uv
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"

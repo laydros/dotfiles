@@ -97,8 +97,8 @@ export LC_TIME=C
 # less: use UTF-8
 export LESSCHARSET=UTF-8
 
-# add cargo for rust
-. "$HOME/.local/share/cargo/env"
+# add cargo for rust; absent on machines without a rustup install
+[ -f "$CARGO_HOME/env" ] && . "$CARGO_HOME/env"
 
 # == SITE LOCAL CONFIG
 
