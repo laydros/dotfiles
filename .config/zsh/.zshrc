@@ -301,6 +301,11 @@ if __is_available eza; then
 fi
 
 # == nvm
+# Candidate for removal: no nvm install exists on jaguar, and it is unclear
+# whether any of the Linux boxes still use it. Kept because it is guarded and
+# costs nothing when nvm is absent. Note that npm does not need nvm -- npm
+# ships with Node itself.
+#
 # NVM_DIR is set to its XDG location in .zshenv, so it is deliberately not set
 # here. Homebrew's nvm lives under $HOMEBREW_PREFIX/opt/nvm, which differs
 # between Apple Silicon (/opt/homebrew), Intel macOS and Linuxbrew.
