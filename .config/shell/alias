@@ -2,6 +2,8 @@
 
 ## lazygit for yadm
 alias lazyadm='lazygit --git-dir="$HOME/.local/share/yadm/repo.git" --work-tree="$HOME"'
+alias ly='lazyadm'
+alias lg='lazygit'
 
 alias gst="git status"
 alias yst="yadm status"
