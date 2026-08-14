@@ -36,6 +36,22 @@ BREAKING THE LETTER OR SPIRIT OF THE RULES IS FAILURE.
   together before implementation. Routine fixes and clear implementations don't need
   discussion.
 
+## Subagents: Model Selection
+
+Subagents inherit the parent model unless overridden — a Fable session spawns Fable
+subagents by default. Fable's value is the main loop; subagents gather, the main loop judges.
+
+- ALWAYS pin an explicit model on any subagent/fan-out. Never silently inherit Fable.
+- **Sonnet**: mechanical, fully-specified work (counting, sweeps, inventories, checklists).
+  Excellent when the prompt carries the guidance — spell out steps, output shape, and traps.
+- **Opus**: anything needing judgment (review, classification, synthesis, verification).
+  When unsure which tier, use Opus — uncertainty rounds up, never down.
+- **Fable** subagents almost never, and only with a stated reason; **Haiku** never without
+  my explicit permission.
+- Spot-verify load-bearing subagent claims in the main loop before acting on them.
+- (Forks always inherit the parent model and can't be downgraded. Mention rough token cost
+  when reporting fan-out results.)
+
 ## Designing software
 
 - YAGNI. The best code is no code. Don't add features we don't need right now.
