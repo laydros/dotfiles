@@ -39,7 +39,8 @@ BREAKING THE LETTER OR SPIRIT OF THE RULES IS FAILURE.
 ## Designing software
 
 - YAGNI. The best code is no code. Don't add features we don't need right now.
-- When it doesn't conflict with YAGNI, architect for extensibility and flexibility.
+- Write for whoever maintains this next — you, another human, or an AI. Obvious beats clever, and clunky is fine when it buys robustness or clarity. Don't rewrite working code to get there.
+- Model reality, don't guess it. A set is a set even when it holds one element today; a policy value is data even when it has one value today. That's accuracy, not speculation. What YAGNI forbids is machinery — plugin seams, one-implementor interfaces, indirection for a swap nobody asked for. The test: are you removing an untrue assumption, or adding a concept? Cost is what the next reader has to hold in their head, not lines written.
 
 ## File Operations
 
