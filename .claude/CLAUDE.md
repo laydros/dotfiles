@@ -49,6 +49,10 @@ subagents by default. Fable's value is the main loop; subagents gather, the main
 - **Fable** subagents almost never, and only with a stated reason; **Haiku** never without
   my explicit permission.
 - Spot-verify load-bearing subagent claims in the main loop before acting on them.
+- Skills that fork (e.g. /code-review) are Fable fan-outs too: the fork runs the parent
+  model, its own subagents inherit it, and model pins can't reach inside the skill. Never
+  launch one on a Fable session without flagging the cost and getting my approval first —
+  prefer reviewing inline or dispatching one Opus-pinned agent instead.
 - (Forks always inherit the parent model and can't be downgraded. Mention rough token cost
   when reporting fan-out results.)
 
