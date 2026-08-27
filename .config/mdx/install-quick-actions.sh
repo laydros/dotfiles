@@ -2,9 +2,9 @@
 #
 # Builds Finder Quick Actions that run mdx, one per output format.
 #
-# Each one lands in ~/Library/Services and shows up under Quick Actions in the
-# Finder context menu for markdown files. Re-run this after changing the
-# command below; the bundles are generated, not hand-edited.
+# Each one lands in ~/Library/Services. Installing them is not enough to make
+# them usable - see the steps printed at the end. Re-run this after changing
+# the command below; the bundles are generated, not hand-edited.
 
 set -euo pipefail
 
@@ -154,7 +154,20 @@ make_quick_action pdf "Convert Markdown to PDF"
 make_quick_action html "Convert Markdown to HTML"
 make_quick_action docx "Convert Markdown to Word"
 
-# Without this the new services can take a long time to appear in the menu.
 /System/Library/CoreServices/pbs -flush 2>/dev/null || true
 
-echo "done - they appear under Quick Actions when you right-click a .md file"
+# Neither of these can be done from here. Finder caches the service list, so
+# the actions are invisible everywhere - including System Settings - until it
+# restarts. They then arrive switched off.
+cat <<'NEXT'
+
+Installed. Two manual steps remain:
+
+  1. killall Finder
+     Finder caches the service list; until it restarts the actions do not
+     appear in the context menu or in System Settings.
+
+  2. Switch them on under
+     System Settings > General > Login Items & Extensions > Finder
+     Newly installed Quick Actions arrive disabled.
+NEXT
