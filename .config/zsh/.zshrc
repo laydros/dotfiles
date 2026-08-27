@@ -130,6 +130,17 @@ fi
 export EDITOR="nvim"
 export VISUAL="nvim"
 
+# Collapse duplicate PATH entries; first occurrence of each directory wins
+typeset -U path PATH
+
+# TODO: PATH lives in .zshrc, so only interactive shells get it. Non-interactive
+# zsh (ssh host 'cmd', scripts with a zsh shebang) reads .zshenv only and misses
+# these dirs. Fix: move this block to $ZDOTDIR/path.zsh, source it from BOTH
+# .zshenv and .zprofile. The .zprofile pass re-asserts order after macOS
+# /etc/zprofile runs path_helper and demotes these below /usr/bin. Sourcing
+# twice is safe: with typeset -U above, re-prepending dedupes and restores
+# position, and on non-macOS the second pass is a harmless no-op.
+
 # Start with system PATH, then add our directories in priority order
 PATH=$HOME/bin:$HOME/.local/bin:$PATH
 
@@ -419,5 +430,3 @@ if [[ -d "$HOME/.rbenv/shims" ]]; then
   }
 fi
 
-# uv drops its shell env file here; absent on machines without uv
-[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
