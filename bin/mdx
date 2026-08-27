@@ -1,12 +1,24 @@
 #!/usr/bin/env bash
 #
-# mdx - render a markdown file to html, pdf, or docx.
+# mdx - render markdown files to html, pdf, or docx.
 #
 # HTML and PDF are produced from the same stylesheet, so they look alike.
 # Word takes its styling from a reference document instead, because .docx
 # uses named styles rather than CSS.
 
 set -euo pipefail
+
+# Finder Quick Actions and other GUI launch contexts start with a minimal
+# PATH that omits Homebrew, which would make pandoc look uninstalled.
+for dir in /opt/homebrew/bin /usr/local/bin; do
+  if [ -d "$dir" ]; then
+    case ":$PATH:" in
+      *":$dir:"*) ;;
+      *) PATH="$dir:$PATH" ;;
+    esac
+  fi
+done
+export PATH
 
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/mdx"
 css="${MDX_CSS:-$config_dir/style.css}"
@@ -18,11 +30,12 @@ open_after=false
 
 usage() {
   cat <<EOF
-usage: mdx [-t html|pdf|docx] [-o OUTFILE] [-O] FILE.md
+usage: mdx [-t html|pdf|docx] [-o OUTFILE] [-O] FILE.md [FILE.md ...]
 
   -t FORMAT   output format: html, pdf, or docx (default: html)
-  -o OUTFILE  output path (default: input name with the format's extension)
-  -O          open the result when it finishes
+  -o OUTFILE  output path, only valid with a single input file
+              (default: input name with the format's extension)
+  -O          open each result when it finishes
   -h          show this help
 
 HTML output is self-contained - styles and images are inlined into the one
@@ -32,12 +45,19 @@ Styling: $css
 Word template (optional): $reference_doc
 
 Override either with \$MDX_CSS or \$MDX_REFERENCE_DOC.
+
+Finder right-click support is installed once per machine by
+$config_dir/install-quick-actions.sh
 EOF
 }
 
 die() {
   printf 'mdx: %s\n' "$*" >&2
   exit 1
+}
+
+warn() {
+  printf 'mdx: %s\n' "$*" >&2
 }
 
 while getopts ':t:o:Oh' opt; do
@@ -55,34 +75,21 @@ while getopts ':t:o:Oh' opt; do
 done
 shift $((OPTIND - 1))
 
-if [ $# -ne 1 ]; then
+if [ $# -lt 1 ]; then
   usage >&2
   exit 2
 fi
 
-input=$1
-[ -f "$input" ] || die "no such file: $input"
-command -v pandoc >/dev/null 2>&1 || die "pandoc is not installed"
+if [ -n "$outfile" ] && [ $# -gt 1 ]; then
+  die "-o takes a single input file, got $#"
+fi
 
 case "$format" in
   html | pdf | docx) ;;
   *) die "unsupported format: $format (want html, pdf, or docx)" ;;
 esac
 
-[ -n "$outfile" ] || outfile="${input%.*}.$format"
-
-# Sets the <title> element without emitting a visible heading. Using `title`
-# metadata instead would print the name into the top of the document, which
-# duplicates the H1 most files already start with.
-pagetitle=$(basename "${input%.*}")
-
-# yaml_metadata_block keeps Obsidian frontmatter from rendering as a rule
-# followed by stray key/value lines.
-common=(
-  --standalone
-  --from gfm+yaml_metadata_block+footnotes
-  --variable "pagetitle=$pagetitle"
-)
+command -v pandoc >/dev/null 2>&1 || die "pandoc is not installed"
 
 case "$format" in
   html | pdf)
@@ -90,33 +97,76 @@ case "$format" in
     ;;
 esac
 
-case "$format" in
-  html)
-    pandoc "${common[@]}" --embed-resources --css "$css" \
-      --output "$outfile" -- "$input"
-    ;;
-  pdf)
-    command -v weasyprint >/dev/null 2>&1 ||
-      die "weasyprint is not installed (brew install weasyprint)"
-    # --embed-resources inlines the CSS so weasyprint never has to resolve
-    # the stylesheet path out of pandoc's temporary directory. --quiet drops
-    # weasyprint's notes about CSS it does not implement, which pandoc's own
-    # default styles trigger on every run.
-    pandoc "${common[@]}" --embed-resources --css "$css" \
-      --pdf-engine weasyprint --pdf-engine-opt=--quiet \
-      --output "$outfile" -- "$input"
-    ;;
-  docx)
-    docx_args=()
-    if [ -f "$reference_doc" ]; then
-      docx_args=(--reference-doc "$reference_doc")
-    fi
-    pandoc "${common[@]}" "${docx_args[@]}" --output "$outfile" -- "$input"
-    ;;
-esac
-
-printf '%s\n' "$outfile"
-
-if [ "$open_after" = true ]; then
-  open "$outfile"
+if [ "$format" = pdf ]; then
+  command -v weasyprint >/dev/null 2>&1 ||
+    die "weasyprint is not installed (brew install weasyprint)"
 fi
+
+render() {
+  local input=$1
+  local out=$2
+  local pagetitle common docx_args
+
+  # Sets the <title> element without emitting a visible heading. Using
+  # `title` metadata instead would print the name into the top of the
+  # document, which duplicates the H1 most files already start with.
+  pagetitle=$(basename "${input%.*}")
+
+  # yaml_metadata_block keeps Obsidian frontmatter from rendering as a rule
+  # followed by stray key/value lines.
+  common=(
+    --standalone
+    --from gfm+yaml_metadata_block+footnotes
+    --variable "pagetitle=$pagetitle"
+  )
+
+  case "$format" in
+    html)
+      pandoc "${common[@]}" --embed-resources --css "$css" \
+        --output "$out" -- "$input"
+      ;;
+    pdf)
+      # --embed-resources inlines the CSS so weasyprint never has to resolve
+      # the stylesheet path out of pandoc's temporary directory. --quiet drops
+      # weasyprint's notes about CSS it does not implement, which pandoc's own
+      # default styles trigger on every run.
+      pandoc "${common[@]}" --embed-resources --css "$css" \
+        --pdf-engine weasyprint --pdf-engine-opt=--quiet \
+        --output "$out" -- "$input"
+      ;;
+    docx)
+      docx_args=()
+      if [ -f "$reference_doc" ]; then
+        docx_args=(--reference-doc "$reference_doc")
+      fi
+      pandoc "${common[@]}" "${docx_args[@]}" --output "$out" -- "$input"
+      ;;
+  esac
+}
+
+# One bad file should not cost the user the rest of a Finder selection.
+status=0
+
+for input in "$@"; do
+  if [ ! -f "$input" ]; then
+    warn "no such file: $input"
+    status=1
+    continue
+  fi
+
+  out=${outfile:-"${input%.*}.$format"}
+
+  if ! render "$input" "$out"; then
+    warn "failed to render: $input"
+    status=1
+    continue
+  fi
+
+  printf '%s\n' "$out"
+
+  if [ "$open_after" = true ]; then
+    open "$out"
+  fi
+done
+
+exit "$status"
