@@ -42,7 +42,11 @@ HTML output is self-contained - styles and images are inlined into the one
 file, so it can be emailed and will open anywhere.
 
 Styling: $css
+
 Word template (optional): $reference_doc
+Word styling comes from that file's style definitions, not its text. Start
+from pandoc's own and edit the styles in Word or LibreOffice:
+  pandoc --print-default-data-file reference.docx > $reference_doc
 
 Override either with \$MDX_CSS or \$MDX_REFERENCE_DOC.
 
