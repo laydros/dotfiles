@@ -105,7 +105,7 @@ fi
 render() {
   local input=$1
   local out=$2
-  local pagetitle common docx_args
+  local pagetitle common
 
   # Sets the <title> element without emitting a visible heading. Using
   # `title` metadata instead would print the name into the top of the
@@ -135,11 +135,15 @@ render() {
         --output "$out" -- "$input"
       ;;
     docx)
-      docx_args=()
+      # Spelled out rather than collecting the optional flag into an array:
+      # under a Finder Quick Action this runs on bash 3.2, where expanding an
+      # empty array with `set -u` is a fatal error.
       if [ -f "$reference_doc" ]; then
-        docx_args=(--reference-doc "$reference_doc")
+        pandoc "${common[@]}" --reference-doc "$reference_doc" \
+          --output "$out" -- "$input"
+      else
+        pandoc "${common[@]}" --output "$out" -- "$input"
       fi
-      pandoc "${common[@]}" "${docx_args[@]}" --output "$out" -- "$input"
       ;;
   esac
 }
