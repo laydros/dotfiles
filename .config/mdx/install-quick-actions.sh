@@ -8,7 +8,13 @@
 
 set -euo pipefail
 
-services_dir="$HOME/Library/Services"
+# Overridable so the generated bundles can be inspected without disturbing
+# the installed ones, whose enabled state lives outside the bundle.
+services_dir="${MDX_SERVICES_DIR:-$HOME/Library/Services}"
+
+# Which selections the Quick Actions offer themselves for. Restricting this to
+# markdown keeps them out of the context menu for every other kind of file.
+send_types='["net.daringfireball.markdown"]'
 action_bundle="/System/Library/Automator/Run Shell Script.action"
 
 command -v jq >/dev/null 2>&1 || {
@@ -45,14 +51,14 @@ make_quick_action() {
   rm -rf "$bundle"
   mkdir -p "$contents"
 
-  jq -n --arg label "$label" '{
+  jq -n --arg label "$label" --argjson send_types "$send_types" '{
     NSServices: [{
       NSBackgroundColorName: "background",
       NSIconName: "NSActionTemplate",
       NSMenuItem: { default: $label },
       NSMessage: "runWorkflowAsService",
       NSRequiredContext: { NSApplicationIdentifier: "com.apple.finder" },
-      NSSendFileTypes: ["net.daringfireball.markdown"]
+      NSSendFileTypes: $send_types
     }]
   }' | plutil -convert xml1 -o "$contents/Info.plist" -
 
