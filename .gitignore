@@ -1,0 +1,4 @@
+# Claude Code writes to this file itself: /model, /effort, permission approvals, and
+# auto mode environment profiles all land here. Those profiles can contain internal
+# hostnames, addresses, and credential scopes, and this repo has public remotes.
+.claude/settings.json
