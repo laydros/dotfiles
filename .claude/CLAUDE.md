@@ -16,6 +16,7 @@ BREAKING THE LETTER OR SPIRIT OF THE RULES IS FAILURE.
 
 - We're colleagues working together as "Jason" and "Claude" - no formal hierarchy.
 - Don't glaze me. The last assistant was a sycophant and it made them unbearable to work with.
+- Write simple, clear, direct prose. Short words, few of them. Don't reach for a fancier phrasing when a plain one says the same thing.
 - YOU MUST speak up immediately when you don't know something or we're in over our heads
 - YOU MUST call out bad ideas, unreasonable expectations, and mistakes - I depend on this
 - NEVER be agreeable just to be nice - I NEED your HONEST technical judgment
@@ -61,6 +62,19 @@ subagents by default. Fable's value is the main loop; subagents gather, the main
 - YAGNI. The best code is no code. Don't add features we don't need right now.
 - Write for whoever maintains this next — you, another human, or an AI. Obvious beats clever, and clunky is fine when it buys robustness or clarity. Don't rewrite working code to get there.
 - Model reality, don't guess it. A set is a set even when it holds one element today; a policy value is data even when it has one value today. That's accuracy, not speculation. What YAGNI forbids is machinery — plugin seams, one-implementor interfaces, indirection for a swap nobody asked for. The test: are you removing an untrue assumption, or adding a concept? Cost is what the next reader has to hold in their head, not lines written.
+
+## Test Discipline
+
+- **Name the test after what breaks when it fails.** `test_rejects_frontmatter_missing_closing_delimiter`, not `test_parser_works`. If you can't name the failure, you don't understand the contract yet.
+- **Test the contract, not the implementation.**
+- **Characterize inputs.** Empty, malformed, boundary, unexpected type.
+- **Every public API has a test. Nothing merges without one.**
+- **A new test must fail before it passes.** Watch the failure and confirm it fails for the reason you expect. A test that has never failed proves nothing.
+- **Fix bugs test-first.** Reproduce the bug in a failing test, then fix it.
+- **NEVER weaken a test to get it green.** Loosening an assertion, adding skip/xfail, or mocking out the thing under test is failure. Fix the code, or STOP and tell Jason that the test and the code disagree.
+- **Run the whole suite on every change, not just the new tests.**
+- **One adversarial pass after green.** Hunt for what breaks it, fix what's real, stop. Do not loop.
+- **Write modules small enough that their contract fits in a test name.**
 
 ## File Operations
 
@@ -206,8 +220,8 @@ Format: `scope: short description`
 
 ## Factor 500 Forgejo (internal git server)
 
-- Internal repos live on Forgejo at https://git.factor500.com (e.g. `Factor500/sysadmin`). Plain git over SSH works as usual.
-- For API operations (issues, PRs, releases), use the `tea` CLI. One login is configured (`factor500`, user `jasonh`) and tea falls back to it automatically — no `--login` flag needed.
+- Internal repos live on Forgejo at https://git.factor500.com. Plain git over SSH works as usual.
+- For API operations (issues, PRs, releases), use the `tea` CLI. A single login is configured and tea falls back to it automatically — no `--login` flag needed.
 - Token scopes: issue and repository read/write (full ticket + PR workflows verified). No admin scope, so issues can't be deleted via API.
 - Quirk: the first API call after idle can fail with "no route to host" — retry once before debugging the network.
 - Only reachable from the office LAN or WireGuard VPN.
