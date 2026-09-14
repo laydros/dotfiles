@@ -34,13 +34,14 @@
 # Warning: syncing removes anything installed but not listed here
 # (except VS Code extensions, which `brew bundle` ignores).
 
-tap "darrylmorley/whatcable"
-tap "microsoft/mssql-release"
-tap "steipete/tap"
+tap "microsoft/mssql-release", trusted: {
+  formulae: ["msodbcsql18", "mssql-tools18"],
+}
+tap "steipete/tap", trusted: { formula: "spogo" }
 
-brew "spogo"
-brew "mssql-tools18"
-brew "msodbcsql18"
+brew "steipete/tap/spogo"
+brew "microsoft/mssql-release/mssql-tools18"
+brew "microsoft/mssql-release/msodbcsql18"
 brew "syncthing", restart_service: true
 brew "colima"
 brew "docker", link: false
@@ -188,4 +189,3 @@ mas "Xcode", id: 497799835
 
 
 # vscode "kaleidoscope-app.vscode-ksdiff"
-

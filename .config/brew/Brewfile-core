@@ -33,7 +33,7 @@
 # Warning: syncing removes anything installed but not listed here
 # (except VS Code extensions, which `brew bundle` ignores).
 
-tap "oven-sh/bun"
+tap "oven-sh/bun", trusted: { formula: "bun" }
 
 # to get sftp with tab complete
 brew "OpenSSH" if OS.mac?
@@ -49,7 +49,7 @@ brew "bat-extras"
 brew "block-goose-cli"
 brew "boost"
 brew "btop"
-brew "bun"
+brew "oven-sh/bun/bun"
 brew "glib"
 brew "ccusage"
 brew "chezmoi"
