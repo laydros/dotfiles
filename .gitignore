@@ -2,3 +2,7 @@
 # auto mode environment profiles all land here. Those profiles can contain internal
 # hostnames, addresses, and credential scopes, and this repo has public remotes.
 .claude/settings.json
+
+# The pre_commit leak guard's org-specific term list. The terms are the
+# sensitive part, so the list stays local while the hook itself is tracked.
+.config/yadm/hooks/leak-patterns.txt
