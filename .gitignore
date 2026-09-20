@@ -8,3 +8,20 @@
 # The pre_commit leak guard's org-specific term list. The terms are the
 # sensitive part, so the list stays local while the hook itself is tracked.
 .config/yadm/hooks/leak-patterns.txt
+
+# Claude Code keeps its runtime state in ~/.claude next to the config that is
+# tracked: session transcripts, memory files, shell snapshots, telemetry,
+# uploads. They name internal hosts and paths, and this repo has a public
+# remote. yadm sets status.showUntrackedFiles=no, so none of it appears in
+# `yadm status` to be noticed before an `add -A` sweeps it in. Ignore the
+# directory and re-include only what is meant to sync, so state directories
+# added by future Claude Code versions are excluded without another edit.
+.claude/*
+!.claude/CLAUDE.md
+!.claude/commands/
+!.claude/hooks/
+!.claude/output-styles/
+!.claude/scripts/
+!.claude/settings.shared.json
+!.claude/skills/
+!.claude/statusline.sh
