@@ -16,6 +16,12 @@ Patterns come from two places:
              repo. One pattern per line, '#' starts a comment. Blank when
              absent, in which case only the built-ins apply.
 
+Because leak-patterns.txt is excluded, it does not travel with the repo the way
+this hook does: a fresh clone gets the hook and no patterns, and the scan then
+passes on terms it would have caught elsewhere. Copy the file to each new
+machine by hand (scp, then chmod 600). The hook warns on stderr when it runs
+without one.
+
 Escape hatch for a false positive:
 
     YADM_SKIP_LEAK_CHECK=1 yadm commit ...
