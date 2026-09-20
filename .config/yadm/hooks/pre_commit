@@ -41,6 +41,10 @@ BUILTIN = [
 
 def load_local_patterns():
     if not os.path.isfile(PATTERNS_FILE):
+        print(
+            "yadm pre_commit: leak-patterns.txt absent; built-in patterns only.",
+            file=sys.stderr,
+        )
         return []
     out = []
     with open(PATTERNS_FILE, encoding="utf-8") as f:
