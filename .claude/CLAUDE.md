@@ -97,6 +97,7 @@ Subagents inherit the parent model. Pin a model on every fan-out.
 - Dotfiles (yadm) commits: `scope: short description`, lowercase, imperative, no period, no conventional-commit prefixes. Multi-scope: `ssh, brew: add zag and update packages`. Scopes so far: zsh, nvim, tmux, ghostty, ssh, brew, git, claude, espanso.
 - Claude Code settings: `~/.claude/settings.json` is per-machine and untracked. Anything that should be on every machine goes in `~/.claude/settings.shared.json`, which yadm hooks merge in after clone and pull. To apply by hand: `python3 ~/.claude/scripts/merge_shared_settings.py`.
 - yadm: use plain `yadm status`, never the untracked-files forms (`-u`, `-uall`, `--untracked-files`). They walk the whole home directory and hold the index lock. Check a path with `yadm ls-files <path>`.
+- yadm: never stage with `-A` or `--all`. The work tree is all of `$HOME`, and `status.showUntrackedFiles=no` hides what would be swept in. Stage named paths.
 
 ## Docs, notes, and tasks
 
