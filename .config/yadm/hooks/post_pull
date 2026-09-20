@@ -1,0 +1,5 @@
+#!/bin/sh
+# After `yadm clone` or `yadm pull` (post_clone is a symlink to this file), fold the tracked ~/.claude/settings.shared.json into the
+# untracked per-machine ~/.claude/settings.json. See the merge script's docstring
+# for why the live file is not tracked.
+exec python3 "$HOME/.claude/scripts/merge_shared_settings.py"

@@ -1,0 +1,44 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Read|Glob|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/m3db-data-guard.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/yadm-status-untracked-block.py"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash $HOME/.claude/statusline.sh"
+  },
+  "env": {
+    "OBNOTES_PATH": "$HOME/Documents/obnotes",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "35"
+  },
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "worktree": {
+    "baseRef": "fresh"
+  },
+  "syncClaudeAiSkills": false,
+  "skillOverrides": {
+    "content-research-writer": "off"
+  }
+}

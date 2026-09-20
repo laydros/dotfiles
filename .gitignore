@@ -1,6 +1,8 @@
 # Claude Code writes to this file itself: /model, /effort, permission approvals, and
 # auto mode environment profiles all land here. Those profiles can contain internal
 # hostnames, addresses, and credential scopes, and this repo has public remotes.
+# What should sync lives in .claude/settings.shared.json; yadm hooks merge it into
+# this file after clone and pull via .claude/scripts/merge_shared_settings.py.
 .claude/settings.json
 
 # The pre_commit leak guard's org-specific term list. The terms are the
