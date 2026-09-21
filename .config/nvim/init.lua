@@ -65,6 +65,15 @@ opt.clipboard:prepend({ "unnamed", "unnamedplus" })
 opt.listchars = { tab = '▸·', trail = '·', eol = '↲', nbsp = '␣' }
 opt.list = true
 
+-- Wrapping (display only -- never alters file contents)
+-- wrap is on by default. linebreak breaks at word boundaries instead of
+-- mid-word; breakindent aligns the continuation with the start of the line.
+opt.linebreak = true
+opt.breakindent = true
+
+-- Ruler for hard-wrapped filetypes. Cleared for markdown, which soft-wraps.
+opt.colorcolumn = "80"
+
 -- Disable folding completely
 opt.foldenable = false
 
@@ -142,8 +151,9 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo.softtabstop = 2
     vim.wo.spell = true
     vim.wo.wrap = true
-    vim.wo.linebreak = true
-    vim.wo.colorcolumn = "80"
+    -- linebreak/breakindent are set globally now.
+    -- No ruler: prose is soft-wrapped, so there is no column to aim for.
+    vim.wo.colorcolumn = ""
   end
 })
 
