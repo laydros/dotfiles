@@ -348,6 +348,7 @@ cx() {
 # source zsh functions
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 __is_available zoxide && eval "$(zoxide init zsh)"
+__is_available hermes && eval "$(hermes completion zsh)"
 
 # fzf - fuzzy finder
 # Ctrl+R: Fuzzy command history search
