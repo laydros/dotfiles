@@ -53,7 +53,7 @@ HISTFILE="$XDG_CONFIG_HOME/zsh/histfile"
 HISTSIZE=1100000            # Max entries to keep in memory
 SAVEHIST=1000000            # Max entries to save to file
 
-HISTORY_IGNORE="(ls|cd|pwd|exit|cd)*"
+HISTORY_IGNORE="(ls|cd|pwd|exit)(| *)"   # (| *), not a bare * -- that also swallowed lsof, lsblk and cdrecord
 #HIST_STAMPS="yyyy-mm-dd"
 HISTTIME_FORMAT="yyyy-mm-dd"
 
@@ -78,13 +78,6 @@ setopt HIST_VERIFY          # ask for confirmation every time you bang (!) a com
 
 autoload -U colors zcalc
 colors
-
-# possible fix for very slow autocomplete in git repo
-# https://stackoverflow.com/questions/9810327/zsh-auto-completion-for-git-takes-significant-amount-of-time-can-i-turn-it-off/9810485#9810485
-
-__git_files () {
-    _wanted files expl 'local files' _files
-}
 
 # == SSH Agent
 
@@ -159,6 +152,10 @@ if [[ "$OS" == "linux" && -d /home/m3db/data/linux/bin ]]; then
 fi
 
 export PATH
+
+# Custom completion functions. MUST come before compinit -- fpath has to be
+# complete when compinit builds the dump, or nothing in .zsh_functions is scanned.
+fpath+=${ZDOTDIR:-~}/.zsh_functions
 
 # Load completions with daily cache
 autoload -Uz compinit
@@ -345,8 +342,6 @@ cx() {
     eza -la
 }
 
-# source zsh functions
-fpath+=${ZDOTDIR:-~}/.zsh_functions
 __is_available zoxide && eval "$(zoxide init zsh)"
 __is_available hermes && eval "$(hermes completion zsh)"
 
