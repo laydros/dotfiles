@@ -27,7 +27,7 @@ alias sort='LC_ALL=C sort'
 alias dotf='ls .[a-zA-Z0-9_]*'
 alias qr='qrencode -t UTF8'
 alias cp="cp -iv"                    # confirm before overwriting, verbose
-alias cat="bat -p"
+command -v bat >/dev/null 2>&1 && alias cat="bat -p"   # guarded: without this, cat is broken on machines without bat
 alias clear="clear -x"
 alias ip="ip -c"
 alias feh="echo imv"
