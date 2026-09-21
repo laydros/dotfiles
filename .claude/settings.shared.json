@@ -26,7 +26,6 @@
     "command": "bash $HOME/.claude/statusline.sh"
   },
   "env": {
-    "OBNOTES_PATH": "$HOME/Documents/obnotes",
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "35"
   },
   "attribution": {

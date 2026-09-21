@@ -5,7 +5,7 @@ description: Jason's organizing standard for Todoist. Use before creating, editi
 
 # Organizing Standard: kinds, Todoist, and ceilings
 
-**The authority is the vault**, at `~/Documents/obnotes/reference/organizing-standard.md` with the capture rules in `~/Documents/obnotes/reference/salience-routing.md`. If the vault is reachable, read those and let them win over this summary. What follows is the condensed version for when it is not.
+**The authority is the vault** (location per the shared CLAUDE.md), at `reference/organizing-standard.md` with the capture rules in `reference/salience-routing.md`. If the vault is reachable, read those and let them win over this summary. What follows is the condensed version for when it is not.
 
 ## Kind vs state
 

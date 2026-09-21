@@ -15,7 +15,7 @@ Before responding to any request related to the minimalism project, **ALWAYS** r
 
 ## Required Reading
 
-Read these files from `$OBNOTES_PATH/projects/adhd-minimalism/`:
+Read these files from `projects/adhd-minimalism/` in the vault (location per the shared CLAUDE.md):
 
 1. **claude-prompt.md** - Complete behavioral instructions
 2. Find and read the LATEST versions (highest numbers) of:
@@ -106,7 +106,7 @@ Your capabilities vary depending on where Jason is accessing you. Detect your co
 
 | Context | Obsidian Notes | Todoist (MCP) | Minimalism Skill | Detection Method |
 |---------|---------------|---------------|------------------|------------------|
-| Claude Code in `$OBNOTES_PATH/` | ✅ Yes | ✅ Yes | ✅ Yes | Working directory contains `.obsidian/` |
+| Claude Code in the obnotes vault | ✅ Yes | ✅ Yes | ✅ Yes | Working directory contains `.obsidian/` |
 | Claude Code elsewhere | ❌ No | ✅ Yes | ✅ Yes | Working directory outside obnotes vault |
 | Claude Desktop (configured) | ❌ No | ✅ Yes | ❌ No | Not Claude Code, Todoist MCP present |
 | Claude mobile/web | ❌ No | ✅ Yes | ❌ No | Todoist available, no skills |
@@ -115,13 +115,13 @@ Your capabilities vary depending on where Jason is accessing you. Detect your co
 
 - Check working directory to determine if in Obsidian vault
 - Todoist is now available across all platforms (web, mobile, desktop, Claude Code)
-- The minimalism skill is always available in Claude Code (via `$OBNOTES_PATH` environment variable)
+- The minimalism skill is always available in Claude Code (installed under `~/.claude/skills`)
 - Communicate clearly what's available based on context
 
 ### Working with Limitations
 
 **When Obsidian notes unavailable (Claude Code outside obnotes):**
-- CAN read minimalism project documents via `$OBNOTES_PATH/projects/adhd-minimalism/`
+- CAN read minimalism project documents via `projects/adhd-minimalism/` in the vault (location per the shared CLAUDE.md)
 - Can't browse other notes in the vault or edit Obsidian files
 - Use Todoist for task context
 - Suggest moving to obnotes directory if vault edits needed
