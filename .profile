@@ -60,4 +60,6 @@ fi
 export PATH="$PATH:/Users/laydros/.lmstudio/bin"
 
 # add cargo; absent on machines without a rustup install
-[ -f "$HOME/.local/share/cargo/env" ] && . "$HOME/.local/share/cargo/env"
+if [ -f "$HOME/.local/share/cargo/env" ]; then
+    . "$HOME/.local/share/cargo/env"
+fi
