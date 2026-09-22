@@ -117,7 +117,29 @@ device still needs its own one-line `.stignore` containing `#include .stignore-s
 Miss it on one device and that device ignores nothing — and syncs everything the
 patterns were meant to exclude. Verify per device, never assume.
 
-Compare `expanded` counts across hosts; they should match. Order matters — Syncthing
+Compare `expanded` counts across hosts; they should match.
+
+### Adding a device (including iOS) to a folder that uses a shared pattern file
+
+**Do not put `#include .stignore-shared` on a device before that file has synced.**
+Verified 2026-09-22: pointing `#include` at a file that is not there yet gives
+
+```
+parse error: failed to load include file .stignore-shared: file not found
+```
+
+and **zero patterns in effect**. The folder starts normally and ignores nothing, which
+is the exact outcome the include was meant to prevent. On a fresh folder the shared file
+cannot be present yet, so the include is a chicken-and-egg.
+
+Paste the literal patterns into the new device's ignore list for the first sync, then
+switch to the one-line include once the shared file has arrived. Confirm `expanded` is
+non-zero and `error` is null before trusting either form.
+
+Related: **set ignores before the first sync, never after.** A fresh folder computes
+"need" from the global index rather than from who is actually offering, so with no
+ignores it will queue files no connected device will serve and park there.
+ Order matters — Syncthing
 takes the first matching pattern, which is why keeping rules in one shared file is
 what keeps behaviour identical everywhere.
 
