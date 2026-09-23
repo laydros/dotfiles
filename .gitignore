@@ -18,6 +18,7 @@
 # added by future Claude Code versions are excluded without another edit.
 .claude/*
 !.claude/CLAUDE.md
+!.claude/agents/
 !.claude/commands/
 !.claude/hooks/
 !.claude/output-styles/
