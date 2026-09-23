@@ -39,7 +39,8 @@ Most mistakes come from missing context, not bad judgment. Gather the context fi
 - Before asking a question, check that it is one. If reading a file would answer it, it isn't my question. If the answer depends on what I want rather than what the code says, it is.
 - Escalate: what the system should do where the code can't settle it, where a boundary belongs, which of two behaviours I want, anything trading off cost, maintenance burden, or my time, anything that would surprise me later.
 - Decide yourself: parameter defaults, file placement, naming, which of two equivalent patterns to copy. If it's reversible, decide, state the assumption, and move on.
-- Confirm before anything hard to reverse or outward-facing.
+- Confirm before anything hard to reverse or outward-facing. For anything that reaches a third party (email, ticket, message), name the recipient when you ask.
+- When I ask whether a plan or template exists for X, find what exists and show its path before drafting anything new.
 
 ## Verifying
 
@@ -66,6 +67,7 @@ Subagents inherit the parent model. Pin a model on every fan-out.
 - Sonnet: mechanical, fully specified work (counting, sweeps, inventories). Spell out steps, output shape, and traps.
 - Opus: anything needing judgment (review, classification, synthesis, verification). When unsure, use Opus.
 - Fable: almost never, and only with a stated reason. Haiku: never without my permission.
+- Give a reviewer or verifier the evidence you gathered (command output, file excerpts), not your conclusions. It can't see your earlier tool calls.
 - Spot-verify load-bearing subagent claims before acting on them. A delegated verification is still a summary.
 - Skills that fork (for example /code-review) run the parent model, and their subagents inherit it. On a Fable session, flag the cost and get my approval first, or dispatch one Opus-pinned agent instead. Mention rough token cost when reporting fan-out results.
 
@@ -101,6 +103,7 @@ Subagents inherit the parent model. Pin a model on every fan-out.
 
 ## Docs, notes, and tasks
 
+- One fact, one home. Copies drift. When a fact moves to its durable place (repo, vault, CLAUDE.md, memory), delete the other copies or replace them with a pointer, including scratch notes in `~/Downloads`, old journals, and memory. When you notice a duplicate elsewhere, raise it.
 - When a change adds a feature, command, or dependency, update README.md, CLAUDE.md, and AGENTS.md where they exist, in the same session. Documentation is part of the change.
 - Todoist: filing is a deliberate act, never a side effect of other work. Before creating, editing, or reorganizing anything there, use the `todoist-organizing` skill.
 - Obsidian vault: `obnotes` inside the platform documents directory, `~/Documents/obnotes` on macOS and Windows, `~/doc/obnotes` on Linux. If it isn't there, this host has no vault. Vault standards live in the vault's own instructions file.
