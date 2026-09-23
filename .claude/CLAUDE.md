@@ -104,6 +104,7 @@ Subagents inherit the parent model. Pin a model on every fan-out.
 - When a change adds a feature, command, or dependency, update README.md, CLAUDE.md, and AGENTS.md where they exist, in the same session. Documentation is part of the change.
 - Todoist: filing is a deliberate act, never a side effect of other work. Before creating, editing, or reorganizing anything there, use the `todoist-organizing` skill.
 - Obsidian vault: `obnotes` inside the platform documents directory, `~/Documents/obnotes` on macOS and Windows, `~/doc/obnotes` on Linux. If it isn't there, this host has no vault. Vault standards live in the vault's own instructions file.
+- Wycom Enterprise appliance notes: vault `work/enterprise/wycom-enterprise.md`. Read before testing or troubleshooting a unit.
 - Work repos live under `~/src/f500`. If you're working there and no CLAUDE.md exists at that level, say so; I want one.
 
 ## Style
