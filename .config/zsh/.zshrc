@@ -23,21 +23,7 @@ __is_available() {
   command -v "$prog" >/dev/null 2>&1
 }
 
-# hopefully avoid PATH duplication
-typeset -U PATH
-# fpath picks up duplicates from brew shellenv running in nested shells;
-# duplicate entries make compinit scan the same directory repeatedly.
-typeset -U fpath FPATH
-
-# Homebrew. Must run before compinit: shellenv is what puts brew's
-# site-functions on fpath, and brew is not on PATH until it does.
-if [[ -x /opt/homebrew/bin/brew ]]; then
-   eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [[ -x /usr/local/bin/brew ]]; then
-   eval "$(/usr/local/bin/brew shellenv)"
-elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
-   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
+# PATH and Homebrew are set in path.zsh, sourced from .zshenv and .zprofile.
 
 unsetopt autocd
 bindkey -e
@@ -108,7 +94,7 @@ fi
 #    fi
 # fi
 #
-# homebrew shellenv now runs in the INIT section above, ahead of compinit
+# homebrew shellenv runs in path.zsh, sourced from .zshenv, ahead of compinit
 
 # automatically start tmux when sshing in
 # in .zshrc, only for SSH sessions
@@ -125,33 +111,6 @@ export VISUAL="nvim"
 
 # Collapse duplicate PATH entries; first occurrence of each directory wins
 typeset -U path PATH
-
-# TODO: PATH lives in .zshrc, so only interactive shells get it. Non-interactive
-# zsh (ssh host 'cmd', scripts with a zsh shebang) reads .zshenv only and misses
-# these dirs. Fix: move this block to $ZDOTDIR/path.zsh, source it from BOTH
-# .zshenv and .zprofile. The .zprofile pass re-asserts order after macOS
-# /etc/zprofile runs path_helper and demotes these below /usr/bin. Sourcing
-# twice is safe: with typeset -U above, re-prepending dedupes and restores
-# position, and on non-macOS the second pass is a harmless no-op.
-
-# Start with system PATH, then add our directories in priority order
-PATH=$HOME/bin:$HOME/.local/bin:$PATH
-
-# Rust
-PATH=$HOME/.local/share/cargo/bin:$PATH
-
-# Go
-PATH=$HOME/.local/share/go/bin:$PATH
-
-# sbin for homebrew
-PATH="/usr/local/sbin:$PATH"
-
-# for m3-info
-if [[ "$OS" == "linux" && -d /home/m3db/data/linux/bin ]]; then
-    PATH=/home/m3db/data/linux/bin:$PATH
-fi
-
-export PATH
 
 # Custom completion functions. MUST come before compinit -- fpath has to be
 # complete when compinit builds the dump, or nothing in .zsh_functions is scanned.

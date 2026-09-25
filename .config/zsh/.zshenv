@@ -103,3 +103,6 @@ export LESSCHARSET=UTF-8
 # == SITE LOCAL CONFIG
 
 # [[ -e ~/.zshenv.local ]] && . ~/.zshenv.local || :
+
+# PATH and Homebrew, for every zsh including non-interactive ones.
+[[ -r "$ZDOTDIR/path.zsh" ]] && source "$ZDOTDIR/path.zsh"
