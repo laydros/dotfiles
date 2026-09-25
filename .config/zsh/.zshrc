@@ -68,7 +68,7 @@ colors
 # == SSH Agent
 
 # Hosts that should use a local ssh-agent (otherwise rely on agent forwarding or system default).
-ssh_agent_hosts=("ibanez" "indy" "vox")
+ssh_agent_hosts=("ibanez" "indy")
 
 if [[ " ${ssh_agent_hosts[@]} " =~ " $(hostname) " ]]; then
     # Check if we can connect to an existing agent
