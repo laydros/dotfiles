@@ -53,27 +53,14 @@ brew "python@3.12"
 #tap "jeffreywildman/homebrew-virt-manager"
 #brew "virt-viewer"
 
-# cask "alacritty"
-cask "antinote"
-cask "autodesk-fusion"
-cask "bambu-studio"
-#cask "bartender"
+brew "mas"
+
+# ---------------------------------------------------------------------------
+# Every Mac
+# ---------------------------------------------------------------------------
+
 cask "bbedit"
-cask "bettertouchtool"
-cask "brave-browser"
-cask "chatgpt"
-cask "cmux"
-cask "codex"
-cask "codex-app"
-cask "codexbar"
 cask "daisydisk"
-cask "discord"
-cask "dotnet-sdk@8"
-cask "dotnet-sdk"
-cask "easy-move+resize"
-cask "espanso"
-cask "ferdium"
-cask "firefox"
 cask "font-caladea"
 cask "font-carlito"
 cask "font-caskaydia-mono-nerd-font"
@@ -84,108 +71,141 @@ cask "font-iosevka"
 cask "font-iosevka-nerd-font"
 cask "font-source-code-pro"
 cask "ghostty"
-cask "google-chrome"
-#cask "hammerspoon"
 cask "handbrake-app"
 cask "iina"
-#cask "iterm2"
-#cask "jordanbaird-ice@beta"
-cask "kaleidoscope"
-# cask "karabiner-elements"
 cask "keka"
-cask "libreoffice"
-# cask "librewolf"
-#cask "lm-studio"
-cask "lulu"
-cask "maccy"
-cask "macfuse"
-#cask "makemkv"
 cask "musicbrainz-picard"
-# cask "netnewswire"
-#cask "nomachine"
 cask "obsidian"
-# cask "onyx"
-cask "pdf-expert"
-cask "permute"
-cask "plexamp"
-cask "proton-mail-bridge"
-cask "protonvpn"
 # cask "qlimagesize"
 cask "qlmarkdown"
 cask "qlstephen"
 # cask "qlvideo"
 cask "quicklook-video"
-# cask "qmk-toolbox"
 # cask "quicklook-json"
-cask "qutebrowser"
-cask "raycast"
-cask "royal-tsx"
-# cask "rustdesk"
-# cask "setapp"
-cask "signal"
-# cask "soundsource"
-cask "spotify"
-cask "steam"
-cask "stolendata-mpv"
-cask "swiftbar"
-
-# Eclipse JDK
-cask "temurin"
-cask "telegram"
-# cask "tigervnc-viewer"
-# cask "tor-browser"
 cask "transmission"
-cask "transmit"
-cask "veracrypt"
-cask "viscosity"
-cask "visual-studio-code"
-cask "whatcable"
-# cask "whichspace"
-cask "xquartz"
-cask "zoom"
 
-brew "mas"
-
-mas "1Blocker", id: 1365531024
 mas "Acorn", id: 6737921844
-# mas "Adobe Lightroom", id: 1451544217
-# mas "Amphetamine", id: 937984704
-# mas "AutoMounter", id: 1160435653
-# mas "Be Focused Pro", id: 961632517
 mas "Bitwarden", id: 1352778147
-mas "Capo", id: 696977615
-# mas "Capture", id: 6458535284
-# mas "DeArrow", id: 6451469297
-mas "Drafts", id: 1435957248
-mas "Disk Speed Test", id: 425264550
-mas "Fantastical", id: 975937182
 mas "GarageBand", id: 682658836
-mas "Hidden Bar", id: 1452453066
-mas "HomePass", id: 1330266650
 mas "iMovie", id: 408981434
-mas "Ivory", id: 6444602274
 mas "Keynote", id: 361285480
-# mas "Navicat Premium Essentials", id: 466416967
 mas "Numbers", id: 361304891
 mas "Pages", id: 361309726
-mas "Parcel", id: 375589283
-# mas "Pastebot", id: 1179623856
-# mas "Perplexity", id: 6714467650
-# mas "Resident Evil 2", id: 1640632432
-mas "Save to Raindrop.io", id: 1549370672
-mas "Shellcut", id: 6746333545
-mas "SponsorBlock", id: 1573461917
-mas "Tab Space", id: 1473726602
 mas "Tailscale", id: 1475387142
-# mas "Telephone", id: 406825478
-mas "TestFlight", id: 899247664
-mas "Todoist", id: 585829637
-# mas "Tuneful", id: 6739804295
-mas "UTM", id: 1538878817
-# mas "Valheim", id: 1554294918
-mas "Windows App", id: 1295203466
-mas "WireGuard", id: 1451685025
-mas "Xcode", id: 497799835
+
+# ---------------------------------------------------------------------------
+# Workstations - everything except the fender server
+# ---------------------------------------------------------------------------
+
+unless HOST == "fender"
+  # cask "alacritty"
+  cask "antinote"
+  cask "autodesk-fusion"
+  cask "bambu-studio"
+  #cask "bartender"
+  cask "bettertouchtool"
+  cask "brave-browser"
+  cask "chatgpt"
+  cask "cmux"
+  cask "codex"
+  cask "codex-app"
+  cask "codexbar"
+  cask "discord"
+  cask "dotnet-sdk@8"
+  cask "dotnet-sdk"
+  cask "easy-move+resize"
+  cask "espanso"
+  cask "ferdium"
+  cask "firefox"
+  cask "google-chrome"
+  #cask "hammerspoon"
+  #cask "iterm2"
+  #cask "jordanbaird-ice@beta"
+  cask "kaleidoscope"
+  # cask "karabiner-elements"
+  cask "libreoffice"
+  # cask "librewolf"
+  #cask "lm-studio"
+  cask "lulu"
+  cask "maccy"
+  cask "macfuse"
+  #cask "makemkv"
+  # cask "netnewswire"
+  #cask "nomachine"
+  # cask "onyx"
+  cask "pdf-expert"
+  cask "permute"
+  cask "plexamp"
+  cask "proton-mail-bridge"
+  cask "protonvpn"
+  # cask "qmk-toolbox"
+  cask "qutebrowser"
+  cask "raycast"
+  cask "royal-tsx"
+  # cask "rustdesk"
+  # cask "setapp"
+  cask "signal"
+  # cask "soundsource"
+  cask "spotify"
+  cask "steam"
+  cask "stolendata-mpv"
+  cask "swiftbar"
+
+  # Eclipse JDK
+  cask "temurin"
+  cask "telegram"
+  # cask "tigervnc-viewer"
+  # cask "tor-browser"
+  cask "transmit"
+  cask "veracrypt"
+  cask "viscosity"
+  cask "visual-studio-code"
+  cask "whatcable"
+  # cask "whichspace"
+  cask "xquartz"
+  cask "zoom"
+
+  mas "1Blocker", id: 1365531024
+  # mas "Adobe Lightroom", id: 1451544217
+  # mas "Amphetamine", id: 937984704
+  # mas "AutoMounter", id: 1160435653
+  # mas "Be Focused Pro", id: 961632517
+  mas "Capo", id: 696977615
+  # mas "Capture", id: 6458535284
+  # mas "DeArrow", id: 6451469297
+  mas "Drafts", id: 1435957248
+  mas "Disk Speed Test", id: 425264550
+  mas "Fantastical", id: 975937182
+  mas "Hidden Bar", id: 1452453066
+  mas "HomePass", id: 1330266650
+  mas "Ivory", id: 6444602274
+  # mas "Navicat Premium Essentials", id: 466416967
+  mas "Parcel", id: 375589283
+  # mas "Pastebot", id: 1179623856
+  # mas "Perplexity", id: 6714467650
+  # mas "Resident Evil 2", id: 1640632432
+  mas "Save to Raindrop.io", id: 1549370672
+  mas "Shellcut", id: 6746333545
+  mas "SponsorBlock", id: 1573461917
+  mas "Tab Space", id: 1473726602
+  # mas "Telephone", id: 406825478
+  mas "TestFlight", id: 899247664
+  mas "Todoist", id: 585829637
+  # mas "Tuneful", id: 6739804295
+  mas "UTM", id: 1538878817
+  # mas "Valheim", id: 1554294918
+  mas "Windows App", id: 1295203466
+  mas "WireGuard", id: 1451685025
+  mas "Xcode", id: 497799835
+end
+
+# ---------------------------------------------------------------------------
+# fender only
+# ---------------------------------------------------------------------------
+
+if HOST == "fender"
+  cask "plex-media-server"
+end
 
 
 # vscode "kaleidoscope-app.vscode-ksdiff"

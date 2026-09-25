@@ -30,8 +30,15 @@
 # - `brew bundle dump` writes one flat file and has no idea about this
 #   split, so it will clobber the layout. Add entries by hand.
 #
+# - HOST is the short hostname. The OS-specific files use it to install
+#   some packages on only some machines. It is defined here because this
+#   file comes first in the concatenation.
+#
 # Warning: syncing removes anything installed but not listed here
 # (except VS Code extensions, which `brew bundle` ignores).
+
+require "socket"
+HOST = Socket.gethostname.split(".").first.downcase
 
 tap "oven-sh/bun", trusted: { formula: "bun" }
 
