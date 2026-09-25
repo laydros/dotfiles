@@ -34,10 +34,10 @@ The category is already the project.
 | Label | Meaning | Ceiling |
 |---|---|---|
 | `active` | being worked now | **3, across all of Todoist** |
-| `next` | ready to pick up | **7** |
+| `next` | ready to pick up | **7**, not counting `quick` |
 | `waiting` | blocked or deferred | none |
 
-Domain labels (`work`, `dev`, `z3`, `home`, `nanoclaw`) are additive, for filtering. **Never put an `@` in a label name** — the API stores bare strings; the `@` is UI rendering only.
+Domain labels (`work`, `dev`, `z3`, `home`, `nanoclaw`) are additive, for filtering. `quick` marks an errand of about 30 minutes or less; a `next` task that also carries it doesn't count toward the 7 and gets done in a batch when there's a gap (trial from 2026-09-25; keep or revert on 2026-10-07). **Never put an `@` in a label name** — the API stores bare strings; the `@` is UI rendering only.
 
 **Priority has no standard yet** (Jason, 2026-09-17). `p1` gets used occasionally for something genuinely urgent; `p2`-`p4` carry no agreed meaning, so existing values are not a signal. Leave priority alone unless he sets it, and do not infer a scheme from what is already there.
 
