@@ -82,9 +82,6 @@ if vim.fn.exists("g:loaded_matchit") == 0 and vim.fn.findfile("plugin/matchit.vi
   vim.cmd("runtime! macros/matchit.vim")
 end
 
--- Plugin configurations (must be set before lazy.nvim loads plugins)
-vim.g.polyglot_disabled = { 'markdown' }
-
 -- Number toggle: relative in command mode, absolute in insert or when focus lost
 local numbertoggle_group = vim.api.nvim_create_augroup("numbertoggle", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "WinEnter" }, {
@@ -175,10 +172,15 @@ require("lazy").setup({
   checker = { enabled = false },
 })
 
+-- LSP (built-in client; servers that aren't installed are skipped)
+require('lsp')
+
 -- Colorscheme
 vim.cmd('colorscheme monokai_soda')
 
 -- ALE linter configuration
+-- Only run the linters listed here; the built-in LSP client covers the rest.
+vim.g.ale_linters_explicit = 1
 vim.g.ale_linters = { markdown = { 'markdownlint' } }
 vim.g.ale_fixers = { markdown = { 'trim_whitespace', 'remove_trailing_lines' } }
 vim.g.ale_fix_on_save = 1
