@@ -74,7 +74,7 @@ PREVIEW_FAILED=0
 echo ""
 echo "=== PACKAGES TO INSTALL ==="
 install_rc=0
-install_out=$(brew bundle check --verbose --file="$BREWFILE_TEMP" 2>&1) || install_rc=$?
+install_out=$(brew bundle check --verbose --no-upgrade --file="$BREWFILE_TEMP" 2>&1) || install_rc=$?
 echo "$install_out"
 if grep -q '^Error:' <<<"$install_out"; then
     error "brew bundle check failed (see above)."
