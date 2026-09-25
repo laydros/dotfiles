@@ -1,0 +1,25 @@
+# Global rumdl config (markdownlint-compatible rules). Used by the rumdl
+# language server in nvim and by `rumdl check`, unless a project has its own.
+# Prose is soft-wrapped, so there is no line length limit.
+
+[global]
+disable = ["MD013", "MD022", "MD032"]
+
+[MD003]
+style = "atx"
+
+[MD004]
+style = "dash"
+
+[MD007]
+indent = 2
+style = "fixed"
+
+[MD012]
+maximum = 1
+
+[MD046]
+style = "fenced"
+
+[MD048]
+style = "backtick"

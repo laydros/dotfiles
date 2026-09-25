@@ -119,6 +119,6 @@ vim.lsp.enable('lua_ls')
 vim.lsp.config.rumdl = {
   cmd = { 'rumdl', 'server' },
   filetypes = { 'markdown' },
-  root_markers = { '.rumdl.toml', 'rumdl.toml', '.markdownlint.json', '.git' },
+  root_markers = { '.rumdl.toml', 'rumdl.toml', '.git' },
 }
 vim.lsp.enable('rumdl')
