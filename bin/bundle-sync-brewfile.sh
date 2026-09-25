@@ -123,9 +123,15 @@ echo
 
 # Execute
 log "Syncing packages..."
-if brew bundle install --cleanup --no-upgrade --file="$BREWFILE_TEMP"; then
+# `brew bundle install` no longer takes `--cleanup`, so removal is a separate
+# step. Install runs first so a failed install never leaves packages removed.
+if ! brew bundle install --no-upgrade --file="$BREWFILE_TEMP"; then
+    error "Install failed; nothing was removed."
+    exit 1
+fi
+if brew bundle cleanup --force --file="$BREWFILE_TEMP"; then
     success "Brewfile sync completed."
 else
-    error "Sync failed."
+    error "Cleanup failed."
     exit 1
 fi
