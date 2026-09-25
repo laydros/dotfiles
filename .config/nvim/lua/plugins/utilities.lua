@@ -11,5 +11,4 @@ return {
       vim.g.table_mode_header_fillchar = '-'
     end,
   },
-  { 'nvim-lua/plenary.nvim' },
 }
