@@ -18,6 +18,14 @@ Feel free to adapt pieces for your own setup.
 These steps live outside the tracked dotfiles because they touch
 system state, not config files. Run them once on each new install.
 
+### macOS: system settings
+
+Run `~/bin/macos-defaults.sh` on a new Mac. It sets hot corners, Dock, Finder, trackpad (tap to click, Look Up on Force Click), Ctrl+1..5 to switch desktops, and Caps Lock -> Control. It is safe to re-run and exits on other OSes.
+
+- Keyboard remaps are stored per keyboard, so run it again after plugging in a new one. It remaps every attached keyboard. Keyboards listed in `PC_KEYBOARDS` also get Option and Command swapped and are set up even when unplugged.
+- Create desktops 1-5 in Mission Control first. The script only binds the keys.
+- Log out once afterward so keyboard and trackpad changes take effect everywhere.
+
 ### Ubuntu / GNOME: use plain ssh-agent instead of gnome-keyring
 
 GNOME's `gcr-ssh-agent` lists passphrased keys via `ssh-add -l` but
