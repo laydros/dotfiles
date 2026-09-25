@@ -114,3 +114,11 @@ vim.lsp.config.lua_ls = {
   }
 }
 vim.lsp.enable('lua_ls')
+
+-- Markdown LSP Configuration (rumdl: markdownlint-compatible linter)
+vim.lsp.config.rumdl = {
+  cmd = { 'rumdl', 'server' },
+  filetypes = { 'markdown' },
+  root_markers = { '.rumdl.toml', 'rumdl.toml', '.markdownlint.json', '.git' },
+}
+vim.lsp.enable('rumdl')

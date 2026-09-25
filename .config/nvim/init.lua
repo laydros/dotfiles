@@ -6,6 +6,8 @@ vim.g.mapleader = ","
 vim.g.maplocalleader = ","
 
 -- Bootstrap lazy.nvim
+-- Staying on lazy until vim.pack (built in since 0.12) is no longer marked
+-- experimental; its lockfile gives the same install-on-first-start behaviour.
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -178,12 +180,18 @@ require('lsp')
 -- Colorscheme
 vim.cmd('colorscheme monokai_soda')
 
--- ALE linter configuration
--- Only run the linters listed here; the built-in LSP client covers the rest.
-vim.g.ale_linters_explicit = 1
-vim.g.ale_linters = { markdown = { 'markdownlint' } }
-vim.g.ale_fixers = { markdown = { 'trim_whitespace', 'remove_trailing_lines' } }
-vim.g.ale_fix_on_save = 1
+-- Markdown: strip trailing whitespace and trailing blank lines on save.
+-- Linting comes from the rumdl language server (lua/lsp.lua).
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = vim.api.nvim_create_augroup("markdown-trim", { clear = true }),
+  pattern = { "*.md", "*.markdown" },
+  callback = function()
+    local view = vim.fn.winsaveview()
+    vim.cmd([[keeppatterns silent! %s/\s\+$//e]])
+    vim.cmd([[keeppatterns silent! %s/\n\+\%$//e]])
+    vim.fn.winrestview(view)
+  end,
+})
 
 -- Markdown keymaps
 local markdown_group = vim.api.nvim_create_augroup("MarkdownMappings", { clear = true })

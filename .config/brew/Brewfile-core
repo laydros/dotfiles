@@ -131,6 +131,7 @@ brew "ripgrep"
 brew "rbenv"
 brew "rogue"
 brew "ruby-build"
+brew "rumdl"
 brew "rustup" if OS.mac?
 brew "shellcheck"
 # brew "slashem"

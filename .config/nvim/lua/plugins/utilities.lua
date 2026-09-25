@@ -1,6 +1,5 @@
 -- Utility plugins
 return {
-  { 'dense-analysis/ale' },
   { 'wellle/context.vim', event = 'VeryLazy' },
   {
     'dhruvasagar/vim-table-mode',
