@@ -94,7 +94,8 @@ Subagents inherit the parent model. Pin a model on every fan-out.
 ## Version control
 
 - If the project isn't in a git repo, stop and ask before initializing one.
-- On starting work, ask how to handle uncommitted changes or untracked files. Suggest committing existing work first.
+- On starting work, mention uncommitted changes you didn't make. Never sweep them into your commit.
+- Commit finished work in the same session without asking. Stage only the files you changed.
 - Push only when I ask. Keep Claude attribution out of commit messages; it's noise.
 - Dotfiles (yadm) commits: `scope: short description`, lowercase, imperative, no period, no conventional-commit prefixes. Multi-scope: `ssh, brew: add zag and update packages`. Scopes so far: zsh, nvim, tmux, ghostty, ssh, brew, git, claude, espanso.
 - Claude Code settings: `~/.claude/settings.json` is per-machine and untracked. Anything that should be on every machine goes in `~/.claude/settings.shared.json`, which yadm hooks merge in after clone and pull. To apply by hand: `python3 ~/.claude/scripts/merge_shared_settings.py`.
