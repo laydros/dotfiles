@@ -20,9 +20,10 @@ export XDG_RUNTIME_DIR=/run/user/$UID
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
-# Use systemd-managed ssh-agent.service socket if available (Linux desktops/servers).
+# Use the systemd-managed OpenSSH agent socket if available (Linux desktops/servers),
+# but keep an agent that is already set: a forwarded one (ssh -A) or the desktop's.
 # Falls through to per-shell logic in .zshrc when absent.
-if [[ -S "$XDG_RUNTIME_DIR/openssh_agent" ]]; then
+if [[ ! -S ${SSH_AUTH_SOCK-} && -S ${XDG_RUNTIME_DIR-}/openssh_agent ]]; then
   export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/openssh_agent"
 fi
 
