@@ -114,5 +114,6 @@ Subagents inherit the parent model. Pin a model on every fan-out.
 
 - Markdown: don't hard-wrap prose; one paragraph or list item per line. `-` for unordered lists with one space after and two-space nesting; fenced code blocks with a language, never indented; ATX headings with no closing hashes; `**bold**` and `*italic*`, never mixing `*` and `_`.
 - PowerShell scripts: ASCII only. Hyphens for bullets, "OK" or "PASS" instead of checkmarks.
+- Editor: when a command hands me a file to edit, open it in vim, never nano, even where a runbook says nano.
 - Icons: Lucide by default. Exceptions are fine when a project has a reason.
 - Config goes in `$HOME/.config` when the software supports XDG.
