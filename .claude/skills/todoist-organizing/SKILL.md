@@ -22,7 +22,7 @@ description: Jason's organizing standard for Todoist. Use before creating, editi
 
 ## The Todoist mapping
 
-- Top-level project = **area** (Work, Personal, Pond, Lettie).
+- Top-level project = **area** (Work, Personal, NanoClaw, Lettie).
 - Sub-project = a large **project** or a long-lived area under it (z3, WyDocs, DR).
 - Section = a **phase or part** within that. This is where a project's plan becomes visible without becoming 200 tasks.
 - Task = task. **Subtasks only when the checklist is known at creation and fits on one screen**; context goes in the description. Needing subtasks under subtasks means it is a project, and the plan moves to the vault or the repo.
