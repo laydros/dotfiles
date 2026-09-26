@@ -166,6 +166,13 @@ setopt prompt_subst
 autoload -Uz vcs_info
 precmd() { vcs_info }
 
+# Turn off terminal mouse reporting at each prompt. A remote tmux that dies
+# without exiting cleanly (dropped ssh) leaves it on, and mouse moves and
+# clicks then print escape-sequence gibberish into the shell.
+autoload -Uz add-zsh-hook
+_reset_mouse() { printf '\e[?1000l\e[?1002l\e[?1003l\e[?1006l' }
+add-zsh-hook precmd _reset_mouse
+
 # Format the vcs_info_msg_0_ variable
 # Shows: (main) clean, (main*) unstaged changes, (main+) staged, (main*+) both
 # If this causes slowness in large repos or network mounts, disable with:
