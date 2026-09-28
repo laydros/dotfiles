@@ -123,7 +123,7 @@ Superpowers is the workflow. Use its spike, bounded and architectural paths, wit
 
 - One fact, one home. Copies drift. When a fact moves to its durable place (repo, vault, CLAUDE.md, memory), delete the other copies or replace them with a pointer, including scratch notes in `~/Downloads`, old journals, and memory. When you notice a duplicate elsewhere, raise it.
 - When a change adds a feature, command, or dependency, update README.md, CLAUDE.md, and AGENTS.md where they exist, in the same session. Documentation is part of the change.
-- Todoist: filing is a deliberate act, never a side effect of other work. Before creating, editing, or reorganizing anything there, use the `todoist-organizing` skill.
+- Todoist: filing is a deliberate act, never a side effect of other work, unless a project's CLAUDE.md grants standing permission for its own progress tracking. Before creating, editing, or reorganizing anything there, use the `todoist-organizing` skill.
 - Obsidian vault: `obnotes` inside the platform documents directory, `~/Documents/obnotes` on macOS and Windows, `~/doc/obnotes` on Linux. If it isn't there, this host has no vault. Vault standards live in the vault's own instructions file.
 - Work repos live under `~/src/f500`. If you're working there and no CLAUDE.md exists at that level, say so; I want one.
 

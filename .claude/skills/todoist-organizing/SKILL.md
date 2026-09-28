@@ -51,5 +51,5 @@ Only the section currently being worked gets real tasks. **Every other section h
 - Do not duplicate a plan into Todoist. The plan has one home.
 - Do not create a new Todoist project for something that is a project under an existing area. Use a section.
 - Do not conclude "there is no task for this" from a search of active tasks. **Completed tasks are invisible to that search** — check completed tasks over the relevant window first. The highest-value question in any review is "is this already done?"
-- Do not add tasks opportunistically while doing other work. Filing is a deliberate act.
+- Do not add tasks opportunistically while doing other work. Filing is a deliberate act. Exception: a project's CLAUDE.md may grant standing permission for its own progress tracking; the z3 repo's does.
 - Do not restructure beyond what is described here without asking.
