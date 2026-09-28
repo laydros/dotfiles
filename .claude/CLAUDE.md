@@ -77,12 +77,29 @@ Subagents inherit the parent model. Pin a model on every fan-out.
 - Write for whoever maintains this next. Obvious beats clever, and clunky is fine when it buys robustness or clarity. Don't rewrite working code to get there.
 - Model reality, don't guess it. A set is a set even with one element today; a policy value is data even with one value today. YAGNI forbids machinery (plugin seams, one-implementor interfaces, indirection for a swap nobody asked for), not accuracy. The test: are you removing an untrue assumption, or adding a concept?
 
+## Development workflow
+
+Superpowers is the workflow. Use its spike, bounded and architectural paths, with these changes:
+
+- A change that fits in one sentence and touches no money, schema or stored data skips the design stop. Say what you're doing in one line, then do it.
+- Ask clarifying questions as one numbered list with your recommendation for each, not one per message.
+- The design says in plain words what will be true when it's done, and names the tests that prove each part. Name them well enough that I don't need to review them; I skim designs and plans.
+- Acceptance tests go in their own commit before the code. The final report says whether they changed after that commit.
+- Before running an architectural plan, have it reviewed with fresh context: `codex exec --sandbox read-only`, or a fresh Opus subagent if Codex isn't available. Give it only the goal and the plan. Ask where the plan misses the goal, keeps or builds what the goal removes, or lacks a step, and whether the tests prove the goal. Verify each finding before acting on it. One round.
+- Run an approved plan through one Opus orchestrator subagent that uses subagent-driven development end to end, so this thread holds its report instead of the whole run. Relay its "Rulings I made" list as written. Models for the agents it starts follow the Subagents section above, not the skill's own model choice.
+- Plans and specs go in the project's repo, in `docs/plans/` and `docs/specs/`, unless the project's CLAUDE.md names other folders. In a repo someone else owns, ask before committing them.
+- Check user-visible changes in the browser before calling them done.
+- End with four lines, answered separately: implemented, checks pass, reviewed, observed live. "Not done" is a valid answer on any of them.
+- Project specifics (check command, where acceptance tests go, how to start the app and sign in) live in the project's CLAUDE.md.
+
 ## Tests
 
 - Name the test after what breaks when it fails. If you can't name the failure, you don't understand the contract yet.
 - Test the contract, not the implementation. Characterize inputs: empty, malformed, boundary, wrong type.
 - Every public API has a test.
 - A new test must fail before it passes, for the reason you expect. Fix bugs test-first.
+- A test that fails in setup, before its assertions run, hasn't failed for the right reason. An absence assertion passes before the thing it denies exists; break the guard and confirm that test fails.
+- Assert the harm was prevented, not that the guard fired.
 - Never weaken a test to get it green. Loosening an assertion, adding skip or xfail, or mocking the thing under test is failure. Fix the code, or stop and tell me the test and the code disagree.
 - Run the whole suite on every change. One adversarial pass after green, then stop.
 
