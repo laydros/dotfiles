@@ -19,10 +19,12 @@ from datetime import datetime
 
 # $ per million tokens: (input, output, cache read, 5-minute cache write, 1-hour cache write).
 # Checked 2026-09-28 against Claude Code's cost-state records: every session fits these.
+# Sonnet 5.5 is from the published price table (same as Sonnet 5); no cost record had it yet.
 # Cache-read ratios differ by model: Opus 5.5 is 5% of input, Opus 5 and Sonnet 5 are 10%.
 PRICES = {
     "claude-opus-5-5": (4.0, 20.0, 0.20, 5.0, 8.0),
     "claude-opus-5": (5.0, 25.0, 0.50, 6.25, 10.0),
+    "claude-sonnet-5-5": (2.0, 10.0, 0.20, 2.5, 4.0),
     "claude-sonnet-5": (2.0, 10.0, 0.20, 2.5, 4.0),
 }
 FALLBACK_MODEL = "claude-opus-5-5"

@@ -58,6 +58,14 @@ class UsageTests(unittest.TestCase):
         ])
         self.assertAlmostEqual(su.usage_of(path)["dollars"], 0.50)
 
+    def test_sonnet_5_5_is_priced_not_flagged_as_unknown(self):
+        path = self.transcript([
+            assistant("m1", "claude-sonnet-5-5", {"input_tokens": 1_000_000}),
+        ])
+        u = su.usage_of(path)
+        self.assertEqual(u["unpriced"], set())
+        self.assertAlmostEqual(u["dollars"], 2.00)
+
     def test_one_hour_cache_writes_cost_twice_input(self):
         path = self.transcript([
             assistant("m1", "claude-sonnet-5", {
