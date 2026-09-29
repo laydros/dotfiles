@@ -59,6 +59,7 @@ Most mistakes come from missing context, not bad judgment. Gather the context fi
 
 - Memory is yours to drive. Save what's worth keeping without asking, then tell me what you saved.
 - A correction that should change future behavior goes in memory or this file. Reasoning behind a decision goes in the repo or the vault, next to the thing it explains.
+- Repo docs never point at Claude's memory; it lives on one machine.
 
 ## Subagents
 
@@ -84,8 +85,8 @@ Superpowers is the workflow. Use its spike, bounded and architectural paths, wit
 - A change that fits in one sentence and touches no money, schema or stored data skips the design stop. Say what you're doing in one line, then do it.
 - Ask clarifying questions as one numbered list with your recommendation for each, not one per message.
 - The design says in plain words what will be true when it's done, and names the tests that prove each part. Name them well enough that I don't need to review them; I skim designs and plans.
-- Acceptance tests go in their own commit before the code. The final report says whether they changed after that commit.
-- Before running an architectural plan, have it reviewed with fresh context: `codex exec --sandbox read-only`, or a fresh Opus subagent if Codex isn't available. Give it only the goal and the plan. Ask where the plan misses the goal, keeps or builds what the goal removes, or lacks a step, and whether the tests prove the goal. Verify each finding before acting on it. One round.
+- Acceptance tests go in their own commit before the code. When a plan assigns a test to a task, check that every route and function the test touches exists by that task. The final report says whether the tests changed after that commit.
+- Before running an architectural plan, have it reviewed with fresh context: `codex exec --sandbox read-only`, or a fresh Opus subagent if Codex isn't available. Give it the goal, the design's decisions and the plan, nothing else. Ask where the plan misses the goal, keeps or builds what the goal removes, or lacks a step, and whether the tests prove the goal. Verify each finding before acting on it. One round.
 - Run an approved plan through one Opus orchestrator subagent that uses subagent-driven development end to end, so this thread holds its report instead of the whole run. Relay its "Rulings I made" list as written. Models for the agents it starts follow the Subagents section above, not the skill's own model choice.
 - Plans and specs go in the project's repo, in `docs/plans/` and `docs/specs/`, unless the project's CLAUDE.md names other folders. In a repo someone else owns, ask before committing them.
 - Check user-visible changes in the browser before calling them done.
