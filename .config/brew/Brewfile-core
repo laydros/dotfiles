@@ -42,6 +42,16 @@ HOST = Socket.gethostname.split(".").first.downcase
 
 tap "oven-sh/bun", trusted: { formula: "bun" }
 
+# opencode is pinned to 1.18.20 from a local tap because homebrew-core's
+# 1.18.28-1.18.30 crash on every prompt (anomalyco/opencode#48803, caused by
+# oven-sh/bun#42632). Tracked in the Todoist task "Check opencode upstream
+# bug". The tap exists only on the machine where it was created, so the
+# entries are skipped elsewhere. Remove this block when unpinning.
+if File.directory?("#{HOMEBREW_REPOSITORY}/Library/Taps/laydros/homebrew-local")
+  tap "laydros/local"
+  brew "laydros/local/opencode"
+end
+
 # to get sftp with tab complete
 brew "OpenSSH" if OS.mac?
 brew "signify-osx" if OS.mac?
@@ -63,7 +73,6 @@ brew "claude-code-templates"
 brew "cloudflare-wrangler"
 brew "cmake"
 brew "curl"
-brew "detox"
 #brew "docker"
 #brew "docker-compose"
 brew "dos2unix"
@@ -110,11 +119,13 @@ brew "lf"
 brew "llm"
 brew "lua"
 brew "lua-language-server"
+brew "macmon" if OS.mac?
 brew "mcat"
 brew "meson"
 brew "mdformat"
 brew "mistral-vibe"
 brew "moreutils"
+brew "mpv"
 brew "mq"
 brew "ncdu"
 brew "nethack"
@@ -134,6 +145,7 @@ brew "ruby-build"
 brew "rumdl"
 brew "rustup" if OS.mac?
 brew "shellcheck"
+brew "sqlcmd"
 # brew "slashem"
 # brew "smartmontools"
 brew "sqlite"

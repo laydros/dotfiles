@@ -76,7 +76,6 @@ cask "musicbrainz-picard"
 cask "obsidian"
 # cask "qlimagesize"
 cask "qlmarkdown"
-cask "qlstephen"
 # cask "qlvideo"
 # cask "quicklook-json"
 cask "quicklook-video"
@@ -99,13 +98,6 @@ mas "Todoist", id: 585829637
 # ---------------------------------------------------------------------------
 
 unless HOST == "fender"
-  # Microsoft packages need sudo on most updates; kept off the server.
-  tap "microsoft/mssql-release", trusted: {
-    formulae: ["msodbcsql18", "mssql-tools18"],
-  }
-  brew "microsoft/mssql-release/mssql-tools18"
-  brew "microsoft/mssql-release/msodbcsql18"
-
   # cask "alacritty"
   cask "antinote"
   cask "autodesk-fusion"
@@ -116,7 +108,6 @@ unless HOST == "fender"
   cask "chatgpt"
   cask "cmux"
   cask "codex"
-  cask "codex-app"
   cask "codexbar"
   cask "discord"
   cask "dotnet-sdk@8"
@@ -144,7 +135,6 @@ unless HOST == "fender"
   cask "proton-mail-bridge"
   cask "protonvpn"
   # cask "qmk-toolbox"
-  cask "qutebrowser"
   cask "raycast"
   cask "royal-tsx"
   # cask "rustdesk"
@@ -152,7 +142,6 @@ unless HOST == "fender"
   cask "signal"
   # cask "soundsource"
   cask "steam"
-  cask "stolendata-mpv"
   cask "swiftbar"
 
   # Eclipse JDK
@@ -162,6 +151,7 @@ unless HOST == "fender"
   cask "veracrypt"
   cask "viscosity"
   cask "visual-studio-code"
+  cask "vorssaint"
   cask "whatcable"
   # cask "whichspace"
   cask "xquartz"
@@ -183,7 +173,7 @@ unless HOST == "fender"
   mas "HomePass", id: 1330266650
   mas "Ivory", id: 6444602274
   # mas "Navicat Premium Essentials", id: 466416967
-  mas "Parcel", id: 375589283
+  mas "Parachute Backup", id: 6748614170
   # mas "Pastebot", id: 1179623856
   # mas "Perplexity", id: 6714467650
   # mas "Resident Evil 2", id: 1640632432
