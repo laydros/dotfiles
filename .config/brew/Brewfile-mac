@@ -39,7 +39,7 @@ tap "steipete/tap", trusted: { formula: "spogo" }
 brew "steipete/tap/spogo"
 brew "syncthing", restart_service: true
 brew "colima"
-brew "docker", link: false
+brew "docker"
 
 brew "python@3.12"
 
