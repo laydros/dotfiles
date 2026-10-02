@@ -21,6 +21,7 @@
 !.claude/agents/
 !.claude/commands/
 !.claude/hooks/
+!.claude/mods/
 !.claude/output-styles/
 !.claude/scripts/
 !.claude/settings.shared.json
