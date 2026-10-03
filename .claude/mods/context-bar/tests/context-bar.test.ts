@@ -221,17 +221,17 @@ for (const surface of SURFACES) {
       expect(await band.find({ type: 'Text', text: /System 19k/ })).toBeDefined()
     })
 
-    test('System is not drawn in the same colour as Free', async ($, on) => {
+    test('System is drawn in the claude colour, not grey like Free', async ($, on) => {
       engine(on, () => BEFORE)
       await $.session.start({ cwd: '/', surface, isInteractive: true })
       const band = await mountBand($, surface)
 
       const swatches = (await band.findAll({ type: 'Text', text: /^■$/ })).map(t => t.props.color)
-      expect(swatches).toEqual(['subtle', 'success', 'remember', 'skill', 'permission', 'inactive'])
+      expect(swatches).toEqual(['claude', 'success', 'remember', 'skill', 'permission', 'inactive'])
     })
 
     if (surface === 'terminal') {
-      test('bar blocks plus label fill the band width', async ($, on) => {
+      test('bar blocks, label and the blank cells under [-] fill the band width', async ($, on) => {
         engine(on, () => BEFORE)
         await $.session.start({ cwd: '/', surface, isInteractive: true })
         const band = await mountBand($, surface, bandProps(80))
@@ -241,7 +241,7 @@ for (const surface of SURFACES) {
         )
         const cells = blocks.reduce((sum, b) => sum + String(b.text).length, 0)
         expect(blocks).toHaveLength(6)
-        expect(cells + ' 40k of 167k (24%) '.length).toBe(80)
+        expect(cells + ' 40k of 167k (24%) '.length + 4).toBe(80)
       })
     } else {
       test('bar segments grow by share so the label never wraps off the row', async ($, on) => {
@@ -253,7 +253,7 @@ for (const surface of SURFACES) {
         const segments = boxes.filter(b => b.props.backgroundColor !== undefined)
         // thousandths of 167k: 16k, 5k, 2k, 2k, 15k, 127k
         expect(segments.map(b => [b.props.backgroundColor, b.props.flexGrow])).toEqual([
-          ['subtle', 96],
+          ['claude', 96],
           ['success', 30],
           ['remember', 12],
           ['skill', 12],

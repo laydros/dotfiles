@@ -8,6 +8,9 @@ const isHidden = atom({ plugin: 'context-bar', key: 'isHidden' } as const, false
 
 const BLOCK = '█'
 const SWATCH = '■'
+// Blank cells right of the label, where the engine draws the band's [-]
+// collapse button
+const RIGHT_PAD = 4
 
 /** 30000 -> "30k", 3100 -> "3.1k", 1000000 -> "1M". */
 export function formatTokens(n: number): string {
@@ -76,10 +79,11 @@ export function compactThreshold(reported: number, pctOverride: string | undefin
 /**
  * The groups the bar folds /context's `used` rows into, in drawing order, each
  * matched by row name (the breakdown's `kind` only says used, free, buffer or
- * deferred). A row no group matches joins System.
+ * deferred). A row no group matches joins System. A group with a `color`
+ * draws in it instead of one taken from its rows.
  */
-const GROUPS: { name: string; matches: (row: string) => boolean }[] = [
-  { name: 'System', matches: () => false },
+const GROUPS: { name: string; matches: (row: string) => boolean; color?: string }[] = [
+  { name: 'System', matches: () => false, color: 'claude' },
   { name: 'MCP', matches: row => row.startsWith('MCP ') },
   { name: 'Memory', matches: row => row === 'Memory files' },
   { name: 'Skills', matches: row => row === 'Skills' },
@@ -91,8 +95,8 @@ const GROUPS: { name: string; matches: (row: string) => boolean }[] = [
  * the auto-compact point (the whole window when auto-compact is off). Groups
  * with no tokens are left out.
  *
- * Each group takes the colour of its largest row that is not Free's colour,
- * since System prompt and Free space share one.
+ * A group without a set colour takes the colour of its largest row that is
+ * not Free's colour, since System prompt and Free space share one.
  */
 function collapse(b: SessionContextBreakdown, pctOverride: string | undefined): ContextBarSnapshot {
   const window =
@@ -113,7 +117,7 @@ function collapse(b: SessionContextBreakdown, pctOverride: string | undefined): 
     const tokens = list.reduce((sum, c) => sum + c.tokens, 0)
     if (tokens <= 0) continue
     const byTokens = [...list].sort((a, z) => z.tokens - a.tokens)
-    const color = (byTokens.find(c => c.color !== freeColor) ?? byTokens[0]).color
+    const color = g.color ?? (byTokens.find(c => c.color !== freeColor) ?? byTokens[0]).color
     rows.push({ name: g.name, tokens, color })
   }
   rows.push({ name: 'Free', tokens: Math.max(0, window - b.totalTokens), color: freeColor })
@@ -183,14 +187,12 @@ export const register: Register = on => {
     const { Box, Text } = $.ui.resolve(e)
     const label = ` ${formatTokens(snap.used)} of ${formatTokens(snap.window)} (${snap.percent}%) `
 
-    // The label leads the row: the engine draws the band's [-] collapse button
-    // over its right end.
     // The terminal draws a block per cell, so the bar is sized in cells. Other
     // surfaces draw text in a proportional font, where a cell count overflows
     // the band; there each segment is a coloured Box grown by its tokens.
     let segments
     if (e.surface === 'terminal') {
-      const cells = cellWidths(snap.rows, Math.max(10, e.props.bodyColumns - label.length))
+      const cells = cellWidths(snap.rows, Math.max(10, e.props.bodyColumns - label.length - RIGHT_PAD))
       segments = (
         <Text wrap="truncate">
           {snap.rows.map((row, i) => (
@@ -218,12 +220,13 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box flexDirection="row">
-          <Box flexShrink={0}>
-            <Text bold>{label}</Text>
-          </Box>
           <Box flexDirection="row" flexGrow={1} flexShrink={1} overflow="hidden">
             {segments}
           </Box>
+          <Box flexShrink={0}>
+            <Text bold>{label}</Text>
+          </Box>
+          <Box width={RIGHT_PAD} flexShrink={0} />
         </Box>
         <Text wrap="truncate">
           {snap.rows.map((row, i) => (
