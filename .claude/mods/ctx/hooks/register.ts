@@ -18,11 +18,14 @@ function threshold(reported: number, pctOverride: string | undefined) {
   return Math.min(Math.floor(effective * (pct / 100)), reported)
 }
 
-// tokens is absent before the first response and right after a compaction;
-// the compact part is left out when the engine returned no breakdown
+// tokens, the API's count, is absent before the first response and right after
+// a compaction; until it comes back the line shows the breakdown's local
+// estimate, marked ~. The compact part is left out when the engine returned no
+// breakdown
 function line(host: string, { tokens, window, breakdown }: SessionContextUsage, pctOverride: string | undefined) {
-  if (tokens === undefined) return host || undefined
-  const parts = [host, `${fmt(tokens)}/${fmt(window)}`].filter(Boolean)
+  const used = tokens !== undefined ? fmt(tokens) : breakdown !== undefined ? `~${fmt(breakdown.totalTokens)}` : undefined
+  if (used === undefined) return host || undefined
+  const parts = [host, `${used}/${fmt(window)}`].filter(Boolean)
   if (breakdown !== undefined) {
     const { isAutoCompactEnabled, autoCompactThreshold } = breakdown
     parts.push(
