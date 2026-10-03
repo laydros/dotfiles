@@ -27,7 +27,7 @@
   },
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "40",
-    "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods/ctx"
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods/ctx:~/.claude/mods/context-bar"
   },
   "attribution": {
     "commit": "",
