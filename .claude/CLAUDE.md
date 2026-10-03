@@ -105,7 +105,7 @@ Superpowers is the workflow. Use its spike, bounded and architectural paths, wit
 - A test that fails in setup, before its assertions run, hasn't failed for the right reason. An absence assertion passes before the thing it denies exists; break the guard and confirm that test fails.
 - Assert the harm was prevented, not that the guard fired.
 - Never weaken a test to get it green. Loosening an assertion, adding skip or xfail, or mocking the thing under test is failure. Fix the code, or stop and tell me the test and the code disagree.
-- Run the whole suite on every change. One adversarial pass after green, then stop.
+- While working, run the tests that cover the change. Run the whole suite before calling work done and before merging. One adversarial pass after green, then stop.
 
 ## Code comments
 
