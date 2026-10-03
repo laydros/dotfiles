@@ -183,6 +183,8 @@ export const register: Register = on => {
     const { Box, Text } = $.ui.resolve(e)
     const label = ` ${formatTokens(snap.used)} of ${formatTokens(snap.window)} (${snap.percent}%) `
 
+    // The label leads the row: the engine draws the band's [-] collapse button
+    // over its right end.
     // The terminal draws a block per cell, so the bar is sized in cells. Other
     // surfaces draw text in a proportional font, where a cell count overflows
     // the band; there each segment is a coloured Box grown by its tokens.
@@ -216,11 +218,11 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         <Box flexDirection="row">
-          <Box flexDirection="row" flexGrow={1} flexShrink={1} overflow="hidden">
-            {segments}
-          </Box>
           <Box flexShrink={0}>
             <Text bold>{label}</Text>
+          </Box>
+          <Box flexDirection="row" flexGrow={1} flexShrink={1} overflow="hidden">
+            {segments}
           </Box>
         </Box>
         <Text wrap="truncate">
