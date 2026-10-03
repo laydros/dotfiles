@@ -220,9 +220,9 @@ Format: `scope: short description`
 
 ## opencode Environment
 
-- **Global rules**: this file (`~/.config/opencode/AGENTS.md`). **Project rules**: `AGENTS.md` in the repo root. Both apply. This file takes precedence over the `~/.claude/CLAUDE.md` fallback, which is now inactive.
+- **Global rules**: this file (`~/.config/opencode/AGENTS.md`). **Project rules**: `AGENTS.md` in the repo root. Both apply. This file takes precedence over the `~/.claude/CLAUDE.md` fallback.
 - **Skills**: discovered from `.opencode/skills/`, `.claude/skills/`, `.agents/skills/` (project) and `~/.config/opencode/`, `~/.claude/`, `~/.agents/` (global). Jason's Claude Code skills are picked up automatically.
 - **Agents/subagents**: markdown files in `.opencode/agent/` (project) or `~/.config/opencode/agent/` (global).
-- **Config files**: `opencode.jsonc` is runtime/provider/model config; `tui.jsonc` is TUI-only (theme, keybinds, scroll, sounds). Keep them distinct.
+- **Config files**: `opencode.jsonc` is server/project config (model, providers, plugins, permissions); `cli.json` is terminal-only settings (theme, keybinds, sidebar, animations). Keep them distinct.
 - **Model**: pinned to `openrouter/deepseek/deepseek-v4.1-flash` with provider order wafer -> deepinfra -> parasail -> venice and fallbacks allowed; small model is `openrouter/google/gemini-3.1-flash-lite`.
-- **Version pin**: opencode is pinned to 1.18.20 via Homebrew (local tap `laydros/local`) because of an upstream crash in 1.18.28-1.18.30. There is a Todoist reminder due 2026-09-20 to check for a fix and unpin. Don't suggest upgrading opencode until that is cleared.
+- **Version**: opencode is installed from Homebrew's `opencode` formula and runs the V2 line (2.0.x). The 1.18.20 pin via the `laydros/local` tap is gone. Plugins use the V2 API - default-export `Plugin.define({ id, setup })` - and V1 plugin functions do not load.
