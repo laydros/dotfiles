@@ -138,14 +138,16 @@ async function current($: EngineInterface): Promise<Pace[]> {
   return (await $.session.usage()).rateLimits.map(l => pace(l, now)).filter((p): p is Pace => p !== null)
 }
 
-function statusText(paces: readonly Pace[]): string | undefined {
-  if (paces.length === 0) return undefined
-  return paces
+// The five-hour window and when it resets; the seven-day window only while it warns.
+export function statusText(paces: readonly Pace[]): string | undefined {
+  const parts = paces
+    .filter(p => p.kind === 'five_hour' || warnLevel(p) > 0)
     .map(p => {
-      const out = warnLevel(p) > 0 && p.runsOutAt !== null ? ` ! out ${clock(p.runsOutAt, p.kind === 'seven_day')}` : ''
-      return `${p.label} ${Math.round(p.left)}% left${out}`
+      const day = p.kind === 'seven_day'
+      const out = warnLevel(p) > 0 && p.runsOutAt !== null ? ` ! out ${clock(p.runsOutAt, day)}` : ''
+      return `${p.label} ${Math.round(p.left)}% left${day ? '' : `, resets ${clock(p.resetsAt, false)}`}${out}`
     })
-    .join(' · ')
+  return parts.length ? parts.join(' · ') : undefined
 }
 
 // Toasts once per window per level, so a warning repeats only when it gets worse.

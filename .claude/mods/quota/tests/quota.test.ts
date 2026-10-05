@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'claude-code/testing'
 
-import { bar, pace, sparkline, warnLevel } from '../hooks/register'
+import { bar, pace, sparkline, statusText, warnLevel } from '../hooks/register'
 
 const H = 3_600_000
 const NOW = Date.UTC(2026, 9, 5, 15, 0, 0)
@@ -63,5 +63,14 @@ describe('drawing', () => {
   test('the sparkline spans low to high and is empty with no readings', () => {
     expect(sparkline([])).toBe('')
     expect(sparkline([0, 50, 100])).toBe('▁▅█')
+  })
+})
+
+describe('status line', () => {
+  test('shows the five-hour window with its reset time and leaves out a quiet seven-day window', () => {
+    const week = pace({ kind: 'seven_day', percentUsed: 21, resetsAt: new Date(NOW + 128 * H).toISOString() }, NOW)!
+    const text = statusText([fiveHour(38, 2 + 35 / 60)!, week])!
+    expect(text).toContain('5h 62% left, resets ')
+    expect(text).not.toContain('7d')
   })
 })
