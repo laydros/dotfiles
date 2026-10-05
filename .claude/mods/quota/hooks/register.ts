@@ -2,7 +2,7 @@ import type { Register, SessionRateLimit } from 'claude-code'
 
 const LABELS: Record<string, string> = { five_hour: '5h', seven_day: '7d' }
 
-// "5h 59% (resets 09:00)" for each window the last API response reported.
+// "5h 41% left (resets 09:00)" for each window the last API response reported.
 function describe(limits: readonly SessionRateLimit[]): string | undefined {
   const parts = limits
     .filter(l => l.kind in LABELS)
@@ -15,7 +15,8 @@ function describe(limits: readonly SessionRateLimit[]): string | undefined {
             hour12: false,
           })
         : undefined
-      return `${LABELS[l.kind]} ${Math.round(l.percentUsed)}%${reset ? ` (resets ${reset})` : ''}`
+      const left = Math.max(0, 100 - Math.round(l.percentUsed))
+      return `${LABELS[l.kind]} ${left}% left${reset ? ` (resets ${reset})` : ''}`
     })
   return parts.length ? parts.join(' · ') : undefined
 }
@@ -36,6 +37,6 @@ export const register: Register = on => {
   on('prompt.submit', async ($, e, next) => {
     const line = describe((await $.session.usage()).rateLimits)
     if (!line) return next(e)
-    return next({ ...e, context: [...(e.context ?? []), `Claude usage windows (account-wide): ${line}`] })
+    return next({ ...e, context: [...(e.context ?? []), `Claude usage remaining, not used (account-wide): ${line}`] })
   })
 }

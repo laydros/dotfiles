@@ -1,1 +1,1 @@
-{ "name": "quota", "version": "0.1.0", "description": "Shows the 5-hour and 7-day usage windows in the status line and tells Claude on every prompt" }
+{ "name": "quota", "version": "0.2.0", "description": "Shows what is left of the 5-hour and 7-day usage windows in the status line and tells Claude on every prompt" }
