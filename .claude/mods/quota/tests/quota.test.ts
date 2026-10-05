@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'claude-code/testing'
 
-import { bar, pace, sparkline, statusText, warnLevel } from '../hooks/register'
+import { bar, pace, parseUsage, sparkline, statusText, warnLevel } from '../hooks/register'
 
 const H = 3_600_000
 const NOW = Date.UTC(2026, 9, 5, 15, 0, 0)
@@ -77,5 +77,20 @@ describe('status line', () => {
     const week = pace({ kind: 'seven_day', percentUsed: 60, resetsAt: new Date(NOW + 100 * H).toISOString() }, NOW)!
     expect(warnLevel(week)).toBeGreaterThan(0)
     expect(statusText([week])).toBe('7d 40% left')
+  })
+})
+
+describe('reading the usage endpoint', () => {
+  test('reads utilization as percent used for the five-hour and seven-day windows', () => {
+    const text = '{"five_hour":{"utilization":81.0,"resets_at":"2026-10-05T18:00:00.142569+00:00"},"seven_day":{"utilization":23.0,"resets_at":"2026-10-11T00:00:00+00:00"},"seven_day_opus":null}'
+    expect(parseUsage(text)).toEqual([
+      { kind: 'five_hour', percentUsed: 81, resetsAt: '2026-10-05T18:00:00.142569+00:00' },
+      { kind: 'seven_day', percentUsed: 23, resetsAt: '2026-10-11T00:00:00+00:00' },
+    ])
+  })
+
+  test('a reply it cannot read gives no windows, so the session reading is used instead', () => {
+    expect(parseUsage('not json')).toEqual([])
+    expect(parseUsage('{"five_hour":null}')).toEqual([])
   })
 })

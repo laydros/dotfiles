@@ -2,6 +2,9 @@ import type { EngineInterface, Register, SessionRateLimit } from 'claude-code'
 
 const H = 3_600_000
 
+// The endpoint Claude Code's own /usage reads.
+const USAGE_URL = 'https://api.anthropic.com/api/oauth/usage'
+
 // The windows this mod reads, with their length and the short label it prints.
 const WINDOWS: Record<string, { label: string; ms: number; recentMs: number; recentLabel: string }> = {
   five_hour: { label: '5h', ms: 5 * H, recentMs: H / 2, recentLabel: 'last 30 min' },
@@ -133,9 +136,47 @@ async function record($: EngineInterface, paces: readonly Pace[], now: number): 
   await prune($, 'samples:', now)
 }
 
+// Reads the usage endpoint's reply into windows; its `utilization` is percent used (81.0 = 81%).
+export function parseUsage(text: string): SessionRateLimit[] {
+  let body: Record<string, { utilization?: unknown; resets_at?: unknown } | null>
+  try {
+    body = JSON.parse(text)
+  } catch {
+    return []
+  }
+  return Object.keys(WINDOWS).flatMap(kind => {
+    const w = body?.[kind]
+    if (!w || typeof w.utilization !== 'number' || typeof w.resets_at !== 'string') return []
+    return [{ kind, percentUsed: w.utilization, resetsAt: w.resets_at }]
+  })
+}
+
+// Live figures for the whole account, asked at most once a minute. The session's own
+// reading only moves when this session gets a response, so it goes stale while it sits
+// idle and other sessions spend; it is the fallback when the endpoint cannot be read.
+let live: { at: number; limits: SessionRateLimit[] } | undefined
+
+async function limits($: EngineInterface, now: number): Promise<SessionRateLimit[]> {
+  if (live && now - live.at < 60_000) return live.limits
+  try {
+    const auth = await $.session.authorize()
+    if (auth) {
+      const res = await $.http.fetch(USAGE_URL, { auth: auth.handle, headers: { 'anthropic-beta': 'oauth-2025-04-20' } })
+      const parsed = res.ok ? parseUsage(res.text) : []
+      if (parsed.length) {
+        live = { at: now, limits: parsed }
+        return parsed
+      }
+    }
+  } catch {
+    // fall through to the session's own reading
+  }
+  return (await $.session.usage()).rateLimits
+}
+
 async function current($: EngineInterface): Promise<Pace[]> {
   const now = Date.now()
-  return (await $.session.usage()).rateLimits.map(l => pace(l, now)).filter((p): p is Pace => p !== null)
+  return (await limits($, now)).map(l => pace(l, now)).filter((p): p is Pace => p !== null)
 }
 
 // "5h 40% left - 14:00 · 7d 78% left"; only the five-hour window names its reset and when it runs out.
@@ -222,6 +263,7 @@ export const register: Register = on => {
       description: 'Show what is left of the usage windows, the pace and the trend',
     })
     await refresh($)
+    $.clock.every(5 * 60_000, () => void refresh($))
     return result
   })
 
@@ -230,7 +272,14 @@ export const register: Register = on => {
     return next(e)
   })
 
-  on('command.run', { command: 'quota' }, async $ => ({ text: await report($) }))
+  on('command.run', { command: 'quota' }, async ($, e) => {
+    if (e.args.trim() !== 'raw') return { text: await report($) }
+    // Shows the usage endpoint's reply as it arrives, to check how it is read.
+    const auth = await $.session.authorize()
+    if (!auth) return { text: 'No first-party login to ask with.' }
+    const res = await $.http.fetch(USAGE_URL, { auth: auth.handle, headers: { 'anthropic-beta': 'oauth-2025-04-20' } })
+    return { text: '```\n' + `HTTP ${res.status}\n` + res.text.slice(0, 3000) + '\n```' }
+  })
 
   // Hands Claude the same figures beside every prompt, unseen by the user.
   on('prompt.submit', async ($, e, next) => {
