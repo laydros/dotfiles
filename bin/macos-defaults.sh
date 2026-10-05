@@ -14,6 +14,7 @@ if [ "$(uname -s)" != Darwin ]; then
 fi
 
 # --- Dock and hot corners ----------------------------------------------
+echo "Hot corners: TL Mission Control, BL Desktop, BR Quick Note"
 # Corner values: 1 none, 2 Mission Control, 4 Desktop, 14 Quick Note.
 defaults write com.apple.dock wvous-tl-corner -int 2
 defaults write com.apple.dock wvous-tl-modifier -int 0
@@ -24,6 +25,7 @@ defaults write com.apple.dock wvous-bl-modifier -int 0
 defaults write com.apple.dock wvous-br-corner -int 14
 defaults write com.apple.dock wvous-br-modifier -int 0
 
+echo "Dock: size 33, magnify to 82, minimize into app, fixed Spaces order"
 defaults write com.apple.dock tilesize -float 33
 defaults write com.apple.dock magnification -bool true
 defaults write com.apple.dock largesize -float 82
@@ -32,6 +34,7 @@ defaults write com.apple.dock mru-spaces -bool false
 defaults write com.apple.dock showAppExposeGestureEnabled -bool true
 
 # --- Finder ------------------------------------------------------------
+echo "Finder: list view, search current folder, new windows at home, path and status bars, drives on desktop"
 defaults write com.apple.finder FXPreferredViewStyle -string Nlsv
 defaults write com.apple.finder FXDefaultSearchScope -string SCcf
 defaults write com.apple.finder NewWindowTarget -string PfHm
@@ -44,15 +47,19 @@ defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder FinderSpawnTab -bool false
 # Show ~/Library. macOS updates sometimes hide it again; re-run to fix.
+echo "Finder: show ~/Library"
 chflags nohidden "$HOME/Library"
 # No .DS_Store files on network shares or USB drives.
+echo "Finder: no .DS_Store on network or USB drives"
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 # --- Windows and global ------------------------------------------------
+echo "Windows: click wallpaper doesn't show desktop, no tiled margins"
 defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool false
 defaults write com.apple.WindowManager EnableTiledWindowMargins -bool false
 
+echo "Global: keyboard nav in dialogs, auto dark mode, save locally, expanded save and print panels"
 defaults write -g AppleKeyboardUIMode -int 2
 defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool true
 defaults write -g NSDocumentSaveNewDocumentsToCloud -bool false
@@ -64,6 +71,7 @@ defaults write -g PMPrintingExpandedStateForPrint2 -bool true
 # --- Trackpad ----------------------------------------------------------
 # Tap to click. Look Up stays on Force Click; three-finger tap is off so it
 # can't collide with BetterTouchTool's three-finger click = middle click.
+echo "Trackpad: tap to click, three-finger tap off, Force Click on"
 for domain in com.apple.AppleMultitouchTrackpad com.apple.driver.AppleBluetoothMultitouch.trackpad; do
     defaults write "$domain" Clicking -bool true
     defaults write "$domain" TrackpadThreeFingerTapGesture -int 0
@@ -79,6 +87,7 @@ set_space_hotkey() {
     defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add "$1" \
         "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>65535</integer><integer>$2</integer><integer>262144</integer></array><key>type</key><string>standard</string></dict></dict>"
 }
+echo "Spaces: Ctrl+1..5 switch desktops"
 set_space_hotkey 118 18 # 1
 set_space_hotkey 119 19 # 2
 set_space_hotkey 120 20 # 3
@@ -115,7 +124,7 @@ set_keymap() {
     else
         defaults -currentHost write -g "com.apple.keyboard.modifiermapping.$1" -array "$CAPS_TO_CTRL"
     fi
-    echo "keyboard $1: Caps Lock -> Control$(is_pc_keyboard "$2" && echo ', Option/Command swapped')"
+    echo "Keyboard $1: Caps Lock -> Control$(is_pc_keyboard "$2" && echo ', Option/Command swapped')"
 }
 
 # Known keyboards get their entry even when unplugged.
@@ -137,6 +146,7 @@ ioreg -r -c AppleHIDKeyboardEventDriverV2 -l | awk '
 done
 
 # --- Apply -------------------------------------------------------------
+echo "Applying settings and restarting Dock and Finder"
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 killall Dock Finder 2>/dev/null || true
 
