@@ -27,7 +27,7 @@
   },
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "40",
-    "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods/context-bar"
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods/context-bar:~/.claude/mods/quota"
   },
   "attribution": {
     "commit": "",
