@@ -1,0 +1,34 @@
+# A small starting point based on your Neovim preferences.
+theme = "monokai"
+
+[editor]
+line-number = "absolute"
+# To try relative numbers, replace the line above with:
+# line-number = "relative"
+scrolloff = 1
+cursorline = false
+rulers = [80]
+bufferline = "multiple"
+default-yank-register = "+" # Use the system clipboard for ordinary yank/paste.
+auto-format = false # Match Neovim: format explicitly rather than on every save.
+
+[editor.search]
+smart-case = true
+
+[editor.soft-wrap]
+enable = true
+wrap-indicator = ""
+
+[editor.whitespace.render]
+tab = "all"
+newline = "all"
+nbsp = "all"
+
+[editor.whitespace.characters]
+tab = "▸"
+tabpad = "·"
+newline = "↲"
+nbsp = "␣"
+
+# Keep Helix's selection/editing bindings for the trial.
+# Save with :w; format with :format; hover with Space-k.

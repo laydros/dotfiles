@@ -1,0 +1,51 @@
+# Override only the easy differences from Helix's language defaults.
+[[language]]
+name = "c"
+indent = { tab-width = 8, unit = "\t" }
+text-width = 80
+
+[[language]]
+name = "go"
+indent = { tab-width = 4, unit = "\t" }
+
+[[language]]
+name = "html"
+indent = { tab-width = 2, unit = "  " }
+
+[[language]]
+name = "markdown"
+indent = { tab-width = 2, unit = "  " }
+rulers = []
+language-servers = ["rumdl"]
+
+[language-server.rumdl]
+command = "rumdl"
+args = ["server"]
+
+[[language]]
+name = "python"
+indent = { tab-width = 4, unit = "    " }
+language-servers = ["pyright"]
+
+[language-server.pyright]
+command = "pyright-langserver"
+args = ["--stdio"]
+
+[language-server.pyright.config.python.analysis]
+autoSearchPaths = true
+useLibraryCodeForTypes = true
+diagnosticMode = "workspace"
+
+[language-server.rust-analyzer.config]
+cargo.allFeatures = true
+check.command = "clippy"
+
+[language-server.gopls.config]
+analyses.unusedparams = true
+staticcheck = true
+gofumpt = true
+
+[language-server.lua-language-server.config.Lua]
+runtime.version = "LuaJIT"
+workspace.checkThirdParty = false
+telemetry.enable = false
