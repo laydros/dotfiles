@@ -68,6 +68,7 @@ Subagents inherit the parent model. Pin a model on every fan-out.
 
 - Sonnet: mechanical, fully specified work (counting, sweeps, inventories). Spell out steps, output shape, and traps.
 - Opus: anything needing judgment (review, classification, synthesis, verification). When unsure, use Opus.
+- Reviews that only read (a design, a plan, one task's diff) go to `codex exec --sandbox read-only` when Codex is available; it runs on a separate quota. Keep Opus for the final whole-branch review and for reviews that need this session's tools.
 - Fable: almost never, and only with a stated reason. Haiku: never without my permission.
 - Give a reviewer or verifier the evidence you gathered (command output, file excerpts), not your conclusions. It can't see your earlier tool calls.
 - Spot-verify load-bearing subagent claims before acting on them. A delegated verification is still a summary.
