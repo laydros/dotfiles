@@ -138,16 +138,16 @@ async function current($: EngineInterface): Promise<Pace[]> {
   return (await $.session.usage()).rateLimits.map(l => pace(l, now)).filter((p): p is Pace => p !== null)
 }
 
-// The five-hour window and when it resets; the seven-day window only while it warns.
+// "5h 40% left - 14:00 · 7d 78% left"; only the five-hour window names its reset and when it runs out.
 export function statusText(paces: readonly Pace[]): string | undefined {
-  const parts = paces
-    .filter(p => p.kind === 'five_hour' || warnLevel(p) > 0)
+  if (paces.length === 0) return undefined
+  return paces
     .map(p => {
-      const day = p.kind === 'seven_day'
-      const out = warnLevel(p) > 0 && p.runsOutAt !== null ? ` ! out ${clock(p.runsOutAt, day)}` : ''
-      return `${p.label} ${Math.round(p.left)}% left${day ? '' : `, resets ${clock(p.resetsAt, false)}`}${out}`
+      if (p.kind !== 'five_hour') return `${p.label} ${Math.round(p.left)}% left`
+      const out = warnLevel(p) > 0 && p.runsOutAt !== null ? ` ! out ${clock(p.runsOutAt, false)}` : ''
+      return `${p.label} ${Math.round(p.left)}% left - ${clock(p.resetsAt, false)}${out}`
     })
-  return parts.length ? parts.join(' · ') : undefined
+    .join(' · ')
 }
 
 // Toasts once per window per level, so a warning repeats only when it gets worse.

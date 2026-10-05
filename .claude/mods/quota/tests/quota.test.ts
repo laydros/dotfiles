@@ -67,10 +67,15 @@ describe('drawing', () => {
 })
 
 describe('status line', () => {
-  test('shows the five-hour window with its reset time and leaves out a quiet seven-day window', () => {
+  test('the five-hour window shows its reset time; the seven-day window shows only what is left', () => {
     const week = pace({ kind: 'seven_day', percentUsed: 21, resetsAt: new Date(NOW + 128 * H).toISOString() }, NOW)!
     const text = statusText([fiveHour(38, 2 + 35 / 60)!, week])!
-    expect(text).toContain('5h 62% left, resets ')
-    expect(text).not.toContain('7d')
+    expect(text).toMatch(/^5h 62% left - \d\d:\d\d · 7d 79% left$/)
+  })
+
+  test('a seven-day window on track to run out still shows no run-out time', () => {
+    const week = pace({ kind: 'seven_day', percentUsed: 60, resetsAt: new Date(NOW + 100 * H).toISOString() }, NOW)!
+    expect(warnLevel(week)).toBeGreaterThan(0)
+    expect(statusText([week])).toBe('7d 40% left')
   })
 })
