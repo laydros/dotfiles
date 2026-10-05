@@ -1,4 +1,8 @@
 #!/bin/sh
+# compinit refuses group-writable fpath directories, and git does not track
+# directory permissions, so a clone under umask 002 (Debian) would trip it.
+chmod g-w "$HOME/.config/zsh" "$HOME/.config/zsh/.zsh_functions"
+
 # After `yadm clone` or `yadm pull` (post_clone is a symlink to this file), fold the tracked ~/.claude/settings.shared.json into the
 # untracked per-machine ~/.claude/settings.json. See the merge script's docstring
 # for why the live file is not tracked.
