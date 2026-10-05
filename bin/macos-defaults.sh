@@ -45,6 +45,9 @@ defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder FinderSpawnTab -bool false
 # Show ~/Library. macOS updates sometimes hide it again; re-run to fix.
 chflags nohidden "$HOME/Library"
+# No .DS_Store files on network shares or USB drives.
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 # --- Windows and global ------------------------------------------------
 defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool false
