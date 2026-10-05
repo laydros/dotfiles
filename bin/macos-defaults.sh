@@ -43,6 +43,8 @@ defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder FinderSpawnTab -bool false
+# Show ~/Library. macOS updates sometimes hide it again; re-run to fix.
+chflags nohidden "$HOME/Library"
 
 # --- Windows and global ------------------------------------------------
 defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool false
