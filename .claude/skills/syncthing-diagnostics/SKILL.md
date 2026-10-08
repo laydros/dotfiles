@@ -128,17 +128,19 @@ Verified 2026-09-22: pointing `#include` at a file that is not there yet gives
 parse error: failed to load include file .stignore-shared: file not found
 ```
 
-and **zero patterns in effect**. The folder starts normally and ignores nothing, which
-is the exact outcome the include was meant to prevent. On a fresh folder the shared file
-cannot be present yet, so the include is a chicken-and-egg.
+and **zero patterns in effect**. On Synctrain (iOS) it is worse: the folder stops
+pulling entirely, so the shared file can never arrive, and editing the patterns in the
+app keeps erroring (2026-10-07). Remove the folder on the device, which sends no
+deletions to other devices, and re-add it.
 
-Paste the literal patterns into the new device's ignore list for the first sync, then
-switch to the one-line include once the shared file has arrived. Confirm `expanded` is
-non-zero and `error` is null before trusting either form.
+The working sequence: accept the folder with **no patterns**, let it reach 100%, then
+add the one-line include. Confirm `expanded` is non-zero and `error` is null.
 
-Related: **set ignores before the first sync, never after.** A fresh folder computes
-"need" from the global index rather than from who is actually offering, so with no
-ignores it will queue files no connected device will serve and park there.
+That is only safe when every existing host reads `globalFiles == localFiles` for the
+folder. A fresh folder computes "need" from the global index rather than from who is
+actually offering, so if the index holds entries no device will serve, it queues them
+and parks there. Clear those first (see the trap section below), or paste the literal
+patterns for the first sync instead.
  Order matters — Syncthing
 takes the first matching pattern, which is why keeping rules in one shared file is
 what keeps behaviour identical everywhere.
