@@ -119,6 +119,7 @@ Superpowers is the workflow. Use its spike, bounded and architectural paths, wit
 - On starting work, mention uncommitted changes you didn't make. Never sweep them into your commit.
 - Commit finished work in the same session without asking. Stage only the files you changed.
 - Push only when I ask. Keep Claude attribution out of commit messages; it's noise.
+- When a piece of work wraps up and the branch has commits not on its remote, ask whether to push. I often don't notice.
 - Dotfiles (yadm) commits: `scope: short description`, lowercase, imperative, no period, no conventional-commit prefixes. Multi-scope: `ssh, brew: add zag and update packages`. Scopes so far: zsh, nvim, tmux, ghostty, ssh, brew, git, claude, espanso.
 - Claude Code settings: `~/.claude/settings.json` is per-machine and untracked. Anything that should be on every machine goes in `~/.claude/settings.shared.json`, which yadm hooks merge in after clone and pull. To apply by hand: `python3 ~/.claude/scripts/merge_shared_settings.py`.
 - yadm: use plain `yadm status`, never the untracked-files forms (`-u`, `-uall`, `--untracked-files`). They walk the whole home directory and hold the index lock. Check a path with `yadm ls-files <path>`.
