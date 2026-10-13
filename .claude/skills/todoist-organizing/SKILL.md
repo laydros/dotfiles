@@ -51,5 +51,6 @@ Only the section currently being worked gets real tasks. **Every other section h
 - Do not duplicate a plan into Todoist. The plan has one home.
 - Do not create a new Todoist project for something that is a project under an existing area. Use a section.
 - Do not conclude "there is no task for this" from a search of active tasks. **Completed tasks are invisible to that search** — check completed tasks over the relevant window first. The highest-value question in any review is "is this already done?"
+- When Jason parks work partway, complete the task for the finished part and create one task per follow-up (a check and a person to chase are two tasks). Each says what to check and how, well enough to act on cold, and is scheduled for the workday after the event it waits on, never the event day. Work follow-ups go in 💼 Work with `next`; where a Forgejo ticket exists, link it and keep the ticket authoritative.
 - Do not add tasks opportunistically while doing other work. Filing is a deliberate act. Exception: a project's CLAUDE.md may grant standing permission for its own progress tracking; the z3 repo's does.
 - Do not restructure beyond what is described here without asking.
