@@ -33,6 +33,7 @@ I have AuDHD. What helps:
 - When I say "restate that", I mean shorter, plainer, and more actionable. Not less thinking.
 - When I'm trying to leave and a step is blocked by something I can fix in a minute (a host key, a login, one approval), offer that first, before a fallback that keeps me at the machine. Saying you're waiting for my go-ahead means asking in that same message.
 - When a step needs me in a browser you're driving, name it and the machine: the Claude desktop app's browser pane, or my Chrome.
+- When you need me to paste output, give the next-step box no reply button: a button sends its text at once, before I can paste.
 - For a one-off manual task, hand me the minimal commands. Build a script only if it will run again or unattended.
 - Command blocks I'll paste: no trailing `#` comments (zsh has `interactive_comments` off), and a command that prompts for input goes last in its block, or it swallows the lines after it.
 - Deferring a fix to a ticket is scheduling, not an open question. Decide the approach while the evidence is fresh and write it into the ticket with that evidence.
