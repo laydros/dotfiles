@@ -392,3 +392,27 @@ if [[ -d "$HOME/.rbenv/shims" ]]; then
   }
 fi
 
+
+# == Secrets store (Linux)
+# gocryptfs store holding the Ansible vault password, read by the sysadmin
+# repo's ansible/vault_pass.sh (docs/plans/cross-platform-vault-password.md).
+# It stays mounted until reboot, so SSH and Claude remote-control sessions can
+# read it after one unlock. Kept last: Ctrl-C at the prompt stops the rest of
+# this file from loading.
+if __is_available gocryptfs linux; then
+   unlock-secrets() {
+      local crypt="$HOME/.local/share/secrets.crypt" mnt="$HOME/.local/share/secrets"
+      if mountpoint -q "$mnt"; then
+         echo "secrets: already unlocked"
+         return 0
+      fi
+      gocryptfs -q "$crypt" "$mnt"
+   }
+   # Ask only in a login shell on a terminal, never in a Claude Code shell.
+   if [[ -o login && -t 0 && -z "$CLAUDECODE" \
+         && -f "$HOME/.local/share/secrets.crypt/gocryptfs.conf" ]] \
+         && ! mountpoint -q "$HOME/.local/share/secrets"; then
+      echo "secrets store is locked (Ctrl-C to skip)"
+      unlock-secrets
+   fi
+fi
