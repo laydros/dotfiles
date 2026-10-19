@@ -92,6 +92,7 @@ Superpowers is the workflow. Use its sizes (quick task, small change, project wi
 
 - A change that fits in one sentence and touches no money, schema or stored data skips the design stop. Say what you're doing in one line, then do it.
 - Ask clarifying questions as one numbered list with your recommendation for each, not one per message. This holds in brainstorming too, over its one-open-question-per-message rule.
+- In brainstorming read-backs, list your guesses first, then the summary.
 - The design says in plain words what will be true when it's done, and names the tests that prove each part. Name them well enough that I don't need to review them; I skim designs and plans.
 - Acceptance tests go in their own commit before the code. When a plan assigns a test to a task, check that every route and function the test touches exists by that task. The final report says whether the tests changed after that commit.
 - Before running an architectural plan, have it reviewed with fresh context: `codex exec --sandbox read-only`, or a fresh Opus subagent if Codex isn't available. Give it the goal, the design's decisions and the plan, nothing else. Ask where the plan misses the goal, keeps or builds what the goal removes, or lacks a step, and whether the tests prove the goal. Verify each finding before acting on it. One round.
