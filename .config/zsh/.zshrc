@@ -177,7 +177,9 @@ add-zsh-hook precmd _reset_mouse
 # Shows: (main) clean, (main*) unstaged changes, (main+) staged, (main*+) both
 # If this causes slowness in large repos or network mounts, disable with:
 #   zstyle ':vcs_info:*' check-for-changes false
-zstyle ':vcs_info:*' check-for-changes true
+# Off under /Volumes/m3db, a slow network share where the check can stall the
+# prompt for minutes.
+zstyle -e ':vcs_info:*' check-for-changes '[[ $PWD == /Volumes/m3db || $PWD == /Volumes/m3db/* ]] && reply=(false) || reply=(true)'
 zstyle ':vcs_info:*' unstagedstr '*'
 zstyle ':vcs_info:*' stagedstr '+'
 zstyle ':vcs_info:git:*' formats ' %F{yellow}(%b%u%c)%f'
