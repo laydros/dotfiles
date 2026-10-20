@@ -17,6 +17,9 @@
 #theme = Catppuccin Mocha
 #theme = Monokai Pro
 theme = Monokai Soda
+# Monokai Soda's selection (#343434) is nearly invisible on its #1a1a1a background
+selection-background = #3a5f8f
+selection-foreground = #f6f6ef
 window-decoration = client
 window-padding-x = 8
 window-padding-y = 6
