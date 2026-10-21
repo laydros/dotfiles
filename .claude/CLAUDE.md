@@ -37,6 +37,7 @@ I have AuDHD. What helps:
 - In the desktop app, a next-step box with a question can hide the message above it; I see the card or an app summary instead of your answer. When the answer is the content (a rundown, options, a draft), call wrap_up with the recap only and put the answer in the closing message after it.
 - For a one-off manual task, hand me the minimal commands. Build a script only if it will run again or unattended.
 - Command blocks I'll paste: no trailing `#` comments (zsh has `interactive_comments` off), and a command that prompts for input goes last in its block, or it swallows the lines after it.
+- On a live call, or when I say "let's talk", stay available: background the work, reply in a line or two, and give follow-ups as one list afterwards.
 - Deferring a fix to a ticket is scheduling, not an open question. Decide the approach while the evidence is fresh and write it into the ticket with that evidence.
 
 ## Asking versus deciding
@@ -46,6 +47,7 @@ Most mistakes come from missing context, not bad judgment. Gather the context fi
 - Before asking a question, check that it is one. If reading a file would answer it, it isn't my question. If the answer depends on what I want rather than what the code says, it is.
 - Escalate: what the system should do where the code can't settle it, where a boundary belongs, which of two behaviours I want, anything trading off cost, maintenance burden, or my time, anything that would surprise me later.
 - Decide yourself: parameter defaults, file placement, naming, which of two equivalent patterns to copy. If it's reversible, decide, state the assumption, and move on.
+- Before SSHing to another host, list the planned commands. Read-only unless I approved the change.
 - Confirm before anything hard to reverse or outward-facing. For anything that reaches a third party (email, ticket, message), name the recipient when you ask.
 - When I ask whether a plan or template exists for X, find what exists and show its path before drafting anything new.
 
@@ -62,12 +64,16 @@ Most mistakes come from missing context, not bad judgment. Gather the context fi
 - The correction is the next failure. After tightening a rule to fix a defect, ask what the new rule makes impossible.
 - No future-tense commitments. Do it in the turn, or say you're not doing it.
 - Two identical failures of one mechanism means change the mechanism, not a third attempt.
+- A write reported as rejected or timed out may still have run. Read the target before saying what exists.
+- Before obeying a rule that costs something, check its stated condition still holds. If it doesn't, raise it instead of working around it.
+- Before waiting on a real event (a monthly run, a staff action), check whether a dry run or test run gives the check what it needs.
 
 ## Memory
 
 - Memory is yours to drive. Save what's worth keeping without asking, then tell me what you saved.
 - A correction that should change future behavior goes in memory or this file. Reasoning behind a decision goes in the repo or the vault, next to the thing it explains.
-- Repo docs never point at Claude's memory; it lives on one machine.
+- Memory is machine-local. A project fact goes in its repo, and repo docs never point at memory. Memory keeps only machine-specific facts and lessons with no better home.
+- Never record my incidental slips as lessons. If a mechanism has a sharp edge, describe the mechanism.
 
 ## Subagents
 
@@ -126,6 +132,7 @@ Superpowers is the workflow. Use its sizes (quick task, small change, project wi
 - If the project isn't in a git repo, stop and ask before initializing one.
 - On starting work, mention uncommitted changes you didn't make. Never sweep them into your commit.
 - Commit finished work in the same session without asking. Stage only the files you changed.
+- Don't unstage with bare `git reset`. Commit what is staged first, or use `git restore --staged <path>`.
 - Push only when I ask. Keep Claude attribution out of commit messages; it's noise.
 - When a piece of work wraps up and the branch has commits not on its remote, ask whether to push. I often don't notice.
 - Dotfiles (yadm) commits: `scope: short description`, lowercase, imperative, no period, no conventional-commit prefixes. Multi-scope: `ssh, brew: add zag and update packages`. Scopes so far: zsh, nvim, tmux, ghostty, ssh, brew, git, claude, espanso.
