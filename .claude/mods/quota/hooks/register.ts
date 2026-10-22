@@ -1,4 +1,4 @@
-import type { EngineInterface, Register, SessionRateLimit } from 'claude-code'
+import type { EngineInterface, Register, SessionContextUsage, SessionRateLimit } from 'claude-code'
 
 const H = 3_600_000
 
@@ -255,6 +255,14 @@ export function contextLine(paces: readonly Pace[], now: number): string | undef
   return `Claude usage remaining, not used (account-wide): ${parts.join(' | ')}`
 }
 
+// One line for Claude beside every prompt: how full this session's context window is.
+export function contextSizeLine(ctx: SessionContextUsage): string | undefined {
+  if (ctx.tokens === undefined) return undefined
+  const k = (n: number) => `${Math.round(n / 1000)}k`
+  const percent = ctx.percent ?? Math.round((ctx.tokens / ctx.window) * 100)
+  return `This session's context: ${k(ctx.tokens)} tokens of ${k(ctx.window)} (${percent}%), as of the last response`
+}
+
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     const result = await next(e)
@@ -281,10 +289,13 @@ export const register: Register = on => {
     return { text: '```\n' + `HTTP ${res.status}\n` + res.text.slice(0, 3000) + '\n```' }
   })
 
-  // Hands Claude the same figures beside every prompt, unseen by the user.
+  // Hands Claude the same figures beside every prompt, unseen by the user, and the context window's fill.
   on('prompt.submit', async ($, e, next) => {
-    const line = contextLine(await refresh($), Date.now())
-    if (!line) return next(e)
-    return next({ ...e, context: [...(e.context ?? []), line] })
+    const lines = [
+      contextLine(await refresh($), Date.now()),
+      contextSizeLine((await $.session.usage()).context),
+    ].filter((l): l is string => l !== undefined)
+    if (lines.length === 0) return next(e)
+    return next({ ...e, context: [...(e.context ?? []), ...lines] })
   })
 }

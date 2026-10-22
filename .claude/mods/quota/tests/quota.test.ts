@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'claude-code/testing'
 
-import { bar, pace, parseUsage, sparkline, statusText, warnLevel } from '../hooks/register'
+import { bar, contextSizeLine, pace, parseUsage, sparkline, statusText, warnLevel } from '../hooks/register'
 
 const H = 3_600_000
 const NOW = Date.UTC(2026, 9, 5, 15, 0, 0)
@@ -92,5 +92,23 @@ describe('reading the usage endpoint', () => {
   test('a reply it cannot read gives no windows, so the session reading is used instead', () => {
     expect(parseUsage('not json')).toEqual([])
     expect(parseUsage('{"five_hour":null}')).toEqual([])
+  })
+})
+
+describe('context size line', () => {
+  test('names the tokens, the window and the percent the engine reported', () => {
+    expect(contextSizeLine({ tokens: 231_400, window: 1_000_000, percent: 23 })).toBe(
+      "This session's context: 231k tokens of 1000k (23%), as of the last response",
+    )
+  })
+
+  test('works the percent out when the engine gave none', () => {
+    expect(contextSizeLine({ tokens: 50_000, window: 200_000 })).toBe(
+      "This session's context: 50k tokens of 200k (25%), as of the last response",
+    )
+  })
+
+  test('says nothing before the first response, so a fresh or compacted session is not reported as empty', () => {
+    expect(contextSizeLine({ window: 1_000_000 })).toBeUndefined()
   })
 })
