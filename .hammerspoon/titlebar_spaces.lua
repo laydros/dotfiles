@@ -42,7 +42,10 @@ function M.move(win, target, direction, callback)
       state.held = false
       post(types.leftMouseUp)
     end
-    hs.mouse.absolutePosition(state.cursor)
+    if not state.cursorRestored then
+      hs.mouse.absolutePosition(state.cursor)
+      state.cursorRestored = true
+    end
   end
   local function finish(ok, err)
     if M.active ~= state then return end
@@ -87,20 +90,18 @@ function M.move(win, target, direction, callback)
     hs.mouse.absolutePosition(point)
     state.held = true
     post(types.leftMouseDown)
-    later(0.08, function()
-      later(0.08, function()
-        state.task = hs.task.new(hs.configdir .. "/native/space-key", function(code, _, stderr)
-          if M.active ~= state then return end
-          if code ~= 0 then
-            finish(false, "Desktop key sender failed: " .. tostring(stderr))
-          else
-            later(0.05, waitForDesktop)
-          end
-        end, { direction < 0 and "left" or "right" })
-        if not state.task or not state.task:start() then
-          finish(false, "Could not start the native Desktop key sender")
+    later(0.16, function()
+      state.task = hs.task.new(hs.configdir .. "/native/space-key", function(code, _, stderr)
+        if M.active ~= state then return end
+        if code ~= 0 then
+          finish(false, "Desktop key sender failed: " .. tostring(stderr))
+        else
+          later(0.05, waitForDesktop)
         end
-      end)
+      end, { direction < 0 and "left" or "right" })
+      if not state.task or not state.task:start() then
+        finish(false, "Could not start the native Desktop key sender")
+      end
     end)
   end)
   if not ok then finish(false, tostring(err)) end

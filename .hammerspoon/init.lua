@@ -112,6 +112,14 @@ local MIN_W, MIN_H = 60, 60
 
 local drag = nil -- state of the drag in progress, or nil
 
+local function endDrag()
+  if windowControls.dragTimer then
+    windowControls.dragTimer:stop()
+    windowControls.dragTimer = nil
+  end
+  drag = nil
+end
+
 local function windowUnderMouse(mouse)
   local _ = hs.application -- keeps hs.window.orderedWindows() happy
   local pos = hs.geometry.new(mouse)
@@ -152,7 +160,7 @@ end
 -- Use event coordinates: polling the global cursor during a drag can stay stale.
 local function updateDrag(mouse)
   if not drag then return end
-  if not drag.win:id() then drag = nil; return end
+  if not drag.win:id() then endDrag(); return end
   local dx = mouse.x - drag.startMouse.x
   local dy = mouse.y - drag.startMouse.y
   local s = drag.startFrame
@@ -189,6 +197,10 @@ local function updateDrag(mouse)
     -- setFrame performs size/position/size. Most resize grabs only need size.
     drag.win:setSize({ w = math.floor(f.w), h = math.floor(f.h) })
     if drag.fromLeft or drag.fromTop then
+      -- Applications may enforce a minimum larger than MIN_W/MIN_H.
+      local actual = drag.win:size()
+      if drag.fromLeft then f.x = s.x + s.w - actual.w end
+      if drag.fromTop then f.y = s.y + s.h - actual.h end
       drag.win:setTopLeft({ x = math.floor(f.x), y = math.floor(f.y) })
     end
   end
@@ -199,7 +211,7 @@ local function queueDrag(mouse)
   if windowControls.dragTimer then return end
   -- Keep the event tap quick and discard intermediate pointer positions.
   windowControls.dragTimer = hs.timer.doEvery(1 / DRAG_HZ, function()
-    if not drag then return end
+    if not drag then endDrag(); return end
     local latest = drag.pendingMouse
     drag.pendingMouse = nil
     if latest then updateDrag(latest) end
@@ -224,13 +236,9 @@ windowControls.dragTap = hs.eventtap.new(
       return true
 
     elseif t == et.leftMouseUp or t == et.rightMouseUp then
-      if not drag then return false end
-      if windowControls.dragTimer then
-        windowControls.dragTimer:stop()
-        windowControls.dragTimer = nil
-      end
+      if not drag then endDrag(); return false end
       updateDrag(event:location()) -- apply the final position immediately
-      drag = nil
+      endDrag()
       return true
     end
 
