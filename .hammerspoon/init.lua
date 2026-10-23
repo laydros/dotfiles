@@ -120,17 +120,17 @@ local MIN_W, MIN_H = 60, 60
 
 local drag = nil -- state of the drag in progress, or nil
 
-local function windowUnderMouse()
+local function windowUnderMouse(mouse)
   local _ = hs.application -- keeps hs.window.orderedWindows() happy
-  local pos = hs.geometry.new(hs.mouse.absolutePosition())
+  local pos = hs.geometry.new(mouse)
   return hs.fnutils.find(hs.window.orderedWindows(), function(w)
     -- A window can straddle displays; test its frame, not its main screen.
     return w:isStandard() and not w:isFullScreen() and pos:inside(w:frame())
   end)
 end
 
-local function beginDrag(mode)
-  local win = windowUnderMouse()
+local function beginDrag(mode, mouse)
+  local win = windowUnderMouse(mouse)
   if not win or not win:isStandard() then return false end
   if win:isFullScreen() then return false end
   if mode == "resize" then
@@ -139,7 +139,6 @@ local function beginDrag(mode)
   end
 
   local frame = win:frame()
-  local mouse = hs.mouse.absolutePosition()
   drag = { win = win, mode = mode, startMouse = mouse, startFrame = frame }
 
   if mode == "resize" then
@@ -158,10 +157,10 @@ local function beginDrag(mode)
   return true -- swallow the click so the app doesn't also act on it
 end
 
-local function updateDrag()
+-- Use event coordinates: polling the global cursor during a drag can stay stale.
+local function updateDrag(mouse)
   if not drag then return end
   if not drag.win:id() then drag = nil; return end
-  local mouse = hs.mouse.absolutePosition()
   local dx = mouse.x - drag.startMouse.x
   local dy = mouse.y - drag.startMouse.y
   local s = drag.startFrame
@@ -200,21 +199,20 @@ windowControls.dragTap = hs.eventtap.new(
     et.rightMouseDown, et.rightMouseDragged, et.rightMouseUp },
   function(event)
     local t = event:getType()
-
     if t == et.leftMouseDown or t == et.rightMouseDown then
       if not event:getFlags():containExactly(DRAG_MODS) then
         return false
       end
-      return beginDrag(t == et.leftMouseDown and "move" or "resize")
+      return beginDrag(t == et.leftMouseDown and "move" or "resize", event:location())
 
     elseif t == et.leftMouseDragged or t == et.rightMouseDragged then
       if not drag then return false end
-      updateDrag()
+      updateDrag(event:location())
       return true
 
     elseif t == et.leftMouseUp or t == et.rightMouseUp then
       if not drag then return false end
-      updateDrag()
+      updateDrag(event:location())
       drag = nil
       return true
     end
