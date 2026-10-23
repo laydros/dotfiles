@@ -116,6 +116,7 @@ hs.hotkey.bind({ "ctrl", "alt", "shift" }, "right",
 -- ---------------------------------------------------------------------
 
 local DRAG_MODS = { "cmd", "shift" }
+local DRAG_HZ = 120 -- shared update limit for moving and resizing
 local MIN_W, MIN_H = 60, 60
 
 local drag = nil -- state of the drag in progress, or nil
@@ -190,7 +191,28 @@ local function updateDrag(mouse)
     end
   end
 
-  drag.win:setFrame(f)
+  if drag.mode == "move" then
+    -- Moving must not also resize: Safari is particularly slow on size writes.
+    drag.win:setTopLeft({ x = math.floor(f.x), y = math.floor(f.y) })
+  else
+    -- setFrame performs size/position/size. Most resize grabs only need size.
+    drag.win:setSize({ w = math.floor(f.w), h = math.floor(f.h) })
+    if drag.fromLeft or drag.fromTop then
+      drag.win:setTopLeft({ x = math.floor(f.x), y = math.floor(f.y) })
+    end
+  end
+end
+
+local function queueDrag(mouse)
+  drag.pendingMouse = mouse
+  if windowControls.dragTimer then return end
+  -- Keep the event tap quick and discard intermediate pointer positions.
+  windowControls.dragTimer = hs.timer.doEvery(1 / DRAG_HZ, function()
+    if not drag then return end
+    local latest = drag.pendingMouse
+    drag.pendingMouse = nil
+    if latest then updateDrag(latest) end
+  end)
 end
 
 local et = hs.eventtap.event.types
@@ -207,12 +229,16 @@ windowControls.dragTap = hs.eventtap.new(
 
     elseif t == et.leftMouseDragged or t == et.rightMouseDragged then
       if not drag then return false end
-      updateDrag(event:location())
+      queueDrag(event:location())
       return true
 
     elseif t == et.leftMouseUp or t == et.rightMouseUp then
       if not drag then return false end
-      updateDrag(event:location())
+      if windowControls.dragTimer then
+        windowControls.dragTimer:stop()
+        windowControls.dragTimer = nil
+      end
+      updateDrag(event:location()) -- apply the final position immediately
       drag = nil
       return true
     end
