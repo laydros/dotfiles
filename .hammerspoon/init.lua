@@ -23,14 +23,12 @@ end
 --
 --   Ctrl+Opt+Shift+Left / Right   (the chords BTT used to handle)
 --
--- Follow the window to its exact destination Space.
--- Set FOLLOW to false if you want the window to go without you.
+-- Hold the title bar and use Ctrl+Option+Arrow to switch Desktops.
+-- This follows the window without opening Mission Control.
 -- ---------------------------------------------------------------------
 
-local FOLLOW = true
 local spaceMovePending = false
-local missionControl = require("mission_control")
-windowControls.missionControl = missionControl
+local titlebarSpaces = require("titlebar_spaces")
 
 function windowControls.moveFocusedWindowToSpace(direction) -- -1 = left, +1 = right
   if spaceMovePending then return end
@@ -43,15 +41,10 @@ function windowControls.moveFocusedWindowToSpace(direction) -- -1 = left, +1 = r
   local screen = win:screen()
   if not screen then return end
 
-  -- This screen's regular Spaces, in order (fullscreen Spaces excluded)
+  -- Native switching acts on the immediately adjacent Space.
   local ordered = hs.spaces.spacesForScreen(screen)
   if not ordered then return end
-  local spaces = {}
-  for _, id in ipairs(ordered) do
-    if hs.spaces.spaceType(id) == "user" then
-      spaces[#spaces + 1] = id
-    end
-  end
+  local spaces = ordered
   if #spaces < 2 then
     report("This display needs at least two Desktop Spaces")
     return
@@ -79,29 +72,27 @@ function windowControls.moveFocusedWindowToSpace(direction) -- -1 = left, +1 = r
     return
   end
 
-  -- Wait for the physical shortcut keys to be released before opening
-  -- Mission Control. Go to the exact ID, even with fullscreen Spaces between.
+  if hs.spaces.spaceType(target) ~= "user" then
+    report("The adjacent Space is fullscreen; choose an adjacent regular Desktop")
+    return
+  end
+
+  -- The hotkey release callback starts the move; modifiers may remain held.
   spaceMovePending = true
-  windowControls.spaceTimer = hs.timer.waitUntil(function()
-    local flags = hs.eventtap.checkKeyboardModifiers()
-    return not (flags.ctrl or flags.alt or flags.shift or flags.cmd)
-  end, function()
-    if not win:id() then spaceMovePending = false; return end
-    local started, err = missionControl:moveWindowToSpace(win, target, function(ok, moveError)
-      spaceMovePending = false
-      windowControls.lastSpaceMove = { success = ok, error = moveError, target = target }
-      if not ok then report(moveError or "Could not move window to Desktop") end
-    end, FOLLOW)
-    if not started then
-      spaceMovePending = false
-      report(err or "Could not start Desktop move")
-    end
-  end, 0.05)
+  local started, err = titlebarSpaces.move(win, target, direction, function(ok, moveError)
+    spaceMovePending = false
+    windowControls.lastSpaceMove = { success = ok, error = moveError, target = target }
+    if not ok then report(moveError or "Could not move window to Desktop") end
+  end)
+  if not started then
+    spaceMovePending = false
+    report(err or "Could not start Desktop move")
+  end
 end
 
-hs.hotkey.bind({ "ctrl", "alt", "shift" }, "left",
+hs.hotkey.bind({ "ctrl", "alt", "shift" }, "left", nil,
   function() windowControls.moveFocusedWindowToSpace(-1) end)
-hs.hotkey.bind({ "ctrl", "alt", "shift" }, "right",
+hs.hotkey.bind({ "ctrl", "alt", "shift" }, "right", nil,
   function() windowControls.moveFocusedWindowToSpace(1) end)
 
 -- ---------------------------------------------------------------------

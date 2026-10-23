@@ -1,29 +1,44 @@
 # Hammerspoon window controls
 
-- Hold Cmd+Shift and left-drag anywhere inside a regular window to move it.
-- Hold Cmd+Shift and right-drag to resize from the nearest edge/corner.
-  A grab in the center resizes from the bottom-right corner.
-- Ctrl+Option+Shift+Left/Right moves the focused window to the previous/next
-  regular Desktop on its display and follows it. No wrapping at the ends.
-- Change FOLLOW in init.lua to false to move without following.
+- Cmd+Shift + left-drag inside a regular window: move it.
+- Cmd+Shift + right-drag: resize from the nearest edge/corner.
+  A center grab resizes from the bottom-right corner.
+- Ctrl+Option+Shift + Left/Right: on arrow release, move the focused window
+  to the adjacent Desktop and follow it. The modifiers can stay held.
 
-Hammerspoon needs Accessibility permission. Reload Config after editing.
-Space movement briefly opens Mission Control and waits for shortcut modifiers
- to be released. Fullscreen windows and windows assigned to All Desktops
-are excluded. Avoid using the mouse while a Space move is in progress.
-Failures appear as alerts and in the Hammerspoon Console.
+Moving and resizing use mouse-event coordinates and combine rapid pointer
+updates at a shared limit of 120 updates per second. Change DRAG_HZ in init.lua
+if desired. Releasing the mouse applies the final position immediately.
 
-## macOS 27 compatibility
+## Setup on another Mac
 
-The built-in hs.spaces.moveWindowToSpace can return success without moving a
-window, and hs.spaces.gotoSpace uses an outdated Mission Control tree.
-mission_control.lua is the standalone helper from PaperWM.spoon; this config
-loads only that helper and does not enable PaperWM's tiling window manager.
+1. Install Hammerspoon and allow it in System Settings > Privacy & Security >
+   Accessibility.
+2. Enable Ctrl+Option+Left/Right as macOS's Move left/right a space shortcuts.
+3. With Apple's command-line developer tools installed, build the key sender:
 
-Upstream: https://github.com/mogenson/PaperWM.spoon
-Fix: https://github.com/mogenson/PaperWM.spoon/pull/174
-Downloaded 2026-10-23 from the release branch, mission_control.lua.
-The helper is unmodified. License: LICENSE.PaperWM (MIT).
-SHA-256: 6241a6579baf1d997cd26524337e89e61960ff34b8532b76db4342b18d2e0c8a
+   ```sh
+   sh ~/.hammerspoon/native/build.sh
+   ```
 
-The hs.ipc module is enabled for local diagnostics using the installed hs CLI.
+4. Reload Hammerspoon's config.
+
+The helper executable is built locally and ignored by Git; its C source and
+build script are tracked by yadm. Rebuild after changing the C source.
+
+## Moving between Desktops
+
+The helper briefly holds the title-bar strip above the green window button,
+sends Ctrl+Option+Arrow, then releases and restores the pointer. It does not
+open Mission Control or intentionally nudge the window. The small native key
+sender posts through the HID event route, which works on this Mac where
+Hammerspoon's built-in keyStroke did not switch Desktops.
+
+Use regular windows on adjacent regular Desktops. Fullscreen windows,
+fullscreen destination Spaces, and windows assigned to All Desktops are
+excluded. There is no wraparound at the first/last Desktop. Avoid moving the
+mouse during the brief title-bar hold. A timeout releases the held button.
+Errors appear in the Hammerspoon Console and as alerts.
+
+Keep BTT's matching shortcuts disabled or quit BTT so it does not also handle
+the same shortcut. The hs.ipc module enables local diagnostics with the hs CLI.
