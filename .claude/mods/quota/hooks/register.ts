@@ -17,7 +17,7 @@ const MIN_ELAPSED = 0.02
 const QUIET_ABOVE_LEFT = 80
 // Projected use at reset (% of the window) at which each warning level starts.
 const WARN_AT = [120, 150, 200]
-// Readings kept per window, for the trend and the recent rate.
+// Readings kept per window, for the recent rate.
 const MAX_SAMPLES = 400
 
 export type Pace = {
@@ -77,15 +77,6 @@ export function bar(left: number, paceLeft: number, width: number): string {
   let out = ''
   for (let i = 0; i < width; i++) out += i === mark ? '│' : i < filled ? '█' : '░'
   return out
-}
-
-const SPARKS = '▁▂▃▄▅▆▇█'
-
-export function sparkline(values: readonly number[]): string {
-  if (values.length === 0) return ''
-  const lo = Math.min(...values)
-  const span = Math.max(...values) - lo || 1
-  return values.map(v => SPARKS[Math.round(((v - lo) / span) * (SPARKS.length - 1))]).join('')
 }
 
 export function duration(ms: number): string {
@@ -224,7 +215,7 @@ async function report($: EngineInterface): Promise<string> {
   return reportText(entries, now)
 }
 
-// The /quota reply: per window, what is left, the bar, the pace, the recent rate and the trend.
+// The /quota reply: per window, what is left, the bar, the pace and the recent rate.
 export function reportText(entries: readonly { p: Pace; samples?: readonly Sample[] }[], now: number): string {
   const blocks: string[] = []
   for (const { p, samples = [] } of entries) {
@@ -240,10 +231,6 @@ export function reportText(entries: readonly { p: Pace; samples?: readonly Sampl
       const spent = p.used - recentFrom.used
       const even = ((now - recentFrom.t) / w.ms) * 100
       lines.push(`    ${w.recentLabel}: ${spent.toFixed(1)}% spent (even pace ${even.toFixed(1)}%)`)
-    }
-    if (samples.length > 1) {
-      const shown = samples.slice(-40)
-      lines.push(`    trend ${sparkline(shown.map(s => s.used))}  (used, last ${shown.length} readings)`)
     }
     blocks.push(lines.join('\n'))
   }
@@ -266,7 +253,7 @@ export const register: Register = on => {
     const result = await next(e)
     await $.command.register({
       name: 'quota',
-      description: 'Show what is left of the usage windows, the pace and the trend',
+      description: 'Show what is left of the usage windows and the pace',
     })
     await refresh($)
     $.clock.every(5 * 60_000, () => void refresh($))

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'claude-code/testing'
 
-import { bar, pace, parseUsage, reportText, sparkline, statusText, warnLevel } from '../hooks/register'
+import { bar, pace, parseUsage, reportText, statusText, warnLevel } from '../hooks/register'
 
 const H = 3_600_000
 const NOW = Date.UTC(2026, 9, 5, 15, 0, 0)
@@ -59,11 +59,6 @@ describe('drawing', () => {
   test('the bar fills what is left and marks where an even pace would be', () => {
     expect(bar(60, 50, 10)).toBe('█████│░░░░')
   })
-
-  test('the sparkline spans low to high and is empty with no readings', () => {
-    expect(sparkline([])).toBe('')
-    expect(sparkline([0, 50, 100])).toBe('▁▅█')
-  })
 })
 
 describe('the /quota report', () => {
@@ -78,6 +73,11 @@ describe('the /quota report', () => {
     const bars = text().split('\n').filter(l => l.includes('│'))
     expect(bars.length).toBe(2)
     for (const l of bars) expect(l.length).toBeLessThanOrEqual(24)
+  })
+
+  test('leaves out the trend line, even with readings stored', () => {
+    const samples = [{ t: NOW - 20 * 60_000, used: 3 }, { t: NOW - 10 * 60_000, used: 4 }]
+    expect(reportText([{ p: fiveHour(5, 4.67)!, samples }], NOW)).not.toContain('trend')
   })
 
   test('leaves out the five-hour window count and the bar legend', () => {
