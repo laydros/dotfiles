@@ -19,6 +19,8 @@ Run `/claude-api prompt-audit` scoped to the repo's `CLAUDE.md`, `AGENTS.md` and
 
 On top of what it looks for, cut what the code shows quickly: architecture summaries, walkthroughs of code, inventories, version lists, calendar chores. Keep gotchas, commands, traps and conventions, and link to the repo's docs for depth.
 
+Before cutting a section, grep the repo for references to its heading. A section other docs cite is reference: move it to a doc and repoint every citation in the same change.
+
 Where the audit and Jason's rules disagree, his win. The audit leaves working duplicates alone; here, one fact gets one home (step 4).
 
 ## 3. Verify every claim you keep

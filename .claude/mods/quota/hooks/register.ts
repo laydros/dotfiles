@@ -17,7 +17,7 @@ const MIN_ELAPSED = 0.02
 const QUIET_ABOVE_LEFT = 80
 // Projected use at reset (% of the window) at which each warning level starts.
 const WARN_AT = [120, 150, 200]
-// Readings kept per window, for the trend and the recent rate.
+// Readings kept per window, for the recent rate.
 const MAX_SAMPLES = 400
 
 export type Pace = {
@@ -77,15 +77,6 @@ export function bar(left: number, paceLeft: number, width: number): string {
   let out = ''
   for (let i = 0; i < width; i++) out += i === mark ? '│' : i < filled ? '█' : '░'
   return out
-}
-
-const SPARKS = '▁▂▃▄▅▆▇█'
-
-export function sparkline(values: readonly number[]): string {
-  if (values.length === 0) return ''
-  const lo = Math.min(...values)
-  const span = Math.max(...values) - lo || 1
-  return values.map(v => SPARKS[Math.round(((v - lo) / span) * (SPARKS.length - 1))]).join('')
 }
 
 export function duration(ms: number): string {
@@ -219,15 +210,21 @@ async function report($: EngineInterface): Promise<string> {
   const now = Date.now()
   const paces = await current($)
   if (paces.length === 0) return 'No usage windows reported yet. They arrive with the first response of a session.'
+  const entries = []
+  for (const p of paces) entries.push({ p, samples: ((await $.store.get(sampleKey(p))) as Sample[] | undefined) ?? [] })
+  return reportText(entries, now)
+}
+
+// The /quota reply: per window, what is left, the bar, the pace and the recent rate.
+export function reportText(entries: readonly { p: Pace; samples?: readonly Sample[] }[], now: number): string {
   const blocks: string[] = []
-  for (const p of paces) {
+  for (const { p, samples = [] } of entries) {
     const w = WINDOWS[p.kind]
     const day = p.kind === 'seven_day'
-    const samples = ((await $.store.get(sampleKey(p))) as Sample[] | undefined) ?? []
     const recentFrom = samples.find(s => s.t >= now - w.recentMs)
     const lines = [
       `${p.label}  ${Math.round(p.left)}% left · resets in ${duration(p.resetsAt - now)} (${clock(p.resetsAt, day)})`,
-      `    ${bar(p.left, 100 - p.expectedUsed, 40)}`,
+      `    ${bar(p.left, 100 - p.expectedUsed, 20)}`,
       `    ${verdict(p)}`,
     ]
     if (recentFrom && recentFrom.t < now - 60_000) {
@@ -235,14 +232,10 @@ async function report($: EngineInterface): Promise<string> {
       const even = ((now - recentFrom.t) / w.ms) * 100
       lines.push(`    ${w.recentLabel}: ${spent.toFixed(1)}% spent (even pace ${even.toFixed(1)}%)`)
     }
-    if (day) lines.push(`    ${Math.floor((p.resetsAt - now) / (5 * H))} five-hour windows until reset`)
-    if (samples.length > 1) {
-      const shown = samples.slice(-40)
-      lines.push(`    trend ${sparkline(shown.map(s => s.used))}  (used, last ${shown.length} readings)`)
-    }
     blocks.push(lines.join('\n'))
   }
-  return '```\n' + blocks.join('\n\n') + '\n```\nThe bar fills what is left; │ marks where an even pace would be.'
+  // Plain lines, no code fence: the phone app puts "quota: " before the reply, so a fence never opens.
+  return blocks.join('\n\n')
 }
 
 // One line for Claude beside every prompt: what is left of each window, and the pace.
@@ -268,7 +261,7 @@ export const register: Register = on => {
     const result = await next(e)
     await $.command.register({
       name: 'quota',
-      description: 'Show what is left of the usage windows, the pace and the trend',
+      description: 'Show what is left of the usage windows and the pace',
     })
     await refresh($)
     $.clock.every(5 * 60_000, () => void refresh($))

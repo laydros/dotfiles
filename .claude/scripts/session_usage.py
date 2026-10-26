@@ -9,6 +9,10 @@ Prefer Claude Code's own figure when it prints: it comes from the session's cost
 covers subagents too, and has counted 7-22% more cache reads than the transcripts show. The
 estimate here is a floor, but it is the only way to split main thread from subagents. Both are
 API-rate dollars; on a Max plan they measure usage, not what is billed.
+
+A continued session's transcript starts with the earlier session's lines, so adding up
+per-session totals counts the shared part twice. To price work across sessions, dedupe by
+message ID across all the files first.
 """
 import collections
 import glob

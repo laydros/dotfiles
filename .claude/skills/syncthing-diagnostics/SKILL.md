@@ -190,6 +190,70 @@ grep -c '<id>' <configdir>/config.xml                                           
 
 Back up `config.xml` outside any synced folder before editing config.
 
+A rule added to a shared pattern file reaches every device that includes it at once.
+If the plan is delete-then-ignore, do the delete **before** touching the shared file,
+or the receiving devices ignore the path first and their delete writes no tombstone.
+
+### Two blocked-delete errors that need opposite fixes
+
+Read the error string:
+
+- `...but contains ignored files (see ignore documentation for (?d) prefix)`: the
+  contents are ignored **locally**. A `(?d)` prefix on the pattern fixes it.
+- `...but is not empty; the contents are probably ignored on that remote device, but
+  not locally`: the contents are live **here**. `(?d)` does nothing. Delete the real
+  files locally while their entries are still valid, which writes the child tombstones
+  the ignoring remote could not.
+
+A file pattern like `*.db` never matches a directory, so a remote can tombstone a
+directory while the files inside it stay alive in the global index. That produces the
+second error.
+
+### Stuck index entries
+
+An entry gets stuck when every device that could delete it has it ignored. An ignored
+entry is `invalid`: a parked record, not a claim to hold the file, so deleting it there
+writes no tombstone. Ways out, in order of preference:
+
+1. **Delete on a device whose entry is still valid.** That writes a real tombstone that
+   wins everywhere. Find candidates in the file's `availability` list from
+   `/rest/db/file`, then confirm on the device itself that its entry is valid:
+   `availability` shows what a device last announced, not what is on its disk, and an
+   invalid entry cannot be served even when it is listed.
+2. **Open a window on one device.** Put `!/path/to/file` negations *above* the
+   `#include` in that device's local `.stignore`, rescan so the on-disk file becomes
+   valid, delete it, then restore the plain include. Un-ignoring only works while the
+   files are still on disk; un-ignoring after they are gone makes Syncthing conclude it
+   needs them.
+3. **Remove the device sustaining the entry from the folder.** A device's index data
+   for the folder is dropped when it leaves, along with any entry only it sustained.
+   This can also roll back tombstones that only that device holds, so let the index
+   settle first.
+
+While a cleanup is in progress, keep one device with no ignore patterns for the folder.
+It is the only device that can still write tombstones.
+
+An entry only strands when some device, usually an offline one, still holds a valid
+copy. When every device holding a file ignores it at once, the global entry simply
+disappears.
+
+### Deleted files that come back
+
+A device carrying a stale copy can re-announce files deleted elsewhere. If the folder
+holds a git repo that auto-commits, the resurrection gets committed and looks
+authoritative. The signature is concurrent version vectors that never resolve while both
+hosts report idle and converged with different file counts. Diff the two hosts'
+`/rest/db/browse?levels=-1` trees to find the files.
+
+### Secrets that synced
+
+When adding a rule to stop secrets syncing, search the folder for the actual key values
+(`find ... | xargs grep -F -f <file of values>`), not just the file names. A rule
+anchored to the folder root (`/.env*`) misses copies deeper down, and BSD `grep -r`
+has silently missed matches. Delete the files first, then add the rule. Then check
+`.stversions` on every device with versioning: a receiving device archives what you
+delete.
+
 ## Reporting
 
 Give per-folder `needFiles` / `needDeletes` / `needBytes` / `errors` for each host, the
