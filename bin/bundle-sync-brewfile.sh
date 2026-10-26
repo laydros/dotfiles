@@ -59,9 +59,10 @@ else
     warn "OS-specific Brewfile not found: $OS_BREWFILE (using core only)"
 fi
 
-# Filter out macOS-only entries on Linux
+# Filter out macOS-only entries on Linux. Casks stay: Homebrew installs them on
+# Linux, and anything mac-only lives in Brewfile-mac.
 if [[ "$OS" == "Linux" ]]; then
-    sed -i '/^cask /d; /^mas /d' "$BREWFILE_TEMP"
+    sed -i '/^mas /d' "$BREWFILE_TEMP"
 fi
 
 # Show what would change. Capture output so we can both display it and detect
