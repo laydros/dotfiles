@@ -6,6 +6,10 @@ This dotfiles repo has a public remote. Tools that write into tracked config
 private hostnames and addresses without being asked. This hook scans the lines
 a commit would ADD and refuses the commit when one matches.
 
+The check sits at the commit, not at the write. Claude Code writes its own
+settings.json through its internals rather than a tool call, so a PreToolUse
+hook never sees that write.
+
 Patterns come from two places:
 
   built-in   RFC1918 addresses and similar generic markers. Safe to publish,
