@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'claude-code/testing'
 
-import { bar, pace, parseUsage, sparkline, statusText, warnLevel } from '../hooks/register'
+import { bar, pace, parseUsage, reportText, sparkline, statusText, warnLevel } from '../hooks/register'
 
 const H = 3_600_000
 const NOW = Date.UTC(2026, 9, 5, 15, 0, 0)
@@ -63,6 +63,32 @@ describe('drawing', () => {
   test('the sparkline spans low to high and is empty with no readings', () => {
     expect(sparkline([])).toBe('')
     expect(sparkline([0, 50, 100])).toBe('▁▅█')
+  })
+})
+
+describe('the /quota report', () => {
+  const week = () => pace({ kind: 'seven_day', percentUsed: 8, resetsAt: new Date(NOW + 143 * H).toISOString() }, NOW)!
+  const text = () => reportText([{ p: fiveHour(5, 4.67)! }, { p: week() }], NOW)
+
+  test('has no code fence, which breaks on the phone where the reply follows "quota: " on the same line', () => {
+    expect(text()).not.toContain('```')
+  })
+
+  test('bar lines fit a phone screen', () => {
+    const bars = text().split('\n').filter(l => l.includes('│'))
+    expect(bars.length).toBe(2)
+    for (const l of bars) expect(l.length).toBeLessThanOrEqual(24)
+  })
+
+  test('leaves out the five-hour window count and the bar legend', () => {
+    expect(text()).not.toContain('five-hour windows')
+    expect(text()).not.toContain('marks where')
+  })
+
+  test('still shows what is left, the reset and the pace for each window', () => {
+    expect(text()).toMatch(/^5h {2}95% left · resets in 4h 40m \(\d\d:\d\d\)$/m)
+    expect(text()).toMatch(/^7d {2}92% left · resets in 5d 23h/m)
+    expect(text()).toContain('under pace, lasts until reset')
   })
 })
 
