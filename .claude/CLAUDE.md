@@ -37,6 +37,7 @@ I have AuDHD. What helps:
 - In the desktop app, a next-step box with a question can hide the message above it; I see the card or an app summary instead of your answer. When the answer is the content (a rundown, options, a draft), call wrap_up with the recap only and put the answer in the closing message after it.
 - For a one-off manual task, hand me the minimal commands. Build a script only if it will run again or unattended.
 - Command blocks I'll paste: no trailing `#` comments (zsh has `interactive_comments` off), and a command that prompts for input goes last in its block, or it swallows the lines after it.
+- When a command needs a password, give it without one and let it prompt me (`sqlcmd -U sa` with no `-P` or `SQLCMDPASSWORD` asks for it). No `read -rs` / `export` / `unset` wrapping unless the tool cannot prompt.
 - On a live call, or when I say "let's talk", stay available: background the work, reply in a line or two, and give follow-ups as one list afterwards.
 - Deferring a fix to a ticket is scheduling, not an open question. Decide the approach while the evidence is fresh and write it into the ticket with that evidence.
 
