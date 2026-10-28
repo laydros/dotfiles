@@ -146,15 +146,18 @@ ioreg -r -c AppleHIDKeyboardEventDriverV2 -l | awk '
 done
 
 # --- AltTab ------------------------------------------------------------
-# One shortcut, Option+`, cycles the active app's windows, including
+# One shortcut, Cmd+`, cycles the active app's windows, including
 # minimized ones and ones on other Desktops. Cmd+Tab stays stock for apps.
+# AltTab catches Cmd+` before macOS does, so the native "Move focus to
+# next window" shortcut can stay on.
 # The free tier allows one shortcut; more need Pro. Only values that differ
 # from AltTab's defaults are written. Accessibility permission still has to
 # be granted by hand. AltTab is quit first so it can't overwrite these.
 ALTTAB=com.lwouis.alt-tab-macos
-# Option+` as AltTab archives it, exported from jaguar.
+# Hold Cmd, press `, as AltTab archives them, exported from jaguar.
+ALTTAB_CMD='<dict><key>string</key><string>⌘</string><key>secureData</key><data>YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGlCwwZGhtVJG51bGzWDQ4PEBESExQVFBcUXW1vZGlmaWVyRmxhZ3NfEBtjaGFyYWN0ZXJzSWdub3JpbmdNb2RpZmllcnNWJGNsYXNzWmNoYXJhY3RlcnNXa2V5Q29kZVd2ZXJzaW9ugAOAAIAEgACAAoAAEf//EgAQAADSHB0eH1okY2xhc3NuYW1lWCRjbGFzc2VzWlNSU2hvcnRjdXSiHiBYTlNPYmplY3QIERokKTI3SUxRU1lfbHqYn6qyury+wMLExsnO097n8vUAAAAAAAABAQAAAAAAAAAhAAAAAAAAAAAAAAAAAAAA/g==</data></dict>'
 ALTTAB_BACKTICK='<dict><key>string</key><string>`</string><key>secureData</key><data>YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGmCwwZGhscVSRudWxs1g0ODxAREhMUFRQXGF1tb2RpZmllckZsYWdzXxAbY2hhcmFjdGVyc0lnbm9yaW5nTW9kaWZpZXJzViRjbGFzc1pjaGFyYWN0ZXJzV2tleUNvZGVXdmVyc2lvboADgASABYAEgAKAABAyEABRYNIdHh8gWiRjbGFzc25hbWVYJGNsYXNzZXNaU1JTaG9ydGN1dKIfIVhOU09iamVjdAgRGiQpMjdJTFFTWmBte5mgq7O7vb/Bw8XHycvN0t3m8fQAAAAAAAABAQAAAAAAAAAiAAAAAAAAAAAAAAAAAAAA/Q==</data></dict>'
-echo "AltTab: one shortcut, Option+\`, active app's windows on all Desktops"
+echo "AltTab: one shortcut, Cmd+\`, active app's windows on all Desktops"
 alttab_running=false
 if pgrep -xq AltTab; then
     alttab_running=true
@@ -162,6 +165,7 @@ if pgrep -xq AltTab; then
     while pgrep -xq AltTab; do sleep 0.2; done
 fi
 defaults write "$ALTTAB" shortcutCount -string 1
+defaults write "$ALTTAB" holdShortcut "$ALTTAB_CMD"
 defaults write "$ALTTAB" nextWindowShortcut "$ALTTAB_BACKTICK"
 # Choice values are stored as strings of an index.
 defaults write "$ALTTAB" appsToShow -string 1            # active app
