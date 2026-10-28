@@ -246,6 +246,35 @@ windowControls.dragTap = hs.eventtap.new(
   end)
 windowControls.dragTap:start()
 
+-- ---------------------------------------------------------------------
+-- Part 3: Show the Desktop number after every Desktop switch
+--
+-- macOS gives no sign of which Desktop you landed on, so this shows
+-- "Desktop N" briefly on the main screen. Fullscreen Spaces show nothing.
+-- ---------------------------------------------------------------------
+
+local function showDesktopNumber()
+  local screen = hs.screen.mainScreen()
+  local spaces = screen and hs.spaces.spacesForScreen(screen)
+  local current = hs.spaces.focusedSpace()
+  if not spaces or not current then return end
+  for i, id in ipairs(spaces) do
+    if id == current then
+      if windowControls.desktopAlert then hs.alert.closeSpecific(windowControls.desktopAlert) end
+      windowControls.desktopAlert = hs.alert.show("Desktop " .. i, { textSize = 48 }, screen, 0.8)
+      return
+    end
+  end
+end
+windowControls.showDesktopNumber = showDesktopNumber
+
+-- The watcher can fire before macOS reports the new Space; a short delay
+-- reads the Desktop we landed on, not the one we left.
+windowControls.spaceWatcher = hs.spaces.watcher.new(function()
+  hs.timer.doAfter(0.15, showDesktopNumber)
+end)
+windowControls.spaceWatcher:start()
+
 if not hs.accessibilityState() then
   report("Enable Hammerspoon in System Settings > Privacy & Security > Accessibility")
 elseif not windowControls.dragTap:isEnabled() then
