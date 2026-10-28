@@ -70,7 +70,7 @@ defaults write -g PMPrintingExpandedStateForPrint2 -bool true
 
 # --- Trackpad ----------------------------------------------------------
 # Tap to click. Look Up stays on Force Click; three-finger tap is off so it
-# can't collide with BetterTouchTool's three-finger click = middle click.
+# can't collide with Vorssaint's three-finger click = middle click.
 echo "Trackpad: tap to click, three-finger tap off, Force Click on"
 for domain in com.apple.AppleMultitouchTrackpad com.apple.driver.AppleBluetoothMultitouch.trackpad; do
     defaults write "$domain" Clicking -bool true
