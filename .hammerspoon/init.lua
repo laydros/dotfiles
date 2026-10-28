@@ -253,20 +253,23 @@ windowControls.dragTap:start()
 -- small "Desktop N" at the top of the main screen. Fullscreen Spaces show
 -- nothing.
 --
--- The Space-change notification arrives about a second after the switch
--- (measured 2026-10-28), so the switch keys show the label as soon as they
--- are pressed: Ctrl+1..5, and Ctrl+Option+Left/Right, which the Desktop
--- move in Part 1 also sends. The notification still covers trackpad swipes
--- and app switches, and skips a number the keys just showed.
+-- The Space-change notification arrives when the switch finishes, so the
+-- switch keys show the label as soon as they are pressed: Ctrl+1..5, and
+-- Ctrl+Option+Left/Right, which the Desktop move in Part 1 also sends. A
+-- key-shown label stays up until the notification says the switch landed,
+-- then for LABEL_SECONDS more. Measured 2026-10-28: Ctrl+number lands in
+-- about 0.3s, but the arrow slide takes about 1.1s. The notification alone
+-- covers trackpad swipes and app switches.
 -- ---------------------------------------------------------------------
 
-local LABEL_SECONDS, LABEL_FADE = 0.7, 0.15
+local LABEL_SECONDS, LABEL_FADE = 0.6, 0.15
 local LABEL_PAD_X, LABEL_PAD_Y, LABEL_TOP = 16, 8, 12
 local DESKTOP_KEYCODES = { [18] = 1, [19] = 2, [20] = 3, [21] = 4, [23] = 5 } -- 1..5
 local LEFT_ARROW, RIGHT_ARROW = 123, 124
-local KEY_LABEL_HOLD = 2 -- seconds a key-shown number counts as current
+local KEY_LABEL_HOLD = 2 -- longest a key-shown label waits for the switch to land
 
-local shownDesktop = { index = nil, at = 0 }
+-- pending: a key showed the label and the switch has not landed yet.
+local shownDesktop = { index = nil, at = 0, pending = false }
 windowControls.shownDesktop = shownDesktop -- for diagnostics with the hs CLI
 
 -- Returns the main screen, its Desktop count, and the focused Desktop's index.
@@ -293,7 +296,15 @@ label[2] = { type = "text", text = "", textSize = 18, textColor = { white = 1 },
              textAlignment = "center" }
 windowControls.desktopLabel = label
 
-local function showDesktop(screen, index)
+local function hideLabelAfter(seconds)
+  if windowControls.desktopLabelTimer then windowControls.desktopLabelTimer:stop() end
+  windowControls.desktopLabelTimer = hs.timer.doAfter(seconds, function()
+    shownDesktop.pending = false
+    label:hide(LABEL_FADE)
+  end)
+end
+
+local function showDesktop(screen, index, seconds)
   local text = "Desktop " .. index
   local size = label:minimumTextSize(2, text)
   local w, h = size.w + 2 * LABEL_PAD_X, size.h + 2 * LABEL_PAD_Y
@@ -302,8 +313,7 @@ local function showDesktop(screen, index)
   label[2].text = text
   label[2].frame = { x = LABEL_PAD_X, y = LABEL_PAD_Y, w = size.w, h = size.h }
   label:show()
-  if windowControls.desktopLabelTimer then windowControls.desktopLabelTimer:stop() end
-  windowControls.desktopLabelTimer = hs.timer.doAfter(LABEL_SECONDS, function() label:hide(LABEL_FADE) end)
+  hideLabelAfter(seconds)
   shownDesktop.index, shownDesktop.at = index, hs.timer.secondsSinceEpoch()
 end
 
@@ -318,12 +328,13 @@ windowControls.desktopKeyTap = hs.eventtap.new({ et.keyDown }, function(event)
   elseif (code == LEFT_ARROW or code == RIGHT_ARROW) and flags.alt and not flags.shift then
     -- A key pressed again before the switch finishes moves on from the
     -- number already shown, not from the Desktop macOS still reports.
-    if shownDesktop.index and hs.timer.secondsSinceEpoch() - shownDesktop.at < 1 then
-      index = shownDesktop.index
-    end
+    if shownDesktop.pending then index = shownDesktop.index end
     if index then target = index + (code == LEFT_ARROW and -1 or 1) end
   end
-  if target and target >= 1 and target <= count then showDesktop(screen, target) end
+  if target and target >= 1 and target <= count then
+    showDesktop(screen, target, KEY_LABEL_HOLD)
+    shownDesktop.pending = true
+  end
   return false -- never consume the key; macOS does the switch
 end)
 windowControls.desktopKeyTap:start()
@@ -331,10 +342,13 @@ windowControls.desktopKeyTap:start()
 windowControls.spaceWatcher = hs.spaces.watcher.new(function()
   local screen, _, index = desktopPosition()
   if not index then return end
-  if index == shownDesktop.index and hs.timer.secondsSinceEpoch() - shownDesktop.at < KEY_LABEL_HOLD then
+  if shownDesktop.pending and index == shownDesktop.index then
+    shownDesktop.pending = false
+    hideLabelAfter(LABEL_SECONDS) -- landed where the key said; keep it up a little longer
     return
   end
-  showDesktop(screen, index)
+  shownDesktop.pending = false
+  showDesktop(screen, index, LABEL_SECONDS)
 end)
 windowControls.spaceWatcher:start()
 
