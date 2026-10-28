@@ -1,6 +1,6 @@
 #!/bin/bash
 # Apply my macOS settings (Dock, hot corners, Finder, trackpad, Spaces
-# shortcuts, Caps Lock -> Control). Run by hand on a new Mac, and again
+# shortcuts, Caps Lock -> Control, AltTab). Run by hand on a new Mac, and again
 # after plugging in a new keyboard. Safe to re-run.
 #
 # The list came from diffing jaguar (years of history) against a fresh
@@ -144,6 +144,32 @@ ioreg -r -c AppleHIDKeyboardEventDriverV2 -l | awk '
     set_keymap "$vendor-$product-0" "$vendor-$product"
     [ -z "$handler" ] || set_keymap "alt_handler_id-$handler" "$vendor-$product"
 done
+
+# --- AltTab ------------------------------------------------------------
+# One shortcut, Option+`, cycles the active app's windows, including
+# minimized ones and ones on other Desktops. Cmd+Tab stays stock for apps.
+# The free tier allows one shortcut; more need Pro. Only values that differ
+# from AltTab's defaults are written. Accessibility permission still has to
+# be granted by hand. AltTab is quit first so it can't overwrite these.
+ALTTAB=com.lwouis.alt-tab-macos
+# Option+` as AltTab archives it, exported from jaguar.
+ALTTAB_BACKTICK='<dict><key>string</key><string>`</string><key>secureData</key><data>YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGmCwwZGhscVSRudWxs1g0ODxAREhMUFRQXGF1tb2RpZmllckZsYWdzXxAbY2hhcmFjdGVyc0lnbm9yaW5nTW9kaWZpZXJzViRjbGFzc1pjaGFyYWN0ZXJzV2tleUNvZGVXdmVyc2lvboADgASABYAEgAKAABAyEABRYNIdHh8gWiRjbGFzc25hbWVYJGNsYXNzZXNaU1JTaG9ydGN1dKIfIVhOU09iamVjdAgRGiQpMjdJTFFTWmBte5mgq7O7vb/Bw8XHycvN0t3m8fQAAAAAAAABAQAAAAAAAAAiAAAAAAAAAAAAAAAAAAAA/Q==</data></dict>'
+echo "AltTab: one shortcut, Option+\`, active app's windows on all Desktops"
+alttab_running=false
+if pgrep -xq AltTab; then
+    alttab_running=true
+    osascript -e 'tell application "AltTab" to quit'
+    while pgrep -xq AltTab; do sleep 0.2; done
+fi
+defaults write "$ALTTAB" shortcutCount -string 1
+defaults write "$ALTTAB" nextWindowShortcut "$ALTTAB_BACKTICK"
+# Choice values are stored as strings of an index.
+defaults write "$ALTTAB" appsToShow -string 1            # active app
+defaults write "$ALTTAB" shortcutStyleOverride -string 0 # focus on release
+defaults write "$ALTTAB" appearanceSize -string 1        # medium; Auto is Pro
+if [ "$alttab_running" = true ]; then
+    open -a AltTab
+fi
 
 # --- Apply -------------------------------------------------------------
 echo "Applying settings and restarting Dock and Finder"
