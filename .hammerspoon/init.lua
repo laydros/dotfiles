@@ -247,31 +247,76 @@ windowControls.dragTap = hs.eventtap.new(
 windowControls.dragTap:start()
 
 -- ---------------------------------------------------------------------
--- Part 3: Show the Desktop number after every Desktop switch
+-- Part 3: Show the Desktop number on every Desktop switch
 --
--- macOS gives no sign of which Desktop you landed on, so this shows
--- "Desktop N" briefly on the main screen. Fullscreen Spaces show nothing.
+-- macOS gives no sign of which Desktop you landed on, so this shows a
+-- small "Desktop N" at the top of the main screen. Fullscreen Spaces show
+-- nothing.
+--
+-- The Space-change notification arrives about a second after the switch
+-- (measured 2026-10-28), so the switch keys show the label as soon as they
+-- are pressed: Ctrl+1..5, and Ctrl+Option+Left/Right, which the Desktop
+-- move in Part 1 also sends. The notification still covers trackpad swipes
+-- and app switches, and skips a number the keys just showed.
 -- ---------------------------------------------------------------------
 
-local function showDesktopNumber()
+local DESKTOP_ALERT_STYLE = {
+  textSize = 18, atScreenEdge = 1, padding = 10, radius = 8, strokeWidth = 0,
+  fillColor = { white = 0, alpha = 0.65 }, fadeInDuration = 0, fadeOutDuration = 0.15,
+}
+local DESKTOP_KEYCODES = { [18] = 1, [19] = 2, [20] = 3, [21] = 4, [23] = 5 } -- 1..5
+local LEFT_ARROW, RIGHT_ARROW = 123, 124
+local KEY_LABEL_HOLD = 2 -- seconds a key-shown number counts as current
+
+local shownDesktop = { index = nil, at = 0 }
+windowControls.shownDesktop = shownDesktop -- for diagnostics with the hs CLI
+
+-- Returns the main screen, its Desktop count, and the focused Desktop's index.
+local function desktopPosition()
   local screen = hs.screen.mainScreen()
   local spaces = screen and hs.spaces.spacesForScreen(screen)
   local current = hs.spaces.focusedSpace()
-  if not spaces or not current then return end
+  if not spaces or not current then return screen, 0, nil end
   for i, id in ipairs(spaces) do
-    if id == current then
-      if windowControls.desktopAlert then hs.alert.closeSpecific(windowControls.desktopAlert) end
-      windowControls.desktopAlert = hs.alert.show("Desktop " .. i, { textSize = 48 }, screen, 0.8)
-      return
-    end
+    if id == current then return screen, #spaces, i end
   end
+  return screen, #spaces, nil
 end
-windowControls.showDesktopNumber = showDesktopNumber
 
--- The watcher can fire before macOS reports the new Space; a short delay
--- reads the Desktop we landed on, not the one we left.
+local function showDesktop(screen, index)
+  if windowControls.desktopAlert then hs.alert.closeSpecific(windowControls.desktopAlert) end
+  windowControls.desktopAlert = hs.alert.show("Desktop " .. index, DESKTOP_ALERT_STYLE, screen, 0.7)
+  shownDesktop.index, shownDesktop.at = index, hs.timer.secondsSinceEpoch()
+end
+
+windowControls.desktopKeyTap = hs.eventtap.new({ et.keyDown }, function(event)
+  local flags = event:getFlags()
+  if not flags.ctrl or flags.cmd then return false end
+  local code = event:getKeyCode()
+  local screen, count, index = desktopPosition()
+  local target
+  if DESKTOP_KEYCODES[code] and not flags.alt and not flags.shift then
+    target = DESKTOP_KEYCODES[code]
+  elseif (code == LEFT_ARROW or code == RIGHT_ARROW) and flags.alt and not flags.shift then
+    -- A key pressed again before the switch finishes moves on from the
+    -- number already shown, not from the Desktop macOS still reports.
+    if shownDesktop.index and hs.timer.secondsSinceEpoch() - shownDesktop.at < 1 then
+      index = shownDesktop.index
+    end
+    if index then target = index + (code == LEFT_ARROW and -1 or 1) end
+  end
+  if target and target >= 1 and target <= count then showDesktop(screen, target) end
+  return false -- never consume the key; macOS does the switch
+end)
+windowControls.desktopKeyTap:start()
+
 windowControls.spaceWatcher = hs.spaces.watcher.new(function()
-  hs.timer.doAfter(0.15, showDesktopNumber)
+  local screen, _, index = desktopPosition()
+  if not index then return end
+  if index == shownDesktop.index and hs.timer.secondsSinceEpoch() - shownDesktop.at < KEY_LABEL_HOLD then
+    return
+  end
+  showDesktop(screen, index)
 end)
 windowControls.spaceWatcher:start()
 

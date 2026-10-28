@@ -5,8 +5,10 @@
   A center grab resizes from the bottom-right corner.
 - Ctrl+Option+Shift + Left/Right: on arrow release, move the focused window
   to the adjacent Desktop and follow it. The modifiers can stay held.
-- Every Desktop switch, however it happens, shows "Desktop N" briefly on the
-  main screen. Fullscreen Spaces show nothing.
+- Every Desktop switch shows a small "Desktop N" at the top of the main
+  screen. Ctrl+1..5 and Ctrl+Option+Left/Right show it as the key is
+  pressed; trackpad swipes and app switches show it about a second later,
+  when macOS reports the change. Fullscreen Spaces show nothing.
 
 Moving and resizing use mouse-event coordinates and combine rapid pointer
 updates at a shared limit of 120 updates per second. Change DRAG_HZ in init.lua
