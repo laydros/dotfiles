@@ -260,10 +260,8 @@ windowControls.dragTap:start()
 -- and app switches, and skips a number the keys just showed.
 -- ---------------------------------------------------------------------
 
-local DESKTOP_ALERT_STYLE = {
-  textSize = 18, atScreenEdge = 1, padding = 10, radius = 8, strokeWidth = 0,
-  fillColor = { white = 0, alpha = 0.65 }, fadeInDuration = 0, fadeOutDuration = 0.15,
-}
+local LABEL_SECONDS, LABEL_FADE = 0.7, 0.15
+local LABEL_PAD_X, LABEL_PAD_Y, LABEL_TOP = 16, 8, 12
 local DESKTOP_KEYCODES = { [18] = 1, [19] = 2, [20] = 3, [21] = 4, [23] = 5 } -- 1..5
 local LEFT_ARROW, RIGHT_ARROW = 123, 124
 local KEY_LABEL_HOLD = 2 -- seconds a key-shown number counts as current
@@ -283,9 +281,29 @@ local function desktopPosition()
   return screen, #spaces, nil
 end
 
+-- The label is a canvas on every Desktop at once, so it stays on screen
+-- while the Desktops slide. An hs.alert belongs to the Desktop it was drawn
+-- on and slides away with the one you are leaving.
+local label = hs.canvas.new({ x = 0, y = 0, w = 10, h = 10 })
+label:behaviorAsLabels({ "canJoinAllSpaces", "stationary" })
+label:level(hs.canvas.windowLevels.overlay)
+label[1] = { type = "rectangle", action = "fill", fillColor = { white = 0, alpha = 0.65 },
+             roundedRectRadii = { xRadius = 8, yRadius = 8 } }
+label[2] = { type = "text", text = "", textSize = 18, textColor = { white = 1 },
+             textAlignment = "center" }
+windowControls.desktopLabel = label
+
 local function showDesktop(screen, index)
-  if windowControls.desktopAlert then hs.alert.closeSpecific(windowControls.desktopAlert) end
-  windowControls.desktopAlert = hs.alert.show("Desktop " .. index, DESKTOP_ALERT_STYLE, screen, 0.7)
+  local text = "Desktop " .. index
+  local size = label:minimumTextSize(2, text)
+  local w, h = size.w + 2 * LABEL_PAD_X, size.h + 2 * LABEL_PAD_Y
+  local f = screen:frame()
+  label:frame({ x = f.x + (f.w - w) / 2, y = f.y + LABEL_TOP, w = w, h = h })
+  label[2].text = text
+  label[2].frame = { x = LABEL_PAD_X, y = LABEL_PAD_Y, w = size.w, h = size.h }
+  label:show()
+  if windowControls.desktopLabelTimer then windowControls.desktopLabelTimer:stop() end
+  windowControls.desktopLabelTimer = hs.timer.doAfter(LABEL_SECONDS, function() label:hide(LABEL_FADE) end)
   shownDesktop.index, shownDesktop.at = index, hs.timer.secondsSinceEpoch()
 end
 
