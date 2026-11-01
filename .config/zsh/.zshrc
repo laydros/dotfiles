@@ -98,7 +98,10 @@ fi
 
 # automatically start tmux when sshing in
 # in .zshrc, only for SSH sessions
-if [[ -n "$SSH_CONNECTION" ]] && command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
+# $TMUX doesn't cross ssh but $TERM does: skip when the ssh came from inside tmux,
+# or vox and zag sshing into each other attach to each other's session in a loop
+if [[ -n "$SSH_CONNECTION" ]] && command -v tmux &>/dev/null && [[ -z "$TMUX" ]] \
+    && [[ $TERM != tmux* && $TERM != screen* ]]; then
   tmux attach -t ssh 2>/dev/null || tmux new -s ssh
 fi
 
