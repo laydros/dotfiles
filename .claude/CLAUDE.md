@@ -147,6 +147,7 @@ Superpowers is the workflow. Use its sizes (quick task, small change, project wi
 - Link, don't restate. A note or memory that needs another's fact links to it. Split notes by lifetime, not size: a closed incident and a live config don't share a file. When you split one, fix the links and "see above" phrases the split breaks.
 - Before writing into a folder outside the one this session started in (the vault, another repo), read its CLAUDE.md or AGENTS.md in full, and any file it names as authoritative. Claude Code only loads the instructions for the starting folder; the rest you have to read yourself, and the rule you'd break is often near the bottom.
 - When a change adds a feature, command, or dependency, update README.md, CLAUDE.md, and AGENTS.md where they exist, in the same session. Documentation is part of the change.
+- You MUST start every session by fetching the user's enabled skills in Notion via notion-get-enabled-skills.
 - Todoist: filing is a deliberate act, never a side effect of other work, unless a project's CLAUDE.md grants standing permission for its own progress tracking. Before creating, editing, or reorganizing anything there, use the `todoist-organizing` skill.
 - Obsidian vault: `obnotes` inside the platform documents directory, `~/Documents/obnotes` on macOS and Windows, `~/doc/obnotes` on Linux. If it isn't there, this host has no vault. Vault standards live in the vault's own instructions file.
 - Work repos live under `~/src/f500`. If you're working there and no CLAUDE.md exists at that level, say so; I want one.
