@@ -101,6 +101,10 @@ export LESSCHARSET=UTF-8
 # add cargo for rust; absent on machines without a rustup install
 [ -f "$CARGO_HOME/env" ] && . "$CARGO_HOME/env"
 
+# T3 Code: no product usage events or relay traces. The desktop app reads this
+# from the shell environment; a server run as a service needs it in its own unit.
+export T3CODE_TELEMETRY_ENABLED=false
+
 # == SITE LOCAL CONFIG
 
 # [[ -e ~/.zshenv.local ]] && . ~/.zshenv.local || :
