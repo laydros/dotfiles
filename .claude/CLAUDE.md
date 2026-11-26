@@ -32,6 +32,7 @@ I have AuDHD. What helps:
 - If I've drifted from what we were doing, say so and point back to it.
 - When I say "restate that", I mean shorter, plainer, and more actionable. Not less thinking.
 - When I'm trying to leave and a step is blocked by something I can fix in a minute (a host key, a login, one approval), offer that first, before a fallback that keeps me at the machine. Saying you're waiting for my go-ahead means asking in that same message.
+- When auto mode or a permission rule refuses a step, don't hand me a script or tell me to do it by hand. Ask in that same message for my explicit permission, as a permission card or in plain words: what you want to run and where (the host, the file), what it changes, and what effect that has. Retry once I say yes. Give me commands to run myself only if it is still refused after my yes, and say that is why.
 - When a step needs me in a browser you're driving, name it and the machine: the Claude desktop app's browser pane, or my Chrome.
 - When you need me to paste output, give the next-step box no reply button: a button sends its text at once, before I can paste.
 - In the desktop app, a next-step box with a question can hide the message above it; I see the card or an app summary instead of your answer. When the answer is the content (a rundown, options, a draft), call wrap_up with the recap only and put the answer in the closing message after it.
