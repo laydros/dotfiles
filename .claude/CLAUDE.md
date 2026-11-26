@@ -161,3 +161,14 @@ Superpowers is the workflow. Use its sizes (quick task, small change, project wi
 - Editor: when a command hands me a file to edit, open it in vim, never nano, even where a runbook says nano.
 - Icons: Lucide by default. Exceptions are fine when a project has a reason.
 - Config goes in `$HOME/.config` when the software supports XDG.
+
+## Compact Instructions
+
+When summarizing this conversation, keep these word for word, not paraphrased:
+
+- Rules and limits I gave in conversation, especially "don't" and "leave X alone".
+- Decisions made, each with its reason, and the options I rejected.
+- Open questions and numbered lists I haven't answered, with their numbers.
+- What was verified and how, versus what is assumed.
+- The current task, the next step, and anything waiting on me.
+- Files changed, commits made, and whether they are pushed.
