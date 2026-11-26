@@ -25,7 +25,7 @@
     "type": "command",
     "command": "bash $HOME/.claude/statusline.sh"
   },
-  "autoCompactWindow": 400000,
+  "autoCompactWindow": 433000,
   "env": {
     "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods/context-bar:~/.claude/mods/quota"
   },
